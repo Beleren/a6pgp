@@ -83,9 +83,9 @@
             'atividades' => $atividades,
             'recursos' => $recursos,
         ])
-    </div>
 
-    {{--@include('layouts.partials.sequencia-detalhes')--}}
+        @include('layouts.partials.sequencia-detalhes')
+    </div>
 @endsection
 
 @section('styles')
