@@ -10,7 +10,26 @@
             </div>
             <div class="modal-body">
                 <form>
+                    <!-- Duração -->
+                    <div class="form-group">
+                        <label for="duracao" class="control-label">Duração:</label>
+                        <input type="text" id="duracao" name="duracao" class="form-control">
+                    </div>
 
+                    <!-- Requer Recursos -->
+                    <div class="form-group">
+                        <label for="requer_recursos" class="control-label">
+                            <input type="checkbox" id="requer_recursos" name="requer_recursos">
+                            Requer Recursos?
+                        </label>
+                    </div>
+
+                    <!-- Quantidade -->
+                    <div class="form-group">
+                        <label for="quantidade_recurso" class="control-label">Quantidade de Rercurso</label>
+                        <input type="number" id="quantidade_recurso" name="quantidade_recurso[]"
+                        class="form-control">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

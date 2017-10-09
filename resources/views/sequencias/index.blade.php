@@ -27,7 +27,7 @@
                         </select>
                     </div>
                 </div>
-                <table class="table table-striped table-bordered table-hover col-sm-8 col-md-8">
+                <table class="table table-striped table-bordered table-hover tablesorter col-sm-8 col-md-8">
                     <thead>
                     <tr>
                         <th>Nome</th>
@@ -90,6 +90,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/theme.bootstrap.css') }}">
     <style>
         ul.dependencias,
         ul.dependencias-recursos {
@@ -109,6 +110,8 @@
 
 @section('scripts')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{ asset('js/widget-filter.min.js') }}"></script>
     <script>
         $(function() {
             var sequencias = [];
@@ -405,6 +408,23 @@
                     .find('h4.modal-title').text(nomeAtividade)
                 ;
             }
+
+            $('.tablesorter').tablesorter({
+                widgets: ["filter"],
+                widgetOptions : {
+                    // filter_anyMatch replaced! Instead use the filter_external option
+                    // Set to use a jQuery selector (or jQuery object) pointing to the
+                    // external filter (column specific or any match)
+                    filter_external : '.search',
+                    // add a default type search to the first name column
+                    filter_defaultFilter: { 1 : '~{query}' },
+                    // include column filters
+                    filter_columnFilters: true,
+                    filter_placeholder: { search : 'Procurar ...' },
+                    filter_saveFilters : true,
+                    filter_reset: '.reset'
+                }
+            });
         });
     </script>
 @endsection
