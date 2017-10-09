@@ -10,10 +10,6 @@
     <meta name="keywords" content="PERT, CPM, planejamento, projeto, project">
     <meta name="author" content="Projeto Besouro">
 
-    <!-- Otimizações de Página em Testes de Usabilidade -->
-    <meta http-equiv="Cache-Control" content="private, max-age=2419200">
-    <meta http-equiv="Accept-Charset" content="text/html; text/css">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
