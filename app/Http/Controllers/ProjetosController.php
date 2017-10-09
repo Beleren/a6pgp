@@ -74,7 +74,7 @@ class ProjetosController extends Controller
             'projeto_id' => $projeto->id,
         ]);
 
-        $request->session()->flash('success', 'O projeto foi criado com sucesso!');
+        $request->session()->flash('success', 'Projeto criado com sucesso!');
         return redirect(route('projetos.index'));
     }
 
@@ -125,6 +125,8 @@ class ProjetosController extends Controller
 
         $projeto->save();
 
+        $request->session()->flash('success', 'Projeto alterado com sucesso!');
+
         return redirect(route('projetos.show', ['projeto' => $projeto]));
     }
 
@@ -140,6 +142,7 @@ class ProjetosController extends Controller
 
         Projeto::destroy($projeto->id);
 
+        $request->session()->flash('info', 'O projeto foi excluído com sucesso e todas as atividades e recursos relacionados.');
         return redirect(route('projetos.index'));
     }
 
@@ -168,6 +171,8 @@ class ProjetosController extends Controller
         $this->authorize('view-projeto', $projeto);
 
         $dados = $request->input('projeto-usuarios');
+        $erros = false;
+        $info = false;
 
         if (! $dados) {
 
@@ -176,19 +181,62 @@ class ProjetosController extends Controller
                 $vetor = explode(';', $dados);
 
                 if (count($vetor)) {
+                    $usuarios_nao_cadastrados = '';
+                    $usuarios_ja_cadastrados = '';
+
                     foreach ($vetor as $chave => $valor) {
-                        $usuario = User::where('email', $valor)->first();
+                        $usuario = User::where('email', trim($valor))->first();
 
                         if ($usuario) {
-                            $projeto->users()->save($usuario);
+                            if (ProjetoUsuario::firstOrNew([
+                                'user_id' => $usuario->id,
+                                'projeto_id' => $projeto->id,
+                            ])) {
+                                $usuarios_ja_cadastrados = $usuarios_ja_cadastrados . $valor . '; ';
+                            } else {
+                                $usuario->projetos()->save($projeto);
+                            }
+                        } else {
+                            $usuarios_nao_cadastrados = $usuarios_nao_cadastrados . $valor . '; ';
+                        }
+
+                        if ($usuarios_nao_cadastrados) {
+                            $erros = true;
+                            $usuarios_nao_cadastrados = str_replace_last(';', '', trim($usuarios_nao_cadastrados));
+
+                            if (stripos($usuarios_nao_cadastrados, ';') > 0) {
+                                $request->session()->flash('warning', 'Não foi possível compartilhar o projeto com os usuários ['
+                                    . $usuarios_nao_cadastrados . ']. Verifique os e-mails digitados.');
+                            } else {
+                                $request->session()->flash('warning', 'Não foi possível compartilhar o projeto com o usuário '
+                                    . $usuarios_nao_cadastrados . '. Verifique o e-mail digitado.');
+                            }
+                        }
+
+                        if ($usuarios_ja_cadastrados) {
+                            $info = true;
+                            $usuarios_ja_cadastrados = str_replace_last(';', '', trim($usuarios_ja_cadastrados));
+
+                            if (stripos($usuarios_ja_cadastrados, ';') > 0) {
+                                $request->session()->flash('info', 'Os usuários a seguir já estão com este projeto compartilhado ['
+                                    . $usuarios_ja_cadastrados . '].');
+                            } else {
+                                $request->session()->flash('info', 'O usuário a seguir já está com este projeto compartilhado '
+                                    . $usuarios_ja_cadastrados . '.');
+                            }
                         }
                     }
                 }
 
             } catch (Exception $e) {
+                $request->session()->flash('danger', 'Algo deu errado! Por favor, tente novamente');
                 $e->getMessage();
             }
 
+        }
+
+        if (! $erros && ! $info) {
+            $request->session()->flash('success', 'Projeto foi compartilhado com sucesso!');
         }
 
         return redirect(route('projetos.index'));

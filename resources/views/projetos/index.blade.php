@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('conteudo')    <div class="container">
+@section('conteudo')
+    <div class="container">
         <div>
             <a href="{{ route('projetos.create') }}" class="btn btn-primary">Criar Projeto</a>
         </div>
