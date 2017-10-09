@@ -74,6 +74,7 @@ class ProjetosController extends Controller
             'projeto_id' => $projeto->id,
         ]);
 
+        $request->session()->flash('success', 'O projeto foi criado com sucesso!');
         return redirect(route('projetos.index'));
     }
 

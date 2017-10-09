@@ -24,6 +24,7 @@
 <body>
     <div id="app">
         @include('layouts.partials.navegacao')
+        @include('layouts.partials.mensagens')
         @yield('conteudo')
     </div>
 
