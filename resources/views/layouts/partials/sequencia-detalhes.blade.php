@@ -9,7 +9,11 @@
                 <h4 class="modal-title">Atividade</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="form-detalhes" method="post" action="{{ route('sequencias.salvar-detalhes', [
+                    'projeto' => $projeto->id,
+                ]) }}">
+                    {{ csrf_field() }}
+
                     <!-- Duração -->
                     <div class="form-group">
                         <label for="duracao" class="control-label">Duração:</label>
@@ -77,7 +81,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Sair
                 </button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button id="botaoEnviarDetalhes" type="button" class="btn btn-primary">Salvar</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

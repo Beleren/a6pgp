@@ -139,4 +139,7 @@ Route::middleware(['web', 'auth'])->group(function (){
 
     Route::post('/projetos/{projeto}/sequencias/cenarios', 'SequenciasController@store')
         ->name('sequencias.store');
+
+    Route::post('/projetos/{projeto}/sequencias/detalhes', 'SequenciasController@salvarDetalhes')
+        ->name('sequencias.salvar-detalhes');
 });

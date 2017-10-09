@@ -3,7 +3,7 @@
 @section('conteudo')
     <div class="container-fluid">
         <div class="col-sm-9 col-md-9">
-            <form action="{{ route('sequencias.store', ['projeto' => $projeto->id]) }}"
+            <form id="form-dependencias" action="{{ route('sequencias.store', ['projeto' => $projeto->id]) }}"
                 class="horizontal-form" method="post">
 
                 {{ csrf_field() }}
@@ -84,7 +84,11 @@
             'recursos' => $recursos,
         ])
 
-        @include('layouts.partials.sequencia-detalhes')
+        @include('layouts.partials.sequencia-detalhes', [
+            'projeto' => $projeto,
+            'sequencia' => $sequencia,
+            'atividade' => $atividade,
+        ])
     </div>
 @endsection
 
@@ -226,7 +230,7 @@
                     event.preventDefault();
                     inserirAtividadesPredecessoras();
                     inserirRecursosComoDependencia();
-                    $('form').submit();
+                    $('#form-dependencias').submit();
                 });
             }
 
@@ -425,6 +429,15 @@
                     filter_reset: '.reset'
                 }
             });
+
+            function testeDetalhesDeSequencias() {
+                $('#botaoEnviarDetalhes').on('click', function(event) {
+                    event.preventDefault();
+                    $('#form-detalhes').submit();
+                });
+            }
+
+            testeDetalhesDeSequencias();
         });
     </script>
 @endsection

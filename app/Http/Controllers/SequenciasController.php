@@ -166,4 +166,8 @@ class SequenciasController extends Controller
             'cenario' => $request->input('cenario'),
         ]));
     }
+
+    public function salvarDetalhes(Request $request, Projeto $projeto) {
+        dd('Post Detalhes');
+    }
 }
