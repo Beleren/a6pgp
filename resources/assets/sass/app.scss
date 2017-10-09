@@ -1,0 +1,49 @@
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Font Awesome
+@import "node_modules/font-awesome/scss/font-awesome.scss";
+
+.panel-body .well {
+  height: 12em;
+}
+
+.carousel-caption {
+  color: #D50000;
+  font-size: 150%;
+  top: 1px;
+  padding-bottom: 1px;
+  left: 10%;
+  right: 10%;
+}
+
+#projeto-besouro-carousel .carousel-inner .item img {
+  width: 1024px;
+  height: 560px;
+}
+
+.secao-botao-voltar {
+  margin-bottom: 2em;
+}
+
+.adicionar {
+  padding: 2px 12px;
+  float: right;
+}
+
+strong .badge {
+  color: #3097D1;
+  background-color: #fff;
+}
+
+.list-group-item.active a {
+  color: #fff;
+  font-weight: bold;
+}
