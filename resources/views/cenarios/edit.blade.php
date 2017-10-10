@@ -33,6 +33,14 @@
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
                     <a href="{{ route('cenarios.index', ['id' => $cenario->projeto->id]) }}" class="btn btn-default">Voltar</a> |
                     <button type="submit" class="btn btn-primary">Alterar</button>
+                    <div class="pull-right">
+                        <a href="{{ route('sequencias.index', [
+                            'projeto' => $projeto,
+                            'cenario' => $cenario,
+                        ]) }}" class="btn btn-default">
+                            Visualizar Sequências
+                        </a>
+                    </div>
                 </div>
             </div>
         </form>
