@@ -61,31 +61,7 @@
 
 @section('scripts')
     <script src="{{ asset('js/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.tablesorter.widgets.min.js') }}"></script>
     <script src="{{ asset('js/widget-filter.min.js') }}"></script>
-    <script>
-        $(function() {
-            $('tr:not(:has(th))').each(function(index, linha) {
-                $(linha).on('click', function() {
-                    window.location.href = $('tr').find('td a').attr('href');
-                });
-            });
-
-            $('.tablesorter').tablesorter({
-                widgets: ["filter"],
-                widgetOptions : {
-                    // filter_anyMatch replaced! Instead use the filter_external option
-                    // Set to use a jQuery selector (or jQuery object) pointing to the
-                    // external filter (column specific or any match)
-                    filter_external : '.search',
-                    // add a default type search to the first name column
-                    filter_defaultFilter: { 1 : '~{query}' },
-                    // include column filters
-                    filter_columnFilters: true,
-                    filter_placeholder: { search : 'Procurar ...' },
-                    filter_saveFilters : true,
-                    filter_reset: '.reset'
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('js/app.tablesorter.config.js') }}"></script>
 @endsection
