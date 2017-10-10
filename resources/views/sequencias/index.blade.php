@@ -89,6 +89,12 @@
             'sequencia' => $sequencia,
             'atividade' => $atividade,
         ])
+
+        @include('layouts.partials.detalhes-recursos', [
+            'projeto' => $projeto,
+            'sequencia' => $sequencia,
+            'atividade' => $atividade,
+        ])
     </div>
 @endsection
 
@@ -172,7 +178,9 @@
                 }).droppable({
                     drop: function(event, ui) {
                         corrigirDrop();
-                        removerRecursosDuplicados(ui.draggable);
+                        if(removerRecursosDuplicados(ui.draggable)) {
+                            abrirModalDetalhesDeRecursos(ui.draggable);
+                        }
                     }
                 });
 
@@ -222,6 +230,10 @@
                 ;
 
                 habilitarExclusao();
+
+                $('ul.dependencias-recursos li').on('click', function () {
+                    abrirModalDetalhesDeRecursos($(this));
+                });
             }
             /* Fim da correção de drag and drop */
 
@@ -327,7 +339,7 @@
 
                 var colecao = celula.find('.recursos[data-recurso-id]');
 
-                if (colecao.length < 1) return;
+                if (colecao.length < 1) return false;
 
                 colecao.each(function (i, item) {
                     if (
@@ -345,6 +357,8 @@
                         ).remove();
                     }
                 })
+
+                return true;
             }
 
             function removerRecursosEmBranco() {
@@ -408,7 +422,7 @@
             function mostrarModal(alvo) {
                 var nomeAtividade = alvo.text();
 
-                $('#myModal').modal('show')
+                $('#modal-sequencia-detalhes').modal('show')
                     .find('h4.modal-title').text(nomeAtividade)
                 ;
             }
@@ -430,6 +444,10 @@
                 }
             });
 
+            function abrirModalDetalhesDeRecursos(alvo) {
+                $('#modal-detalhes-recursos').modal('show');
+            }
+
             function testeDetalhesDeSequencias() {
                 $('#botaoEnviarDetalhes').on('click', function(event) {
                     event.preventDefault();
@@ -438,6 +456,7 @@
             }
 
             testeDetalhesDeSequencias();
+
         });
     </script>
 @endsection

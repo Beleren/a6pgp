@@ -1,4 +1,4 @@
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+<div id="modal-sequencia-detalhes" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="gridSystemModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -17,7 +17,7 @@
                     <!-- Duração -->
                     <div class="form-group">
                         <label for="duracao" class="control-label">Duração:</label>
-                        <input type="text" id="duracao" name="duracao" class="form-control">
+                        <input type="number" id="duracao" name="duracao" min="0" class="form-control">
                     </div>
 
                     <!-- Requer Recursos -->
@@ -26,30 +26,6 @@
                             <input type="checkbox" id="requer_recursos" name="requer_recursos">
                             Requer Recursos?
                         </label>
-                    </div>
-
-                    <!-- Quantidade de Recursos -->
-                    <div class="form-group">
-                        <label for="quantidade_recurso" class="control-label">Quantidade de Rercurso</label>
-                        <input type="number" id="quantidade_recurso" name="quantidade_recurso[]"
-                        class="form-control">
-                    </div>
-
-                    <!-- Data de Disponbilização do Recurso -->
-                    <div class="form-group">
-                        <label for="data_inicio_disp_recurso" class="control-label">
-                            Data de Disponibilização do Recurso
-                        </label>
-                        <input type="date" id="data_inicio_disp_recurso" name="data_inicio_disp_recurso"
-                            class="form-control">
-                    </div>
-
-                    <!-- Tempo Alocado -->
-                    <div class="form-group">
-                        <label for="tempo_alocado" class="control-label">
-                            Tempo Alocado:
-                        </label>
-                        <input type="time" id="tempo_alocado" name="tempo_alocado" class="form-control">
                     </div>
 
                     <!-- Início Otimista -->

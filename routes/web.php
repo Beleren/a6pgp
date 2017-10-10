@@ -142,4 +142,7 @@ Route::middleware(['web', 'auth'])->group(function (){
 
     Route::post('/projetos/{projeto}/sequencias/detalhes', 'SequenciasController@salvarDetalhes')
         ->name('sequencias.salvar-detalhes');
+
+    Route::post('/projetos/{projeto}/sequencias/detalhes-recursos', 'SequenciasController@salvarDetalhesRecursos')
+        ->name('sequencias.salvar-detalhes-recursos');
 });

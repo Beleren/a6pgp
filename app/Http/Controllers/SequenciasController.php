@@ -170,4 +170,8 @@ class SequenciasController extends Controller
     public function salvarDetalhes(Request $request, Projeto $projeto) {
         dd('Post Detalhes');
     }
+
+    public function salvarDetalhesRecursos(Request $request, Projeto $projeto) {
+        dd('Post Detalhes de Recursos');
+    }
 }
