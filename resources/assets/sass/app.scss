@@ -24,9 +24,18 @@
   right: 10%;
 }
 
-#projeto-besouro-carousel .carousel-inner .item img {
-  width: 1024px;
-  height: 560px;
+ul.nav li.dropdown:hover ul.dropdown-menu {
+  display: block;
+}
+
+.video{
+  width: 100%;
+  height: auto;
+}
+
+.carousel-inner .item img{
+  width: 100%;
+  max-height: 320px !important;
 }
 
 .secao-botao-voltar {
