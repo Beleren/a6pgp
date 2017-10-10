@@ -134,13 +134,15 @@
             verificarSeExistemAtividades();
             habilitarExclusao();
             corrigirLoad();
+            habilitarAbrirModalRecursos();
+            habilitarSalvarDetalhesRecursos();
 
-            $('table tr td:first-child').click(function(event) {
-               event.stopPropagation();
-               mostrarModal($(this));
+            $('table tr td:first-child').click(function (event) {
+                event.stopPropagation();
+                mostrarModal($(this));
             });
 
-            $('#cenario').change(function(event) {
+            $('#cenario').change(function (event) {
                 event.stopPropagation();
 
                 obterSequenciasDeCenario($(this).val());
@@ -158,7 +160,7 @@
                 $(".dependencias").sortable({
                     revert: true
                 }).droppable({
-                    drop: function(event, ui) {
+                    drop: function (event, ui) {
                         corrigirDrop();
                         verificarAutoDependencia(ui.draggable);
                         removerAtividadesDuplicadas(ui.draggable);
@@ -176,9 +178,9 @@
                 $(".dependencias-recursos").sortable({
                     revert: true
                 }).droppable({
-                    drop: function(event, ui) {
+                    drop: function (event, ui) {
                         corrigirDrop();
-                        if(removerRecursosDuplicados(ui.draggable)) {
+                        if (removerRecursosDuplicados(ui.draggable) == false) {
                             abrirModalDetalhesDeRecursos(ui.draggable);
                         }
                     }
@@ -192,6 +194,7 @@
 
                 //$( "ul, li" ).disableSelection();
             }
+
             /* Fim da função de arrastar e soltar. */
 
             /* Correção de drag and drop */
@@ -200,10 +203,10 @@
                     .attr('style', '')
                     .addClass('col-sm-3')
                     .addClass('col-md-3')
-                    .each(function(index, element) {
+                    .each(function (index, element) {
                         if ($(element).find('span').length > 0) {
-                            $(element).find('span').each(function(i, span) {
-                                if (! $(span).hasClass('glyphicon-remove-circle')) {
+                            $(element).find('span').each(function (i, span) {
+                                if (!$(span).hasClass('glyphicon-remove-circle')) {
                                     $(span).addClass('glyphicon-remove-circle');
                                 }
                             });
@@ -216,10 +219,10 @@
                 $('ul.dependencias-recursos li')
                     .addClass('col-sm-3')
                     .addClass('col-md-3')
-                    .each(function(index, element) {
+                    .each(function (index, element) {
                         if ($(element).find('span').length > 0) {
-                            $(element).find('span').each(function(i, span) {
-                                if (! $(span).hasClass('glyphicon-remove-circle')) {
+                            $(element).find('span').each(function (i, span) {
+                                if (!$(span).hasClass('glyphicon-remove-circle')) {
                                     $(span).addClass('glyphicon-remove-circle');
                                 }
                             });
@@ -230,15 +233,13 @@
                 ;
 
                 habilitarExclusao();
-
-                $('ul.dependencias-recursos li').on('click', function () {
-                    abrirModalDetalhesDeRecursos($(this));
-                });
+                habilitarAbrirModalRecursos();
             }
+
             /* Fim da correção de drag and drop */
 
             function inserirDependencias() {
-                $('#btnSalvar').on('click', function(event) {
+                $('#btnSalvar').on('click', function (event) {
                     event.preventDefault();
                     inserirAtividadesPredecessoras();
                     inserirRecursosComoDependencia();
@@ -251,13 +252,13 @@
 
                 $(sequencias).val('');
 
-                $(sequencias).each(function(index, sequencia) {
+                $(sequencias).each(function (index, sequencia) {
                     var atividades = '';
                     $(sequencia)
                         .parent()
                         .next()
                         .find('li')
-                        .each(function(i, atividade) {
+                        .each(function (i, atividade) {
                             atividades = atividades + ';' + $(atividade).attr('data-atividade-id');
                         });
 
@@ -282,8 +283,8 @@
 
             function removerAtividadesEmBranco() {
                 var atividades = $('.atividades[data-atividade-id]');
-                atividades.each(function(i, atividade) {
-                    if (! $(atividade).attr('data-atividade-id')) {
+                atividades.each(function (i, atividade) {
+                    if (!$(atividade).attr('data-atividade-id')) {
                         $(atividade).remove();
                     }
                 });
@@ -304,7 +305,7 @@
 
                 var cenario = caminho.substr(caminho.lastIndexOf('/') + 1);
 
-                if (! isNaN(cenario)) {
+                if (!isNaN(cenario)) {
                     $('#cenario').val(parseInt(cenario));
                 }
             }
@@ -318,14 +319,12 @@
 
                 colecao.each(function (i, item) {
                     if (
-                        celula.
-                        find('.atividades[data-atividade-id=' +
+                        celula.find('.atividades[data-atividade-id=' +
                             $(item).attr('data-atividade-id')
                             + ']'
                         ).length > 1
                     ) {
-                        celula.
-                        find('.atividades[data-atividade-id=' +
+                        celula.find('.atividades[data-atividade-id=' +
                             $(item)
                                 .attr('data-atividade-id')
                             + ']:not(:first)'
@@ -336,36 +335,36 @@
 
             function removerRecursosDuplicados(acionador) {
                 var celula = $(acionador).parent();
-
+                var remover = false;
                 var colecao = celula.find('.recursos[data-recurso-id]');
 
-                if (colecao.length < 1) return false;
+                if (colecao.length < 1) remover = true;
 
                 colecao.each(function (i, item) {
                     if (
-                        celula.
-                        find('.recursos[data-recurso-id=' +
+                        celula.find('.recursos[data-recurso-id=' +
                             $(item).attr('data-recurso-id')
                             + ']'
                         ).length > 1
                     ) {
-                        celula.
-                        find('.recursos[data-recurso-id=' +
+                        celula.find('.recursos[data-recurso-id=' +
                             $(item)
                                 .attr('data-recurso-id')
                             + ']:not(:first)'
                         ).remove();
-                    }
-                })
 
-                return true;
+                        remover = true;
+                    }
+                });
+
+                return remover;
             }
 
             function removerRecursosEmBranco() {
                 var recursos = $('.recursos[data-recurso-id]');
 
-                recursos.each(function(i, recurso) {
-                    if (! $(recurso).attr('data-recurso-id')) {
+                recursos.each(function (i, recurso) {
+                    if (!$(recurso).attr('data-recurso-id')) {
                         $(recurso).remove();
                     }
                 });
@@ -373,14 +372,14 @@
 
             function habilitarExclusao() {
                 $('ul.dependencias li span.glyphicon-remove-circle')
-                    .on('click', function() {
+                    .on('click', function () {
                         $(this).parent().remove();
-                });
+                    });
 
                 $('ul.dependencias-recursos li span.glyphicon-remove-circle')
                     .on('click', function () {
                         $(this).parent().remove();
-                });
+                    });
             }
 
             function inserirRecursosComoDependencia() {
@@ -388,19 +387,19 @@
 
                 $(sequencias_recursos).val('');
 
-                $(sequencias_recursos).each(function(index, sequencia_recurso) {
+                $(sequencias_recursos).each(function (index, sequencia_recurso) {
                     var recursos = '';
                     $(sequencia_recurso)
                         .parent()
                         .next()
                         .next()
                         .find('li')
-                        .each(function(i, recurso) {
+                        .each(function (i, recurso) {
                             recursos = recursos + ';' + $(recurso).attr('data-recurso-id');
                         });
 
-                        recursos = recursos.substr(1, recursos.length);
-                        $(sequencia_recurso).val(recursos);
+                    recursos = recursos.substr(1, recursos.length);
+                    $(sequencia_recurso).val(recursos);
                     ;
                 });
             }
@@ -408,13 +407,13 @@
             function corrigirLoad() {
                 var colecao = $('ul.dependencias li.atividades.ui-draggable');
 
-                $(colecao).each(function(index, item) {
+                $(colecao).each(function (index, item) {
                     removerAtividadesDuplicadas(item);
                 });
 
                 colecao = $('ul.dependencias-recursos li.recursos.ui-draggable');
 
-                $(colecao).each(function(index, item) {
+                $(colecao).each(function (index, item) {
                     removerRecursosDuplicados(item);
                 });
             }
@@ -429,34 +428,60 @@
 
             $('.tablesorter').tablesorter({
                 widgets: ["filter"],
-                widgetOptions : {
+                widgetOptions: {
                     // filter_anyMatch replaced! Instead use the filter_external option
                     // Set to use a jQuery selector (or jQuery object) pointing to the
                     // external filter (column specific or any match)
-                    filter_external : '.search',
+                    filter_external: '.search',
                     // add a default type search to the first name column
-                    filter_defaultFilter: { 1 : '~{query}' },
+                    filter_defaultFilter: {1: '~{query}'},
                     // include column filters
                     filter_columnFilters: true,
-                    filter_placeholder: { search : 'Procurar ...' },
-                    filter_saveFilters : true,
+                    filter_placeholder: {search: 'Procurar ...'},
+                    filter_saveFilters: true,
                     filter_reset: '.reset'
                 }
             });
 
             function abrirModalDetalhesDeRecursos(alvo) {
                 $('#modal-detalhes-recursos').modal('show');
+                habilitarSalvarDetalhesRecursos();
             }
 
-            function testeDetalhesDeSequencias() {
-                $('#botaoEnviarDetalhes').on('click', function(event) {
+            function testeDetalhesDeSequencias(alvo) {
+                $('#botaoEnviarDetalhes').on('click', function (event) {
                     event.preventDefault();
                     $('#form-detalhes').submit();
                 });
             }
 
+            function salvarDetalhesDeRecursos() {
+                var detalhes = [];
+                var modal = $('#modal-detalhes-recursos');
+
+                detalhes.push({
+                    id: $(alvo).attr('data-recurso-id'),
+                    qtd: model.find('#quantidade_recurso').va(),
+                    dataDispRecurso: modal.find('#data_inicio_disp_recurso'),
+                    tempoAlocado: modal.find('#tempo_alocado').val(),
+                });
+
+                alert(detalhes[detalhes.length - 1]);
+            }
+
+            function habilitarAbrirModalRecursos() {
+                $('ul.dependencias-recursos li').on('click', function () {
+                    abrirModalDetalhesDeRecursos($(this));
+                });
+            };
+
             testeDetalhesDeSequencias();
 
+            function habilitarSalvarDetalhesRecursos() {
+                $('#botaoEnviarDetalhes').on('click', function() {
+                    salvarDetalhesDeRecursos();
+                });
+            }
         });
     </script>
 @endsection

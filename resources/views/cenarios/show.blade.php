@@ -53,7 +53,7 @@
                             <button type="submit" class="btn btn-primary" disabled="disabled">Alterar</button>
                             <div class="pull-right">
                                 <a href="{{ route('sequencias.index', [
-                                    'projeto' => $projeto, 'cenario' => $cenario
+                                    'projeto' => $projeto, 'cenario' => $cenario->id
                                     ]) }}" class="btn btn-default">
                                     Visualizar Sequências
                                 </a>

@@ -36,7 +36,7 @@
                     <div class="pull-right">
                         <a href="{{ route('sequencias.index', [
                             'projeto' => $projeto,
-                            'cenario' => $cenario,
+                            'cenario' => $cenario->id,
                         ]) }}" class="btn btn-default">
                             Visualizar Sequências
                         </a>
