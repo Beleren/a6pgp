@@ -2,8 +2,18 @@
 
 @section('conteudo')
     <div class="container">
-        <div class="secao-botao-voltar">
-            <a href="{{ route('projetos.show', ['projeto' => $projeto]) }}" class="btn btn-default">Voltar</a>
+        <div class="row">
+            <div class="secao-botao-voltar col-sm-1">
+                <a href="{{ route('projetos.show', ['projeto' => $projeto->id]) }}" class="btn btn-default">Voltar</a>
+            </div>
+            <div class="dropdown col-sm-1">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Menu
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ route('atividades.index',$projeto->id) }}">Atividades</a></li>
+                    <li><a href="{{ route('cenarios.index',$projeto->id) }}">Cenários</a></li>
+                </ul>
+            </div>
         </div>
         <div>
             <a href="{{ route('recursos.create', ['projeto' => $projeto->id]) }}"

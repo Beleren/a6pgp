@@ -1,5 +1,5 @@
 <div class="row">
-    <div id="projeto-besouro-carousel" class="carousel slide" data-ride="carousel">
+    <div id="projeto-besouro-carousel" class="carousel slide" style="width: 50%; margin: auto" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <li data-target="#projeto-besouro-carousel" data-slide-to="0" class="active"></li>

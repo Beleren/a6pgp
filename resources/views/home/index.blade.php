@@ -3,13 +3,12 @@
 @section('conteudo')
     <div class="container">
         @include('layouts.partials.carousel')
-
         <div class="row">
             <div class="alert alert-warning">
-                Descrição breve do projeto e sugestões de uso.
+                Descrição breve do projeto e sugestões de uso. Podemos colocar um vídeo de instrução de uso também.
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="teste">
             <p>
                 O projeto Besouro nasceu como um requerimento da matéria de Práticas de Gerenciamento de Projetos (A6PGP)
                 para conclusão do curso de Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) do

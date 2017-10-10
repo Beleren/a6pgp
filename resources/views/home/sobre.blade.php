@@ -2,6 +2,9 @@
 
 @section('conteudo')
     <div class="container">
+        <div style="text-align: center">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/wsh9rHg3UmI?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Escolha do Nome</h4>
