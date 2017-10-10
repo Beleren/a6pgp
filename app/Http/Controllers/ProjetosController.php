@@ -188,10 +188,11 @@ class ProjetosController extends Controller
                         $usuario = User::where('email', trim($valor))->first();
 
                         if ($usuario) {
-                            if (ProjetoUsuario::firstOrNew([
+
+                            if (ProjetoUsuario::where([
                                 'user_id' => $usuario->id,
                                 'projeto_id' => $projeto->id,
-                            ])) {
+                            ])->first()) {
                                 $usuarios_ja_cadastrados = $usuarios_ja_cadastrados . $valor . '; ';
                             } else {
                                 $usuario->projetos()->save($projeto);
