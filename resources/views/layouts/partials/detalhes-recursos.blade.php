@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label for="quantidade_recurso" class="control-label">Quantidade de Rercurso</label>
                         <input type="number" id="quantidade_recurso" name="quantidade_recurso[]"
-                               class="form-control">
+                            min="0" class="form-control">
                     </div>
 
                     <!-- Data de Disponbilização do Recurso -->

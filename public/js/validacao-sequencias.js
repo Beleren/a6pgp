@@ -1,5 +1,18 @@
 $(function() {
+    /*
+     * Fazer refatoração no Javascript para torná-lo mais legível.
+     */
     var sequencias = [];
+    var id_recurso = null;
+    var id_atividade = null;
+
+    var Sequencias = {
+        detalhes: [],
+
+        adicionarDetalhes: function(detalhe) {
+            this.detalhes.push(detalhe);
+        }
+    };
 
     iniciarDragAndDrop();
     inserirDependencias();
@@ -322,7 +335,15 @@ $(function() {
     });
 
     function abrirModalDetalhesDeRecursos(alvo) {
-        $('#modal-detalhes-recursos').modal('show');
+        $('#modal-detalhes-recursos')
+            .modal('show')
+            .find('.modal-header h4').text(
+                alvo.closest('tr').find('td:first-child').text()
+            )
+        ;
+
+        id_recurso = $(alvo).attr('data-recurso-id');
+        id_atividade = alvo.closest('tr').find('td:first-child input[type=hidden][id*=detalhes]').attr('id');
         habilitarSalvarDetalhesRecursos();
     }
 
@@ -333,18 +354,18 @@ $(function() {
         });
     }
 
-    function salvarDetalhesDeRecursos() {
-        var detalhes = [];
+    function salvarDetalhesDeRecursos(id_recurso, atividade_id) {
         var modal = $('#modal-detalhes-recursos');
 
-        detalhes.push({
-            id: $(alvo).attr('data-recurso-id'),
-            qtd: model.find('#quantidade_recurso').va(),
-            dataDispRecurso: modal.find('#data_inicio_disp_recurso'),
+        Sequencias.adicionarDetalhes({
+            recurso_id: id_recurso,
+            atividade_id: atividade_id,
+            qtd: modal.find('#quantidade_recurso').val(),
+            dataDispRecurso: modal.find('#data_inicio_disp_recurso').val(),
             tempoAlocado: modal.find('#tempo_alocado').val(),
         });
 
-        alert(detalhes[detalhes.length - 1]);
+        console.log(Sequencias);
     }
 
     function habilitarAbrirModalRecursos() {
@@ -356,8 +377,15 @@ $(function() {
     testeDetalhesDeSequencias();
 
     function habilitarSalvarDetalhesRecursos() {
-        $('#botaoEnviarDetalhes').on('click', function() {
-            salvarDetalhesDeRecursos();
+
+        $('button#botaoEnviarDetalhes').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var id = id_atividade.substr(id_atividade.indexOf('-') + 1);
+            salvarDetalhesDeRecursos(id_recurso, id);
         });
     }
+
+    habilitarSalvarDetalhesRecursos();
 });
