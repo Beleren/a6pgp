@@ -6,10 +6,15 @@ $(function() {
     var id_recurso = null;
     var id_atividade = null;
 
-    var Sequencias = {
+    var Sequencia = {
+        recursos: [],
         detalhes: [],
 
-        adicionarDetalhes: function(detalhe) {
+        adicionarDetalhesRecursos: function(recurso) {
+            this.recursos.push(recurso);
+        },
+
+        adicionarDetalhesAtividade: function(detalhe) {
             this.detalhes.push(detalhe);
         }
     };
@@ -23,7 +28,6 @@ $(function() {
     habilitarExclusao();
     corrigirLoad();
     habilitarAbrirModalRecursos();
-    habilitarSalvarDetalhesRecursos();
 
     $('table tr td:first-child').click(function (event) {
         event.stopPropagation();
@@ -315,6 +319,7 @@ $(function() {
         $('#modal-sequencia-detalhes').modal('show')
             .find('h4.modal-title').text(nomeAtividade)
         ;
+        event.stopPropagation();
     }
 
     $('.tablesorter').tablesorter({
@@ -357,7 +362,13 @@ $(function() {
     function salvarDetalhesDeRecursos(id_recurso, atividade_id) {
         var modal = $('#modal-detalhes-recursos');
 
-        Sequencias.adicionarDetalhes({
+        var sequencia = $('td:first-child')
+            .find('input:hidden[id=detalhes-' + atividade_id +']');
+
+
+        JSON.parse($(sequencia).val());
+
+        Sequencia.adicionarDetalhesRecursos({
             recurso_id: id_recurso,
             atividade_id: atividade_id,
             qtd: modal.find('#quantidade_recurso').val(),
@@ -365,7 +376,7 @@ $(function() {
             tempoAlocado: modal.find('#tempo_alocado').val(),
         });
 
-        console.log(Sequencias);
+        $(sequencia).val(JSON.stringify(Sequencia));
     }
 
     function habilitarAbrirModalRecursos() {
@@ -386,6 +397,4 @@ $(function() {
             salvarDetalhesDeRecursos(id_recurso, id);
         });
     }
-
-    habilitarSalvarDetalhesRecursos();
 });

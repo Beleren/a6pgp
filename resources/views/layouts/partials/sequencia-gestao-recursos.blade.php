@@ -13,11 +13,13 @@
         <div id="collapseAtividades" class="panel-collapse collapse in"
             role="tabpanel" aria-labelledby="headingAtividades">
             <div class="panel-body">
+                <div class="row"><input type="text" id="myInput" placeholder="Filtro de nome"></div>
+
                 <ul id="lista-atividades" class="atividades list-group">
                     @forelse($atividades as $atividade)
                         <li class="list-group-item atividades"
                             data-atividade-id="{{ $atividade->id }}">
-                            {{ $atividade->nome }}
+                            <span>{{ $atividade->nome }}</span>
                         </li>
                     @empty
                         <span>Não há atividades cadastradas.</span>
@@ -53,3 +55,32 @@
         </div>
     </div>
 </div>
+
+@section('scripts')
+    @parent
+    <script>
+        $(function () {
+            $('#myInput').on('keyup', myFunction);
+
+            function myFunction() {
+                // Declare variables
+                var input, filter, ul, li, a, i;
+                input = document.getElementById('myInput');
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("lista-atividades");
+                li = ul.getElementsByTagName('li');
+
+                // Loop through all list items, and hide those who don't match the search query
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("span")[0];
+                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+        })
+
+    </script>
+@endsection
