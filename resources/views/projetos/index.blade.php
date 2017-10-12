@@ -2,8 +2,10 @@
 
 @section('conteudo')
     <div class="container">
-        <div>
-            <a href="{{ route('projetos.create') }}" class="btn btn-primary">Criar Projeto</a>
+        <div class="row">
+            <div class="secao-botao-voltar col-md-1 col-xs-2">
+                <a href="{{ route('projetos.create') }}" class="btn btn-primary">Criar Projeto</a>
+            </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>

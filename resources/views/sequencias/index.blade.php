@@ -8,15 +8,31 @@
 
                 {{ csrf_field() }}
 
-                <div class="form-group">
-                    <a href="{{ route('atividades.index', ['projeto' => $projeto]) }}"
-                        class="btn btn-default">
-                        Voltar
-                    </a>
-                    <button id="btnSalvar" name="btnSalvar" type="button" class="btn btn-primary">
-                        Salvar
-                    </button>
+                <div class="row">
+                    <div class="secao-botao-voltar col-md-1 col-xs-2">
+                        <a href="{{ route('atividades.index', ['projeto' => $projeto]) }}" class="btn btn-default">Voltar</a>
+                    </div>
+                    <div class="dropdown col-md-1 col-xs-2">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Menu
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('atividades.index',$projeto->id) }}">Atividades</a></li>
+                            <li><a href="{{ route('recursos.index',$projeto->id) }}">Recursos</a></li>
+                            <li><a href="{{ route('cenarios.index',$projeto->id) }}">Cenários</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-5 col-xs-7">
+                        <div class="col-md-4 col-xs-6">
+                            <button id="btnSalvar" name="btnSalvar" type="button" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </div>
+
+                    </div>
+
                 </div>
+
                 <div class="form-group">
                     <label for="cenario" class="control-label">Cenário:</label>
                     <div>

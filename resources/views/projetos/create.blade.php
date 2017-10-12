@@ -18,9 +18,9 @@
                 </div>
             </div>
 
-            <!-- Medida de Tempo -->
+            <!-- Unidade de Tempo -->
             <div class="form-group">
-                <label for="medida_tempo" class="control-label col-sm-2 col-md-2">Medida de Tempo:</label>
+                <label for="medida_tempo" class="control-label col-sm-2 col-md-2">Unidade de Tempo:</label>
                 <div class="col-sm-6 col-md-6">
                     <select name="medida_tempo" id="medida_tempo" class="form-control">
                         <option value="hora">Hora</option>

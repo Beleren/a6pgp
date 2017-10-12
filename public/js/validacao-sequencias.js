@@ -14,7 +14,7 @@ $(function() {
             this.recursos.push(recurso);
         },
 
-        adicionarDetalhesAtividade: function(detalhe) {
+        adicionarDetalhesAtividade: function(id_a, detalhe) {
             this.detalhes.push(detalhe);
         }
     };
@@ -156,7 +156,6 @@ $(function() {
 
             atividades = atividades.substr(1, atividades.length);
             $(sequencia).val(atividades);
-            ;
         });
     }
 
@@ -210,7 +209,9 @@ $(function() {
 
         var colecao = celula.find('.atividades[data-atividade-id]');
 
-        if (colecao.length < 1) return;
+        if (colecao.length < 1) {
+            return false;
+        }
 
         colecao.each(function (i, item) {
             if (
@@ -233,7 +234,9 @@ $(function() {
         var remover = false;
         var colecao = celula.find('.recursos[data-recurso-id]');
 
-        if (colecao.length < 1) remover = true;
+        if (colecao.length < 1) {
+            remover = true;
+        }
 
         colecao.each(function (i, item) {
             if (
@@ -295,7 +298,6 @@ $(function() {
 
             recursos = recursos.substr(1, recursos.length);
             $(sequencia_recurso).val(recursos);
-            ;
         });
     }
 
@@ -352,19 +354,11 @@ $(function() {
         habilitarSalvarDetalhesRecursos();
     }
 
-    function testeDetalhesDeSequencias(alvo) {
-        $('#botaoEnviarDetalhes').on('click', function (event) {
-            event.preventDefault();
-            $('#form-detalhes').submit();
-        });
-    }
-
     function salvarDetalhesDeRecursos(id_recurso, atividade_id) {
         var modal = $('#modal-detalhes-recursos');
 
         var sequencia = $('td:first-child')
             .find('input:hidden[id=detalhes-' + atividade_id +']');
-
 
         JSON.parse($(sequencia).val());
 
@@ -383,9 +377,7 @@ $(function() {
         $('ul.dependencias-recursos li').on('click', function () {
             abrirModalDetalhesDeRecursos($(this));
         });
-    };
-
-    testeDetalhesDeSequencias();
+    }
 
     function habilitarSalvarDetalhesRecursos() {
 

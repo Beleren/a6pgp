@@ -11407,6 +11407,10 @@ button.close {
   height: 12em;
 }
 
+.panel-group {
+  padding-top: 11%;
+}
+
 .carousel-caption {
   color: #D50000;
   font-size: 150%;
