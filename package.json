@@ -16,10 +16,11 @@
     "jquery": "^3.1.1",
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
-    "vue": "^2.1.10"
+    "vue": "^2.5.2"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "jquery-ui": "github:jquery/jquery-ui"
+    "jquery-ui": "github:jquery/jquery-ui",
+    "viz.js": "^1.8.0"
   }
 }

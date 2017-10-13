@@ -7,6 +7,8 @@ use App\Atividade;
 use App\Projeto;
 use App\Sequencia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Validator;
 
 class SequenciasController extends Controller
 {
@@ -44,6 +46,7 @@ class SequenciasController extends Controller
         foreach ($projeto->atividades as $index => $atividade) {
             $has_post_recursos = false;
             $has_post_predecessoras = false;
+            $has_post_detalhes = false;
 
             $sequencias = Sequencia::where('atividade_id', $atividade->id)
                 ->where('cenario_id', $request->input('cenario'))->get();
@@ -57,6 +60,11 @@ class SequenciasController extends Controller
             if ($dados[$index]['recursos']) {
                 $has_post_recursos = true;
                 $recursos = explode(';', $dados[$index]['recursos']);
+            }
+
+            if ($dados[$index]['detalhes']) {
+                $has_post_detalhes = true;
+                $detalhes = $dados[$index]['detalhes'];
             }
 
             /*
@@ -103,6 +111,10 @@ class SequenciasController extends Controller
                     if ($para_excluir) {
                         Sequencia::destroy($para_excluir->pluck('id')->toArray());
                     }
+
+                    // Estou aqui.
+
+                    $this->processarDetalhes($detalhes);
                 }
             }
 
@@ -168,10 +180,78 @@ class SequenciasController extends Controller
     }
 
     public function salvarDetalhes(Request $request, Projeto $projeto) {
-        dd('Post Detalhes');
+        dd($request);
     }
 
     public function salvarDetalhesRecursos(Request $request, Projeto $projeto) {
-        dd('Post Detalhes de Recursos');
+        dd($request->input('sequencias.*.detalhes'));
+    }
+
+    private function processarDetalhesRecursos($valor) {
+        $has_erros = true;
+
+        $regras = [
+            'qtd' => 'integer|min:0',
+            'dataDispRecurso' => 'date|after_or_equal:today',
+            'tempoAlocado' => 'timezone|min:0',
+        ];
+
+        $mensagens = [
+            'qtd.numeric' => 'Quantidade deve ser um número inteiro.',
+            'qtd.min' => 'Quantidade deve ser maior que zero.',
+            'dataDispRecurso.date' => 'Data de Disponibilização do Recurso está em formato inválido.',
+            'data.after' => 'Data de Disponibilização do Recurso deve posterior ou igual a data de hoje.',
+            'tempoAlocado.timezone' => 'Tempo Alocado deve ter formato de horário.',
+            'tempoAlocado' => 'Tempo Alocado não pode ser negatívo.',
+        ];
+
+        $validator = Validator::make($valor, $regras, $mensagens);
+        
+        if (! $validator->fails()) {
+            $has_erros = false;
+        }
+
+        return $has_erros;
+    }
+
+    private function processarDetalhesAtividades($valor) {
+        $has_erros = true;
+
+        $regras = [
+            'duracao' => 'integer|min:0',
+            'requerRecursos' => [
+                Rule::in(['true', 'false', 'on', 'off', '1', '0', 1, 0, true, false ]),
+            ]
+        ];
+
+        $mensagens = [
+            'duracao.integer' => 'Duração deve ser um número inteiro.',
+            'duracao.min' => 'Duração deve ser maior quer zero.',
+            'requerRecursos.in' => 'Requer Recurso deve ser um valor verdadeiro ou falso.',
+            'inicioOtimista.date' => 'Início Otimista deve ter um formato de data.',
+            'inicioPessimista.after_or_equal' => 'Início Pessimista deve ser posterior ou igual a data de hoje.',
+            'fimOtimista.date' => 'Fim Otimista deve ter um formato de data.',
+            'fimPessimista.after_or_equal' => 'Fim Pessimista deve ser posterior ou igual a data de hoje.',
+        ];
+
+        $validator = Validator::make($valor, $regras, $mensagens);
+
+        if (! $validator->fails()) {
+            $has_erros = false;
+        }
+
+        return $has_erros;
+    }
+
+    private function processarDetalhes($valor) {
+        $vetor = json_decode($valor, true);
+
+        if ($vetor) {
+            $this->processarDetalhesRecursos($vetor['recursos']);
+            $this->processarDetalhesAtividades($vetor['detalhes']);
+        }
+
+        dd('Fim!');
+        /* TODO: Informar qual é a atividade onde houve o erro. */
     }
 }

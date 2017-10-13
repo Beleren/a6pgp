@@ -2,6 +2,7 @@
 
 @section('conteudo')
     <div class="container">
+        <div id="area_grafico"></div>
         @include('layouts.partials.carousel')
         <div class="row">
             <div class="alert alert-warning">
@@ -38,4 +39,11 @@
             </ul>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        image = Viz("digraph g { a -> b; }", { format: "png-image-element" });
+        document.body.appendChild(image);
+    </script>
 @endsection

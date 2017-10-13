@@ -98,6 +98,10 @@
                     .attr('action', '/projetos/' + indice + '/compartilhar')
                     .submit();
             }
+
+            $('#compartilhar-projeto').on('shown.bs.modal', function () {
+                $('#projeto-usuarios').focus();
+            })
         });
     </script>
     <script src="{{ asset('js/app.tablesorter.config.js') }}"></script>

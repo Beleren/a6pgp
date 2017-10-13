@@ -13,7 +13,7 @@
         <div id="collapseAtividades" class="panel-collapse collapse in"
             role="tabpanel" aria-labelledby="headingAtividades">
             <div class="panel-body">
-                <div class="row"><input type="text" id="myInput" placeholder="Filtro de nome"></div>
+                <input type="text" id="filtroAtividade" onkeyup="filtrarPainel(this)" class="form-control" placeholder="Filtro de atividade">
 
                 <ul id="lista-atividades" class="atividades list-group">
                     @forelse($atividades as $atividade)
@@ -41,11 +41,12 @@
         </div>
         <div id="collapseRecursos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingRecursos">
             <div class="panel-body">
+                <input type="text" id="filtroRecurso" onkeyup="filtrarPainel(this)" class="form-control" placeholder="Filtro de recurso">
                 <ul id="lista-recursos" class="recursos list-group">
                     @forelse($recursos as $recurso)
                         <li class="list-group-item recursos"
                             data-recurso-id="{{ $recurso->id }}">
-                            {{ $recurso->nome }}
+                            <span>{{ $recurso->nome }}</span>
                         </li>
                     @empty
                         <span>Não há recursos cadastrados.</span>
@@ -59,15 +60,18 @@
 @section('scripts')
     @parent
     <script>
-        $(function () {
-            $('#myInput').on('keyup', myFunction);
+        //$(function () {
+            //$('#myInput').on('keyup', myFunction);
 
-            function myFunction() {
+            //colocar parametro para saber qual input esta chamando
+            function filtrarPainel(elem) {
                 // Declare variables
                 var input, filter, ul, li, a, i;
-                input = document.getElementById('myInput');
+                input = document.getElementById(elem.id);
                 filter = input.value.toUpperCase();
-                ul = document.getElementById("lista-atividades");
+                if(elem.id==='filtroAtividade')
+                    ul = document.getElementById("lista-atividades");
+                else ul = document.getElementById("lista-recursos");
                 li = ul.getElementsByTagName('li');
 
                 // Loop through all list items, and hide those who don't match the search query
@@ -80,7 +84,7 @@
                     }
                 }
             }
-        })
+        //})
 
     </script>
 @endsection

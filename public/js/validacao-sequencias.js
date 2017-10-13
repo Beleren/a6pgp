@@ -8,14 +8,44 @@ $(function() {
 
     var Sequencia = {
         recursos: [],
-        detalhes: [],
+        detalhes: {},
 
         adicionarDetalhesRecursos: function(recurso) {
+            var i = -1;
+
+            if (this.recursos.length > 0) {
+                this.recursos.forEach(function (item, index) {
+                    if (item.recursoId === recurso.recursoId) {
+                        i = index;
+                    }
+                });
+            }
+
+            if (i >= 0) {
+                this.recursos.splice(i, 1);
+            }
+
             this.recursos.push(recurso);
         },
 
-        adicionarDetalhesAtividade: function(id_a, detalhe) {
-            this.detalhes.push(detalhe);
+        adicionarDetalhesAtividade: function(detalhe) {
+            this.detalhes = detalhe;
+        },
+
+        removerRecurso: function(recurso) {
+            var i = -1;
+
+            if (this.recursos.length > 0) {
+                this.recursos.forEach(function (item, index) {
+                    if (item.recursoId === recurso) {
+                        i = index;
+                    }
+                });
+            }
+
+            if (i >= 0) {
+                this.recursos.splice(i, 1);
+            }
         }
     };
 
@@ -72,7 +102,7 @@ $(function() {
         }).droppable({
             drop: function (event, ui) {
                 corrigirDrop();
-                if (removerRecursosDuplicados(ui.draggable) == false) {
+                if (removerRecursosDuplicados(ui.draggable) === false) {
                     abrirModalDetalhesDeRecursos(ui.draggable);
                 }
             }
@@ -114,7 +144,7 @@ $(function() {
             .each(function (index, element) {
                 if ($(element).find('span').length > 0) {
                     $(element).find('span').each(function (i, span) {
-                        if (!$(span).hasClass('glyphicon-remove-circle')) {
+                        if (! $(span).hasClass('glyphicon-remove-circle')) {
                             $(span).addClass('glyphicon-remove-circle');
                         }
                     });
@@ -276,8 +306,35 @@ $(function() {
 
         $('ul.dependencias-recursos li span.glyphicon-remove-circle')
             .on('click', function () {
+                event.stopPropagation();
+                removerRecursoQuandoDependencia($(this).parent());
                 $(this).parent().remove();
             });
+    }
+
+    function removerRecursoQuandoDependencia(alvo) {
+        var sequencia = $(alvo).closest('tr')
+            .find('td:first-child [id|=detalhes]');
+
+        var dados = JSON.parse($(sequencia).val());
+
+        if (Array.isArray(dados.recursos)) {
+             Sequencia.recursos = dados.recursos;
+        } else {
+             Sequencia.recursos = [];
+        }
+
+        if (dados.hasOwnProperty('detalhes')) {
+             Sequencia.detalhes = dados.detalhes;
+        }
+
+        var index = $(alvo).attr('data-recurso-id');
+        Sequencia.removerRecurso(index);
+
+        $(sequencia).val(JSON.stringify(Sequencia));
+
+        Sequencia.detalhes = {};
+        Sequencia.recursos = [];
     }
 
     function inserirRecursosComoDependencia() {
@@ -317,10 +374,26 @@ $(function() {
 
     function mostrarModal(alvo) {
         var nomeAtividade = alvo.text();
+        id_atividade = alvo.find('[id|=detalhes]').attr('id');
+        id_atividade = id_atividade.substr(id_atividade.indexOf('-') + 1);
 
-        $('#modal-sequencia-detalhes').modal('show')
+        var modal = $('#modal-sequencia-detalhes');
+
+        $(modal).modal('show')
             .find('h4.modal-title').text(nomeAtividade)
         ;
+
+        var dados = JSON.parse($('#detalhes-' + id_atividade).val());
+
+        if (dados.hasOwnProperty('detalhes')) {
+            $(modal).find('#duracao').val(dados.detalhes.duracao);
+            $(modal).find('#requer_recursos').val(dados.detalhes.requerRecursos);
+            $(modal).find('#inicio_otimista').val(dados.detalhes.inicioOtimista);
+            $(modal).find('#inicio_pessimista').val(dados.detalhes.inicioPessimista);
+            $(modal).find('#fim_otimista').val(dados.detalhes.fimOtimista);
+            $(modal).find('#fim_pessimista').val(dados.detalhes.fimPessimista);
+        }
+
         event.stopPropagation();
     }
 
@@ -360,17 +433,32 @@ $(function() {
         var sequencia = $('td:first-child')
             .find('input:hidden[id=detalhes-' + atividade_id +']');
 
-        JSON.parse($(sequencia).val());
+        var dados = JSON.parse($(sequencia).val());
+
+        if (Array.isArray(dados.recursos)) {
+            Sequencia.recursos = dados.recursos;
+        } else {
+            Sequencia.recursos = [];
+        }
+
+        if (dados.hasOwnProperty('detalhes')) {
+            Sequencia.detalhes = dados.detalhes;
+        }
 
         Sequencia.adicionarDetalhesRecursos({
-            recurso_id: id_recurso,
-            atividade_id: atividade_id,
+            recursoId: id_recurso,
+            atividadeId: atividade_id,
             qtd: modal.find('#quantidade_recurso').val(),
             dataDispRecurso: modal.find('#data_inicio_disp_recurso').val(),
             tempoAlocado: modal.find('#tempo_alocado').val(),
         });
 
         $(sequencia).val(JSON.stringify(Sequencia));
+
+        Sequencia.detalhes = {};
+        Sequencia.recursos = [];
+
+        limpezaFormDetalhesDeAtividades();
     }
 
     function habilitarAbrirModalRecursos() {
@@ -381,7 +469,7 @@ $(function() {
 
     function habilitarSalvarDetalhesRecursos() {
 
-        $('button#botaoEnviarDetalhes').on('click', function(event) {
+        $('button#botaoEnviarDetalhesRecursos').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -389,4 +477,78 @@ $(function() {
             salvarDetalhesDeRecursos(id_recurso, id);
         });
     }
+
+
+    function salvarDetalhesAtividades() {
+        var modal = $('#modal-sequencia-detalhes');
+        var sequencia = $('#detalhes-' + id_atividade);
+
+        var dados = JSON.parse($(sequencia).val());
+
+        if (dados.hasOwnProperty('detalhes')) {
+            Sequencia.detalhes = dados.detalhes;
+        }
+
+        if (dados.hasOwnProperty('recursos')) {
+            Sequencia.recursos = dados.recursos;
+        }
+
+        Sequencia.adicionarDetalhesAtividade({
+            atividadeId: id_atividade,
+            duracao: $(modal).find('#duracao').val(),
+            requerRecursos: $(modal).find('#requer_recursos').val(),
+            inicioOtimista: $(modal).find('#inicio_otimista').val(),
+            inicioPessimista: $(modal).find('#inicio_pessimista').val(),
+            fimOtimista: $(modal).find('#fim_otimista').val(),
+            fimPessimista: $(modal).find('#fim_pessimista').val(),
+        });
+
+        $('#detalhes-' + id_atividade).val(JSON.stringify(Sequencia));
+
+        Sequencia.detalhes = {};
+        Sequencia.recursos = [];
+
+        limpezaFormDetalhesRecursos();
+    }
+
+    function habilitarSalvarDetalhesAtividades() {
+        $('button#botaoEnviarDetalhes').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            salvarDetalhesAtividades();
+        });
+    }
+
+    habilitarSalvarDetalhesAtividades();
+    
+    function limpezaFormDetalhesDeAtividades() {
+        var modal = $('#modal-detalhes-recursos');
+
+        $(modal).find('#quantidade_recurso').val(null);
+        $(modal).find('#data_inicio_disp_recurso').val(null);
+        $(modal).find('#tempo_alocado').val(null);
+
+        alert('Os dados foram salvos com sucesso!');
+        $(modal).modal('hide');
+    }
+    
+    function limpezaFormDetalhesRecursos() {
+        var modal = $('#modal-sequencia-detalhes');
+
+        $(modal).find('#duracao').val(null);
+        $(modal).find('#requer_recursos').val(null);
+        $(modal).find('#inicio_otimista').val(null);
+        $(modal).find('#inicio_pessimista').val(null);
+        $(modal).find('#fim_otimista').val(null);
+        $(modal).find('#fim_pessimista').val(null);
+
+        alert('Os dados foram salvos com sucesso!');
+        $(modal).modal('hide');
+    }
+
+    /*
+     * TODO: Melhorar a usabilidadde da aplicação com o carregamento automático
+     * dos valores cadastrados de recursos e atividades.
+     */
 });

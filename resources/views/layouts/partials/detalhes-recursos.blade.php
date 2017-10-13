@@ -43,7 +43,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Sair
                 </button>
-                <button id="botaoEnviarDetalhes" type="button" class="btn btn-primary">Salvar</button>
+                <button id="botaoEnviarDetalhesRecursos" type="button" class="btn btn-primary">Salvar</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

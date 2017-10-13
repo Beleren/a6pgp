@@ -60,7 +60,7 @@
                                     <input type="hidden" id="sequenciador-{{ $atividade->id }}-recursos"
                                         name="sequencias[{{ $atividade->id }}][recursos]" value="">
                                     <input type="hidden" id="detalhes-{{ $atividade->id }}"
-                                        name="sequencias[{{ $atividade->id }}][detalhes]" value="">
+                                        name="sequencias[{{ $atividade->id }}][detalhes]" value='{}'>
                                 </td>
                                 <td class="col-sm-5 col-md-5">
                                     <ul class="dependencias list-group">
