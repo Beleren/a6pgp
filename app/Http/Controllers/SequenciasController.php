@@ -74,12 +74,19 @@ class SequenciasController extends Controller
              */
 
             if (! $has_post_predecessoras && ! $has_post_recursos) {
-                if ($sequencias) {
-                    Sequencia::whereIn('id', $sequencias->pluck('id'))
-                        ->delete();
+                if ($has_post_detalhes) {
+                    $detalhe = $this->processarDetalhes($detalhes);
                 }
 
-                $detalhe = $this->processarDetalhes($detalhes);
+                if (
+                    ! $detalhe &&
+                    ! array_key_exists('detalhes', $detalhe)
+                ) {
+                    if ($sequencias) {
+                        Sequencia::whereIn('id', $sequencias->pluck('id'))
+                            ->delete();
+                    }
+                }
 
                 if ($detalhe) {
                     if (array_key_exists('detalhes', $detalhe)) {
@@ -93,32 +100,32 @@ class SequenciasController extends Controller
                                 ->where('atividadeId', $sequencia->atividade_id)
                                 ->first()
                             ;
+
+                            // Limpeza de valores.
+                            $sequencia->inicio_otimista = null;
+                            $sequencia->inicio_pessimista = null;
+                            $sequencia->fim_otimista = null;
+                            $sequencia->fim_pessimista = null;
+                            $sequencia->requer_recursos = false;
+
                             // Início Otimista
                             if ($resultado['inicioOtimista']) {
                                 $sequencia->inicio_otimista = $resultado['inicioOtimista'];
-                            } else {
-                                $sequencia->inicio_otimista = null;
                             }
 
                             // Início Pessimista
                             if ($resultado['inicioPessimista']) {
                                 $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
-                            } else {
-                                $sequencia->inicio_pessimista = null;
                             }
 
                             // Fim Otimista
                             if ($resultado['fimOtimista']) {
                                 $sequencia->fim_otimista = $resultado['fimOtimista'];
-                            } else {
-                                $sequencia->fim_otimista = null;
                             }
 
                             // Fim Pessimista
                             if ($resultado['fimPessimista']) {
                                 $sequencia->fim_pessimista = $resultado['fimPessimista'];
-                            } else {
-                                $sequencia->fim_pessimista = null;
                             }
 
                             // Fim Pessimista
@@ -128,8 +135,6 @@ class SequenciasController extends Controller
                             )
                             ) {
                                 $sequencia->requer_recursos = true;
-                            } else {
-                                $sequencia->requer_recursos = false;
                             }
                         }
 
@@ -163,6 +168,11 @@ class SequenciasController extends Controller
                          * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
                          */
                         if ($detalhe) {
+                            /* Remover valores do banco de dados. */
+                            $sequencia->quantidade_recurso = null;
+                            $sequencia->tempo_alocado = null;
+                            $sequencia->data_inicio_disp_recurso = null;
+
                             if (array_key_exists('recursos', $detalhe)) {
                                 if (count($detalhe['recursos'])) {
                                     $resultado = collect($detalhe['recursos'])
@@ -174,23 +184,19 @@ class SequenciasController extends Controller
                                     // Quantidade de Recursos
                                     if ($resultado['qtd']) {
                                         $sequencia->quantidade_recurso = $resultado['qtd'];
-                                    } else {
-                                        $sequencia->quantidade_recurso = null;
                                     }
 
                                     // Tempo Alocado
                                     if ($resultado['tempoAlocado']) {
                                         $sequencia->tempo_alocado = $resultado['tempoAlocado'];
-                                    } else {
-                                        $sequencia->tempo_alocado = null;
                                     }
 
                                     // Data de Início de Disponibilização de Recurso
                                     if ($resultado['dataDispRecurso']) {
                                         $sequencia->data_inicio_disp_recurso = $resultado['dataDispRecurso'];
-                                    } else {
-                                        $sequencia->data_inicio_disp_recurso = null;
                                     }
+                                } else {
+
                                 }
                             }
 
@@ -202,32 +208,31 @@ class SequenciasController extends Controller
                                         ->first()
                                     ;
 
+                                    // Limpeza de dados
+                                    $sequencia->inicio_otimista = null;
+                                    $sequencia->inicio_pessimista = null;
+                                    $sequencia->fim_otimista = null;
+                                    $sequencia->fim_pessimista = null;
+                                    $sequencia->requer_recursos = false;
+
                                     // Início Otimista
                                     if ($resultado['inicioOtimista']) {
                                         $sequencia->inicio_otimista = $resultado['inicioOtimista'];
-                                    } else {
-                                        $sequencia->inicio_otimista = null;
                                     }
 
                                     // Início Pessimista
                                     if ($resultado['inicioPessimista']) {
                                         $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
-                                    } else {
-                                        $sequencia->inicio_pessimista = null;
                                     }
 
                                     // Fim Otimista
                                     if ($resultado['fimOtimista']) {
                                         $sequencia->fim_otimista = $resultado['fimOtimista'];
-                                    } else {
-                                        $sequencia->fim_otimista = null;
                                     }
 
                                     // Fim Pessimista
                                     if ($resultado['fimPessimista']) {
                                         $sequencia->fim_pessimista = $resultado['fimPessimista'];
-                                    } else {
-                                        $sequencia->fim_pessimista = null;
                                     }
 
                                     // Fim Pessimista
@@ -237,8 +242,6 @@ class SequenciasController extends Controller
                                         )
                                     ) {
                                         $sequencia->requer_recursos = true;
-                                    } else {
-                                        $sequencia->requer_recursos = false;
                                     }
                                 }
                             }
@@ -286,46 +289,41 @@ class SequenciasController extends Controller
                                 $resultado = collect($detalhe['detalhes'])
                                     ->where('recursoId', $sequencia->recurso_id)
                                     ->where('atividadeId', $sequencia->atividade_id)
-                                    ->first()
-                                ;
+                                    ->first();
+
+                                // Limpeza de dados.
+                                $sequencia->inicio_otimista = null;
+                                $sequencia->inicio_pessimista = null;
+                                $sequencia->fim_otimista = null;
+                                $sequencia->fim_pessimista = null;
+                                $sequencia->requer_recursos = false;
 
                                 // Início Otimista
                                 if ($detalhe['detalhes']['inicioOtimista']) {
                                     $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
-                                } else {
-                                    $sequencia->inicio_otimista = null;
                                 }
 
                                 // Início Pessimista
                                 if ($detalhe['detalhes']['inicioPessimista']) {
                                     $sequencia->inicio_pessimista = $detalhe['detalhes']['inicioPessimista'];
-                                } else {
-                                    $sequencia->inicio_pessimista = null;
                                 }
 
                                 // Fim Otimista
                                 if ($detalhe['detalhes']['fimOtimista']) {
                                     $sequencia->fim_otimista = $detalhe['detalhes']['fimOtimista'];
-                                } else {
-                                    $sequencia->fim_otimista = null;
                                 }
 
                                 // Fim Pessimista
                                 if ($detalhe['detalhes']['fimPessimista']) {
                                     $sequencia->fim_pessimista = $detalhe['detalhes']['fimPessimista'];
-                                } else {
-                                    $sequencia->fim_pessimista = null;
                                 }
 
                                 // Fim Pessimista
                                 if (
                                 in_array($detalhe['detalhes']['requerRecursos'],
-                                    ['on', 'true', true, '1', 1]
-                                )
+                                    ['on', 'true', true, '1', 1])
                                 ) {
                                     $sequencia->requer_recursos = true;
-                                } else {
-                                    $sequencia->requer_recursos = false;
                                 }
                             }
                         }

@@ -529,7 +529,6 @@ $(function() {
         $(modal).find('#data_inicio_disp_recurso').val(null);
         $(modal).find('#tempo_alocado').val(null);
 
-        alert('Os dados foram salvos com sucesso!');
         $(modal).modal('hide');
     }
     
@@ -543,7 +542,6 @@ $(function() {
         $(modal).find('#fim_otimista').val(null);
         $(modal).find('#fim_pessimista').val(null);
 
-        alert('Os dados foram salvos com sucesso!');
         $(modal).modal('hide');
     }
 
