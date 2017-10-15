@@ -20,6 +20,8 @@ class Sequencia extends Model
         'atividade_predecessora_id',
         'requer_recursos',
         'tempo_alocado',
+        'data_inicio_disp_recurso',
+        'duracao',
     ];
 
     protected $dates = [

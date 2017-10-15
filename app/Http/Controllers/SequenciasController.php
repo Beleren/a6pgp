@@ -9,6 +9,7 @@ use App\Sequencia;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
+use Carbon\Carbon;
 
 class SequenciasController extends Controller
 {
@@ -71,10 +72,69 @@ class SequenciasController extends Controller
              * Se não houver recursos e atividades enviadas para processamento,
              * as sequências cadastradas no banco de dados devem ser excluídos.
              */
+
             if (! $has_post_predecessoras && ! $has_post_recursos) {
                 if ($sequencias) {
                     Sequencia::whereIn('id', $sequencias->pluck('id'))
                         ->delete();
+                }
+
+                $detalhe = $this->processarDetalhes($detalhes);
+
+                if ($detalhe) {
+                    if (array_key_exists('detalhes', $detalhe)) {
+                        if (count($detalhe['detalhes'])) {
+                            $sequencia = Sequencia::firstOrCreate([
+                                'atividade_id' => $atividade->id,
+                                'cenario_id' =>  $request->input('cenario'),
+                            ]);
+
+                            $resultado = collect($detalhe)
+                                ->where('atividadeId', $sequencia->atividade_id)
+                                ->first()
+                            ;
+                            // Início Otimista
+                            if ($resultado['inicioOtimista']) {
+                                $sequencia->inicio_otimista = $resultado['inicioOtimista'];
+                            } else {
+                                $sequencia->inicio_otimista = null;
+                            }
+
+                            // Início Pessimista
+                            if ($resultado['inicioPessimista']) {
+                                $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
+                            } else {
+                                $sequencia->inicio_pessimista = null;
+                            }
+
+                            // Fim Otimista
+                            if ($resultado['fimOtimista']) {
+                                $sequencia->fim_otimista = $resultado['fimOtimista'];
+                            } else {
+                                $sequencia->fim_otimista = null;
+                            }
+
+                            // Fim Pessimista
+                            if ($resultado['fimPessimista']) {
+                                $sequencia->fim_pessimista = $resultado['fimPessimista'];
+                            } else {
+                                $sequencia->fim_pessimista = null;
+                            }
+
+                            // Fim Pessimista
+                            if (
+                            in_array($resultado['requerRecursos'],
+                                ['on', 'true', true, '1', 1]
+                            )
+                            ) {
+                                $sequencia->requer_recursos = true;
+                            } else {
+                                $sequencia->requer_recursos = false;
+                            }
+                        }
+
+                        $sequencia->save();
+                    }
                 }
             }
 
@@ -84,9 +144,8 @@ class SequenciasController extends Controller
              */
             else if ($has_post_predecessoras && $has_post_recursos) {
                 foreach ($recursos as $index => $recurso) {
-
                     collect($predecessoras)->each(function ($predecessora, $chave)
-                    use ($request, $recurso, $atividade) {
+                    use ($request, $recurso, $atividade, $detalhes, $index) {
 
                         /*
                          * Criação de sequências com seus respectivos recursos.
@@ -97,6 +156,95 @@ class SequenciasController extends Controller
                             'atividade_predecessora_id' => $predecessora,
                             'recurso_id' => $recurso,
                         ]);
+
+                        $detalhe = $this->processarDetalhes($detalhes);
+
+                        /*
+                         * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
+                         */
+                        if ($detalhe) {
+                            if (array_key_exists('recursos', $detalhe)) {
+                                if (count($detalhe['recursos'])) {
+                                    $resultado = collect($detalhe['recursos'])
+                                        ->where('recursoId', $sequencia->recurso_id)
+                                        ->where('atividadeId', $sequencia->atividade_id)
+                                        ->first()
+                                    ;
+
+                                    // Quantidade de Recursos
+                                    if ($resultado['qtd']) {
+                                        $sequencia->quantidade_recurso = $resultado['qtd'];
+                                    } else {
+                                        $sequencia->quantidade_recurso = null;
+                                    }
+
+                                    // Tempo Alocado
+                                    if ($resultado['tempoAlocado']) {
+                                        $sequencia->tempo_alocado = $resultado['tempoAlocado'];
+                                    } else {
+                                        $sequencia->tempo_alocado = null;
+                                    }
+
+                                    // Data de Início de Disponibilização de Recurso
+                                    if ($resultado['dataDispRecurso']) {
+                                        $sequencia->data_inicio_disp_recurso = $resultado['dataDispRecurso'];
+                                    } else {
+                                        $sequencia->data_inicio_disp_recurso = null;
+                                    }
+                                }
+                            }
+
+                            if (array_key_exists('detalhes', $detalhe)) {
+                                if (count($detalhe['detalhes'])) {
+                                    $resultado = collect($detalhe['detalhes'])
+                                        ->where('recursoId', $sequencia->recurso_id)
+                                        ->where('atividadeId', $sequencia->atividade_id)
+                                        ->first()
+                                    ;
+
+                                    // Início Otimista
+                                    if ($resultado['inicioOtimista']) {
+                                        $sequencia->inicio_otimista = $resultado['inicioOtimista'];
+                                    } else {
+                                        $sequencia->inicio_otimista = null;
+                                    }
+
+                                    // Início Pessimista
+                                    if ($resultado['inicioPessimista']) {
+                                        $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
+                                    } else {
+                                        $sequencia->inicio_pessimista = null;
+                                    }
+
+                                    // Fim Otimista
+                                    if ($resultado['fimOtimista']) {
+                                        $sequencia->fim_otimista = $resultado['fimOtimista'];
+                                    } else {
+                                        $sequencia->fim_otimista = null;
+                                    }
+
+                                    // Fim Pessimista
+                                    if ($resultado['fimPessimista']) {
+                                        $sequencia->fim_pessimista = $resultado['fimPessimista'];
+                                    } else {
+                                        $sequencia->fim_pessimista = null;
+                                    }
+
+                                    // Fim Pessimista
+                                    if (
+                                        in_array($resultado['requerRecursos'],
+                                        ['on', 'true', true, '1', 1]
+                                        )
+                                    ) {
+                                        $sequencia->requer_recursos = true;
+                                    } else {
+                                        $sequencia->requer_recursos = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        $sequencia->save();
                     });
 
                     $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -111,10 +259,6 @@ class SequenciasController extends Controller
                     if ($para_excluir) {
                         Sequencia::destroy($para_excluir->pluck('id')->toArray());
                     }
-
-                    // Estou aqui.
-
-                    $this->processarDetalhes($detalhes);
                 }
             }
 
@@ -130,6 +274,64 @@ class SequenciasController extends Controller
                     if ($sequencia->recurso_id) {
                         $sequencias->recurso_id = null;
                     }
+
+                    $detalhe = $this->processarDetalhes($detalhes);
+
+                    /*
+                     * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
+                     */
+                    if ($detalhe) {
+                        if (array_key_exists('detalhes', $detalhe)) {
+                            if (count($detalhe['detalhes'])) {
+                                $resultado = collect($detalhe['detalhes'])
+                                    ->where('recursoId', $sequencia->recurso_id)
+                                    ->where('atividadeId', $sequencia->atividade_id)
+                                    ->first()
+                                ;
+
+                                // Início Otimista
+                                if ($detalhe['detalhes']['inicioOtimista']) {
+                                    $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
+                                } else {
+                                    $sequencia->inicio_otimista = null;
+                                }
+
+                                // Início Pessimista
+                                if ($detalhe['detalhes']['inicioPessimista']) {
+                                    $sequencia->inicio_pessimista = $detalhe['detalhes']['inicioPessimista'];
+                                } else {
+                                    $sequencia->inicio_pessimista = null;
+                                }
+
+                                // Fim Otimista
+                                if ($detalhe['detalhes']['fimOtimista']) {
+                                    $sequencia->fim_otimista = $detalhe['detalhes']['fimOtimista'];
+                                } else {
+                                    $sequencia->fim_otimista = null;
+                                }
+
+                                // Fim Pessimista
+                                if ($detalhe['detalhes']['fimPessimista']) {
+                                    $sequencia->fim_pessimista = $detalhe['detalhes']['fimPessimista'];
+                                } else {
+                                    $sequencia->fim_pessimista = null;
+                                }
+
+                                // Fim Pessimista
+                                if (
+                                in_array($detalhe['detalhes']['requerRecursos'],
+                                    ['on', 'true', true, '1', 1]
+                                )
+                                ) {
+                                    $sequencia->requer_recursos = true;
+                                } else {
+                                    $sequencia->requer_recursos = false;
+                                }
+                            }
+                        }
+                    }
+
+                    $sequencia->save();
                 }
 
                 $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -155,6 +357,95 @@ class SequenciasController extends Controller
                     if ($sequencia->atividade_predecessora_id) {
                         $sequencia->atividade_predecessora_id = null;
                     }
+
+                    $detalhe = $this->processarDetalhes($detalhes);
+
+                    /*
+                     * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
+                     */
+                    if ($detalhe) {
+                        if (array_key_exists('recursos', $detalhe)) {
+                            if (count($detalhe['recursos'])) {
+                                $resultado = collect($detalhe['recursos'])
+                                    ->where('recursoId', $sequencia->recurso_id)
+                                    ->where('atividadeId', $sequencia->atividade_id)
+                                    ->first()
+                                ;
+
+                                // Quantidade de Recursos
+                                if ($resultado['qtd']) {
+                                    $sequencia->quantidade_recurso = $resultado['qtd'];
+                                } else {
+                                    $sequencia->quantidade_recurso = null;
+                                }
+
+                                // Tempo Alocado
+                                if ($resultado['tempoAlocado']) {
+                                    $sequencia->tempo_alocado = $resultado['tempoAlocado'];
+                                } else {
+                                    $sequencia->tempo_alocado = null;
+                                }
+
+                                // Data de Início de Disponibilização de Recurso
+                                if ($resultado['dataDispRecurso']) {
+                                    $sequencia->data_inicio_disp_recurso = $resultado['dataDispRecurso'];
+                                } else {
+                                    $sequencia->data_inicio_disp_recurso = null;
+                                }
+                            }
+                        }
+
+                        if (array_key_exists('detalhes', $detalhe)) {
+                            if (count($detalhe['detalhes'])) {
+                                $resultado = collect($detalhe['detalhes'])
+                                    ->where('recursoId', $sequencia->recurso_id)
+                                    ->where('atividadeId', $sequencia->atividade_id)
+                                    ->first()
+                                ;
+
+                                // Início Otimista
+                                if ($detalhe['detalhes']['inicioOtimista']) {
+                                    $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
+                                } else {
+                                    $sequencia->inicio_otimista = null;
+                                }
+
+                                // Início Pessimista
+                                if ($detalhe['detalhes']['inicioPessimista']) {
+                                    $sequencia->inicio_pessimista = $detalhe['detalhes']['inicioPessimista'];
+                                } else {
+                                    $sequencia->inicio_pessimista = null;
+                                }
+
+                                // Fim Otimista
+                                if ($detalhe['detalhes']['fimOtimista']) {
+                                    $sequencia->fim_otimista = $detalhe['detalhes']['fimOtimista'];
+                                } else {
+                                    $sequencia->fim_otimista = null;
+                                }
+
+                                // Fim Pessimista
+                                if ($detalhe['detalhes']['fimPessimista']) {
+                                    $sequencia->fim_pessimista = $detalhe['detalhes']['fimPessimista'];
+                                } else {
+                                    $sequencia->fim_pessimista = null;
+                                }
+
+                                // Fim Pessimista
+                                if (
+                                in_array($detalhe['detalhes']['requerRecursos'],
+                                    ['on', 'true', true, '1', 1]
+                                )
+                                ) {
+                                    $sequencia->requer_recursos = true;
+                                } else {
+                                    $sequencia->requer_recursos = false;
+                                }
+                            }
+                        }
+                    }
+
+                    $sequencia->save();
                 }
 
                 $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -169,7 +460,7 @@ class SequenciasController extends Controller
             }
 
             else {
-                return 'Erro!';
+                // TODO: Implementar tratativa de caso excepcional.
             }
         }
 
@@ -179,16 +470,8 @@ class SequenciasController extends Controller
         ]));
     }
 
-    public function salvarDetalhes(Request $request, Projeto $projeto) {
-        dd($request);
-    }
-
-    public function salvarDetalhesRecursos(Request $request, Projeto $projeto) {
-        dd($request->input('sequencias.*.detalhes'));
-    }
-
     private function processarDetalhesRecursos($valor) {
-        $has_erros = true;
+        $has_exito = false;
 
         $regras = [
             'qtd' => 'integer|min:0',
@@ -208,14 +491,14 @@ class SequenciasController extends Controller
         $validator = Validator::make($valor, $regras, $mensagens);
         
         if (! $validator->fails()) {
-            $has_erros = false;
+            $has_exito = true;
         }
 
-        return $has_erros;
+        return $has_exito;
     }
 
     private function processarDetalhesAtividades($valor) {
-        $has_erros = true;
+        $has_exito = false;
 
         $regras = [
             'duracao' => 'integer|min:0',
@@ -237,21 +520,43 @@ class SequenciasController extends Controller
         $validator = Validator::make($valor, $regras, $mensagens);
 
         if (! $validator->fails()) {
-            $has_erros = false;
+            $has_exito = true;
         }
 
-        return $has_erros;
+        return $has_exito;
     }
 
     private function processarDetalhes($valor) {
+        $has_exito = false;
         $vetor = json_decode($valor, true);
 
         if ($vetor) {
-            $this->processarDetalhesRecursos($vetor['recursos']);
-            $this->processarDetalhesAtividades($vetor['detalhes']);
+            if (
+                $this->processarDetalhesRecursos($vetor['recursos']) &&
+                $this->processarDetalhesAtividades($vetor['detalhes'])
+            ) {
+                $has_exito = true;
+            }
+        } else {
+            $has_exito = true;
         }
 
-        dd('Fim!');
+        if ($has_exito) {
+            return $vetor;
+        }
+
+        return false;
         /* TODO: Informar qual é a atividade onde houve o erro. */
+    }
+
+    public function obterDetalhesSequencia(Projeto $projeto, Atividade $atividade, Cenario $cenario) {
+        $this->authorize('view-projeto', $projeto);
+
+        $sequencia = Sequencia::where([
+            'cenario_id' => $cenario->id,
+            'atividade_id' => $atividade->id,
+        ])->get();
+
+        dd($sequencia);
     }
 }

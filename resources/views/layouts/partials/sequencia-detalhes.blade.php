@@ -9,9 +9,7 @@
                 <h4 class="modal-title">Atividade</h4>
             </div>
             <div class="modal-body">
-                <form id="form-detalhes" method="post" action="{{ route('sequencias.salvar-detalhes', [
-                    'projeto' => $projeto->id,
-                ]) }}">
+                <form id="form-detalhes" method="post">
                     {{ csrf_field() }}
 
                     <!-- Duração -->

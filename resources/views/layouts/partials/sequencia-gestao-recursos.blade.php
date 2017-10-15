@@ -7,6 +7,12 @@
                     href="#collapseAtividades" aria-expanded="true"
                     aria-controls="collapseAtividades">
                     Atividades
+                    <a class="btn btn-primary adicionar"
+                       href="{{ route('atividades.create', [
+                    'projeto' => $projeto->id]) }}"
+                    >
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
                 </a>
             </h4>
         </div>
@@ -36,6 +42,12 @@
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
                     href="#collapseRecursos" aria-expanded="false" aria-controls="collapseRecursos">
                     Recursos
+                    <a class="btn btn-primary adicionar"
+                       href="{{ route('recursos.create', [
+                    'projeto' => $projeto->id]) }}"
+                    >
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
                 </a>
             </h4>
         </div>

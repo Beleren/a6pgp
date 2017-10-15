@@ -140,9 +140,6 @@ Route::middleware(['web', 'auth'])->group(function (){
     Route::post('/projetos/{projeto}/sequencias/cenarios', 'SequenciasController@store')
         ->name('sequencias.store');
 
-    Route::post('/projetos/{projeto}/sequencias/detalhes', 'SequenciasController@salvarDetalhes')
-        ->name('sequencias.salvar-detalhes');
-
-    Route::post('/projetos/{projeto}/sequencias/detalhes-recursos', 'SequenciasController@salvarDetalhesRecursos')
-        ->name('sequencias.salvar-detalhes-recursos');
+    Route::get('/projetos/{projeto}/atividades/{atividade}/cenarios/{cenario}', 'SequenciasController@obterDetalhesSequencia')
+        ->name('sequencias.obter-detalhes-sequencia');
 });

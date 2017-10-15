@@ -547,6 +547,10 @@ $(function() {
         $(modal).modal('hide');
     }
 
+    function obterDetalhesDeSequenciaDoServidor(sequencia_id, cenario_id, projeto_id) {
+        $.get('');
+    }
+
     /*
      * TODO: Melhorar a usabilidadde da aplicação com o carregamento automático
      * dos valores cadastrados de recursos e atividades.
