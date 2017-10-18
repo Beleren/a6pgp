@@ -14,6 +14,7 @@ class SugestaoMail extends Mailable
     protected $usuario;
     protected $email;
     protected $administrador;
+    protected $mensagem;
 
     /**
      * Create a new message instance.
@@ -21,11 +22,12 @@ class SugestaoMail extends Mailable
      * @param null $usuario
      * @param string $administrador
      */
-    public function __construct($usuario = null, $email = null, $administrador  = 'msena.ifsp@gmail.com')
+    public function __construct($usuario = null, $email = null, $mensagem = null, $administrador  = 'msena.ifsp@gmail.com')
     {
         $this->usuario = $usuario;
         $this->email = $email;
         $this->administrador = $administrador;
+        $this->mensagem = $mensagem;
     }
 
     /**
@@ -38,7 +40,11 @@ class SugestaoMail extends Mailable
         return $this->view('emails.sugestao')
             ->subject('Projeto Besouro | Sugestões')
             ->from('postmaster@besouro.herokuapp.com', 'Projeto Besouro')
-            ->with(['nome' => $this->usuario, 'email' => $this->email])
+            ->with([
+                'nome' => $this->usuario,
+                'email' => $this->email,
+                'mensagem' => $this->mensagem,
+            ])
         ;
     }
 }

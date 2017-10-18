@@ -14,26 +14,26 @@
 
                     <!-- Quantidade de Recursos -->
                     <div class="form-group">
-                        <label for="quantidade_recurso" class="control-label">Quantidade de Rercurso</label>
-                        <input type="number" id="quantidade_recurso" name="quantidade_recurso[]"
+                        <label for="quantidade-recurso" class="control-label">Quantidade de Rercurso</label>
+                        <input type="number" id="quantidade-recurso" name="quantidade-recurso[]"
                             min="0" class="form-control">
                     </div>
 
                     <!-- Data de Disponbilização do Recurso -->
                     <div class="form-group">
-                        <label for="data_inicio_disp_recurso" class="control-label">
+                        <label for="data-inicio-disp-recurso" class="control-label">
                             Data de Disponibilização do Recurso
                         </label>
-                        <input type="date" id="data_inicio_disp_recurso" name="data_inicio_disp_recurso"
+                        <input type="date" id="data-inicio-disp-recurso" name="data-inicio-disp-recurso"
                                class="form-control">
                     </div>
 
                     <!-- Tempo Alocado -->
                     <div class="form-group">
-                        <label for="tempo_alocado" class="control-label">
+                        <label for="tempo-alocado" class="control-label">
                             Tempo Alocado:
                         </label>
-                        <input type="time" id="tempo_alocado" name="tempo_alocado" class="form-control">
+                        <input type="time" id="tempo-alocado" name="tempo-alocado" class="form-control">
                     </div>
                 </form>
             </div>

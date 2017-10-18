@@ -15,4 +15,5 @@
     <p>
         Abraços da equipe Projeto Besouro.
     </p>
+    <pre>{{ $mensagem }}</pre>
 </div>

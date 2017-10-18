@@ -40,7 +40,6 @@
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Duração</th>
                     <th>Descrição</th>
                     <th>Ações</th>
                 </tr>
@@ -55,7 +54,6 @@
                                 {{ $atividade->nome }}
                             </a>
                         </td>
-                        <td>{{ $atividade->duracao }}</td>
                         <td>{{ $atividade->descricao }}</td>
                         <td>
                             <a href="{{ route('atividades.edit', ['atividade' => $atividade->id, 'projeto' => $projeto->id ]) }}">Editar</a> |

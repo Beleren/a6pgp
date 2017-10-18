@@ -18,15 +18,6 @@
                     </div>
                 </div>
 
-                <!-- Duração -->
-                <div class="form-group">
-                    <label for="duracao" class="control-label col-sm-2 col-md-2">Duração:</label>
-                    <div class="col-sm-6 col-md-6">
-                        <input type="number" id="duracao" name="duracao"
-                            class="form-control" value="{{ old('duracao') }}">
-                    </div>
-                </div>
-
                 <!-- Descrição -->
                 <div class="form-group">
                     <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>

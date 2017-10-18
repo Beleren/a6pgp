@@ -20,34 +20,34 @@
 
                     <!-- Requer Recursos -->
                     <div class="form-group">
-                        <label for="requer_recursos" class="control-label">
-                            <input type="checkbox" id="requer_recursos" name="requer_recursos">
+                        <label for="requer-recursos" class="control-label">
+                            <input type="checkbox" id="requer-recursos" name="requer-recursos">
                             Requer Recursos?
                         </label>
                     </div>
 
                     <!-- Início Otimista -->
                     <div class="form-group">
-                        <label for="inicio_otimista" class="control-label">Início Otimista:</label>
-                        <input type="date" id="inicio_otimista" name="inicio_otimista" class="form-control">
+                        <label for="inicio-otimista" class="control-label">Início Otimista:</label>
+                        <input type="date" id="inicio-otimista" name="inicio-otimista" class="form-control">
                     </div>
 
                     <!-- Início Pessimista -->
                     <div class="form-group">
-                        <label for="inicio_pessimista" class="control-label">Início Pessimista:</label>
-                        <input type="date" id="inicio_pessimista" name="inicio_pessimista" class="form-control">
+                        <label for="inicio-pessimista" class="control-label">Início Pessimista:</label>
+                        <input type="date" id="inicio-pessimista" name="inicio-pessimista" class="form-control">
                     </div>
 
                     <!-- Fim Otimista -->
                     <div class="form-group">
-                        <label for="fim_otimista" class="control-label">Fim Otimista:</label>
-                        <input type="date" id="fim_otimista" name="fim_otimista" class="form-control">
+                        <label for="fim-otimista" class="control-label">Fim Otimista:</label>
+                        <input type="date" id="fim-otimista" name="fim-otimista" class="form-control">
                     </div>
 
                     <!-- Fim Pessimista -->
                     <div class="form-group">
-                        <label for="fim_pessimista" class="control-label">Fim Pessimista:</label>
-                        <input type="date" id="fim_pessimista" name="fim_pessimista" class="form-control">
+                        <label for="fim-pessimista" class="control-label">Fim Pessimista:</label>
+                        <input type="date" id="fim-pessimista" name="fim-pessimista" class="form-control">
                     </div>
                 </form>
             </div>

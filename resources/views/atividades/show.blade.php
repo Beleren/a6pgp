@@ -20,17 +20,6 @@
 
                     <input type="hidden" name="nome" id="nome" value="{{ $atividade->nome }}">
 
-                    <!-- Duração -->
-                    <div class="form-group">
-                        <label for="duracao" class="control-label col-sm-2 col-md-2">Duração:</label>
-
-                        <div class="col-sm-6 col-md-6">
-                            <input type="number" id="duracao" name="duracao" min="0" step="1"
-                               class="form-control" value="{{ $atividade->duracao }}"
-                               readonly="readonly">
-                        </div>
-                    </div>
-
                     <!-- Descrição -->
                     <div class="form-group">
                         <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>

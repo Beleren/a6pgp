@@ -59,32 +59,35 @@ class HomeController extends Controller
         $email = $request->input('email');
         $assunto = $request->input('assunto');
         $topico = $request->input('topico');
+        $mensagem = $request->input('mensagem');
 
         switch($topico) {
             case 'sugestao':
-                Mail::to($request->input('email'))
-                    ->send(new SugestaoMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new SugestaoMail($nome, $email, $mensagem));
                 break;
             case 'elogio':
-                Mail::to($request->input('email'))
-                    ->send(new ElogioMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new ElogioMail($nome, $email, $mensagem));
                 break;
             case 'critica':
-                Mail::to($request->input('email'))
-                    ->send(new CriticaMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new CriticaMail($nome, $email, $mensagem));
                 break;
             case 'erro':
-                Mail::to($request->input('email'))
-                    ->send(new ErroMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new ErroMail($nome, $email, $mensagem));
                 break;
             case 'outro':
-                Mail::to($request->input('email'))
-                    ->send(new OutroMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new OutroMail($nome, $email, $mensagem));
                 break;
             default:
-                Mail::to($request->input('email'))
-                    ->send(new OutroMail($nome, $email)); 
+                Mail::to(env('MAIL_USERNAME', 'your@email.com'))
+                    ->send(new OutroMail($nome, $email, $mensagem));
         }
+
+        $request->session()->flash('success', 'E-mail enviado com sucesso!');
 
         if (auth()->guest()) {
             return redirect(url('/'));

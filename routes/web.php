@@ -142,4 +142,8 @@ Route::middleware(['web', 'auth'])->group(function (){
 
     Route::get('/projetos/{projeto}/atividades/{atividade}/cenarios/{cenario}', 'SequenciasController@obterDetalhesSequencia')
         ->name('sequencias.obter-detalhes-sequencia');
+
+    /* Caminho Crítico */
+    Route::get('/projetos/{projeto}/cenarios/{cenario}/caminho-critico', 'CaminhoCriticoController@index')
+        ->name('caminho-critico.index');
 });

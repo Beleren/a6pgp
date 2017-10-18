@@ -28,6 +28,7 @@ class SequenciasController extends Controller
             'sequencias' => $sequencias,
             'cenario' => $cenario,
             'cenarios' => $projeto->cenarios,
+
             'atividades' => $projeto->atividades,
             'recursos' => $projeto->recursos,
         ]);
@@ -101,12 +102,7 @@ class SequenciasController extends Controller
                                 ->first()
                             ;
 
-                            // Limpeza de valores.
-                            $sequencia->inicio_otimista = null;
-                            $sequencia->inicio_pessimista = null;
-                            $sequencia->fim_otimista = null;
-                            $sequencia->fim_pessimista = null;
-                            $sequencia->requer_recursos = false;
+                            $this->limpezaDeCampos($sequencia);
 
                             // Início Otimista
                             if ($resultado['inicioOtimista']) {
@@ -162,6 +158,8 @@ class SequenciasController extends Controller
                             'recurso_id' => $recurso,
                         ]);
 
+                        $this->limpezaDeCampos($sequencia);
+
                         $detalhe = $this->processarDetalhes($detalhes);
 
                         /*
@@ -207,13 +205,6 @@ class SequenciasController extends Controller
                                         ->where('atividadeId', $sequencia->atividade_id)
                                         ->first()
                                     ;
-
-                                    // Limpeza de dados
-                                    $sequencia->inicio_otimista = null;
-                                    $sequencia->inicio_pessimista = null;
-                                    $sequencia->fim_otimista = null;
-                                    $sequencia->fim_pessimista = null;
-                                    $sequencia->requer_recursos = false;
 
                                     // Início Otimista
                                     if ($resultado['inicioOtimista']) {
@@ -262,6 +253,8 @@ class SequenciasController extends Controller
                     if ($para_excluir) {
                         Sequencia::destroy($para_excluir->pluck('id')->toArray());
                     }
+
+                    $sequencia->save();
                 }
             }
 
@@ -277,6 +270,8 @@ class SequenciasController extends Controller
                     if ($sequencia->recurso_id) {
                         $sequencias->recurso_id = null;
                     }
+
+                    $this->limpezaDeCampos($sequencia);
 
                     $detalhe = $this->processarDetalhes($detalhes);
 
@@ -328,8 +323,6 @@ class SequenciasController extends Controller
                             }
                         }
                     }
-
-                    $sequencia->save();
                 }
 
                 $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -341,10 +334,13 @@ class SequenciasController extends Controller
                 if ($para_excluir) {
                     Sequencia::destroy($para_excluir->pluck('id')->toArray());
                 }
+
+                $sequencia->save();
             }
 
 
             else if (! $has_post_predecessoras && $has_post_recursos) {
+
                 foreach ($recursos as $recurso) {
                     $sequencia = Sequencia::firstOrCreate([
                         'cenario_id' => $request->input('cenario'),
@@ -356,6 +352,8 @@ class SequenciasController extends Controller
                         $sequencia->atividade_predecessora_id = null;
                     }
 
+                    $this->limpezaDeCampos($sequencia);
+
                     $detalhe = $this->processarDetalhes($detalhes);
 
                     /*
@@ -364,6 +362,9 @@ class SequenciasController extends Controller
                     if ($detalhe) {
                         if (array_key_exists('recursos', $detalhe)) {
                             if (count($detalhe['recursos'])) {
+
+                                //dd($detalhe['recursos']);
+
                                 $resultado = collect($detalhe['recursos'])
                                     ->where('recursoId', $sequencia->recurso_id)
                                     ->where('atividadeId', $sequencia->atividade_id)
@@ -455,6 +456,8 @@ class SequenciasController extends Controller
                 if ($para_excluir) {
                     Sequencia::destroy($para_excluir->pluck('id')->toArray());
                 }
+
+                $sequencia->save();
             }
 
             else {
@@ -553,8 +556,70 @@ class SequenciasController extends Controller
         $sequencia = Sequencia::where([
             'cenario_id' => $cenario->id,
             'atividade_id' => $atividade->id,
+        ])->first();
+
+        /* Detalhes */
+        $json['detalhes']['inicioOtimista'] = $sequencia->inicio_otimista;
+        $json['detalhes']['inicioPessimista'] = $sequencia->inicio_pessimista;
+        $json['detalhes']['fimOtimista'] = $sequencia->fim_otimista;
+        $json['detalhes']['fimPessimista'] = $sequencia->fim_pessimista;
+        $json['detalhes']['requerRecursos'] = $sequencia->requer_recursos;
+
+        /* Ajustes na formatação do JSON */
+        $json['detalhes']['inicioOtimista'] = $this->ajustarFormatoDeDataJSON($json['detalhes'], 'inicioOtimista');
+        $json['detalhes']['inicioPessimista'] = $this->ajustarFormatoDeDataJSON($json['detalhes'], 'inicioPessimista');
+        $json['detalhes']['fimOtimista'] = $this->ajustarFormatoDeDataJSON($json['detalhes'], 'fimOtimista');
+        $json['detalhes']['fimPessimista'] = $this->ajustarFormatoDeDataJSON($json['detalhes'], 'fimPessimista');
+
+        /* Obtenção de detalhes de recursos */
+        $recursos = $this->obterDetalhesRecursos($atividade, $cenario);
+
+        $json['recursos'] = [];
+
+        foreach ($recursos as $recurso) {
+            $valores = [
+                'atividadeId' => $recurso['atividade_id'],
+                'recursoId' => $recurso['recurso_id'],
+                'qtd' => $recurso['quantidade_recurso'],
+                'tempoalocado' => $recurso['tempo_alocado'],
+                'dataDispRecurso' => $recurso['data_inicio_disp_recurso'],
+            ];
+
+            array_push($json['recursos'], $valores);
+        }
+
+        return $json;
+    }
+
+    private function obterDetalhesRecursos(Atividade $atividade, Cenario $cenario) {
+        $sequencias = Sequencia::where([
+           'cenario_id' => $cenario->id,
+            'atividade_id' => $atividade->id,
         ])->get();
 
-        dd($sequencia);
+        return $sequencias;
+    }
+
+    private function limpezaDeCampos(Sequencia $sequencia) {
+        /* Limpeza */
+        $sequencia->inicio_otimista = null;
+        $sequencia->fim_otimista = null;
+        $sequencia->inicio_pessimista = null;
+        $sequencia->fim_pessimista = null;
+        $sequencia->quantidade_recurso = null;
+        $sequencia->requer_recursos = false;
+        $sequencia->tempo_alocado = null;
+        $sequencia->data_inicio_disp_recurso = null;
+        $sequencia->duracao = null;
+    }
+
+    private function ajustarFormatoDeDataJSON(array $vetor, $chave) {
+        if (array_key_exists($chave, $vetor)) {
+            if ($vetor[$chave]) {
+                return date($vetor[$chave]);
+            }
+        } else {
+            return $vetor;
+        }
     }
 }
