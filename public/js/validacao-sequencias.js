@@ -387,12 +387,29 @@ $(function() {
             var dados = JSON.parse($('#detalhes-' + id_atividade).val());
 
             if (dados.hasOwnProperty('detalhes')) {
-                $(modal).find('#duracao').val(dados.detalhes.duracao);
-                $(modal).find('#requer-recursos').val(dados.detalhes.requerRecursos);
-                $(modal).find('#inicio-otimista').val(dados.detalhes.inicioOtimista.substr(0, 10));
-                $(modal).find('#inicio_pessimista').val(dados.detalhes.inicioPessimista.substr(0, 10));
-                $(modal).find('#fim-otimista').val(dados.detalhes.fimOtimista.substr(0, 10));
-                $(modal).find('#fim-pessimista').val(dados.detalhes.fimPessimista.substr(0, 10));
+                if (dados.detalhes.hasOwnProperty('duracao')) {
+                    $(modal).find('#duracao').val(dados.detalhes.duracao);
+                }
+
+                if (dados.detalhes.hasOwnProperty('requerRecursos')) {
+                    $(modal).find('#requer-recursos').val(dados.detalhes.requerRecursos);
+                }
+
+                if (dados.detalhes.hasOwnProperty('inicioOtimista')) {
+                    $(modal).find('#inicio-otimista').val(dados.detalhes.inicioOtimista.substr(0, 10));
+                }
+
+                if (dados.detalhes.hasOwnProperty('inicioPessimista')) {
+                    $(modal).find('#inicio_pessimista').val(dados.detalhes.inicioPessimista.substr(0, 10));
+                }
+
+                if (dados.detalhes.hasOwnProperty('fimOtimista')) {
+                    $(modal).find('#fim-otimista').val(dados.detalhes.fimOtimista.substr(0, 10));
+                }
+
+                if (dados.detalhes.hasOwnProperty('fimPessimista')) {
+                    $(modal).find('#fim-pessimista').val(dados.detalhes.fimPessimista.substr(0, 10));
+                }
             }
         });
 
@@ -579,14 +596,17 @@ $(function() {
                 ! resultado.detalhes.fimOtimista &&
                 ! resultado.detalhes.fimPessimista
             ) {
-                if (resultado.recursos.count() <= 1 &&
-                    ! resultado.recursos[0].qtd &&
-                    ! resultado.recursos[0].tempoAlocado &&
-                    ! resultado.recursos[0].dataDispRecurso
-                ) {
-                    resultado = '{}';
+                if (resultado.hasOwnProperty('recursos') &&
+                    Array.isArray(resultado.recursos)) {
+                    if (resultado.recursos.length <= 1 &&
+                        ! resultado.recursos[0].qtd &&
+                        ! resultado.recursos[0].tempoAlocado &&
+                        ! resultado.recursos[0].dataDispRecurso
+                    ) {
+                        resultado = '{}';
+                    }
+                    $('#detalhes-' + atividade_id).val(resultado);
                 }
-                $('#detalhes-' + atividade_id).val(resultado);
             } else {
                 $('#detalhes-' + atividade_id).val(JSON.stringify(resultado));
             }

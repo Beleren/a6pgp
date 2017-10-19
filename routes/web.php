@@ -146,4 +146,6 @@ Route::middleware(['web', 'auth'])->group(function (){
     /* Caminho Crítico */
     Route::get('/projetos/{projeto}/cenarios/{cenario}/caminho-critico', 'CaminhoCriticoController@index')
         ->name('caminho-critico.index');
+
+    Route::get('/teste', 'CaminhoCriticoController@caminhoCriticoPorMaiorDuracao');
 });
