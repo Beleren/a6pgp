@@ -1416,9 +1416,9 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-env@^5.0.1:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.0.5.tgz#4383d364d9660873dd185b398af3bfef5efffef3"
+cross-env@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.1.0.tgz#1f12d6b3777d5847dcf9cf39fbee3c6a76dd5058"
   dependencies:
     cross-spawn "^5.1.0"
     is-windows "^1.0.0"
@@ -3357,7 +3357,7 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
-laravel-mix@^1.0:
+laravel-mix@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/laravel-mix/-/laravel-mix-1.5.1.tgz#987b7bfab1892a430d6581e868d8651922929f1a"
   dependencies:

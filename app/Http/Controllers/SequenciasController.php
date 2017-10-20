@@ -607,7 +607,7 @@ class SequenciasController extends Controller
     private function limpezaDeCampoDeRecursos(Sequencia $sequencia) {
         $sequencia->quantidade_recurso = null;
         $sequencia->tempo_alocado = null;
-        $sequencia->data_inicio_disp_recursos = null;
+        $sequencia->data_inicio_disp_recurso = null;
     }
 
     private function ajustarFormatoDeDataJSON(array $vetor, $chave) {

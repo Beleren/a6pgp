@@ -539,7 +539,7 @@ $(function() {
     }
 
     function habilitarSalvarDetalhesAtividades() {
-        $('button#botaoEnviarDetalhes').on('click', function(event) {
+        $('#botaoEnviarDetalhes').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
