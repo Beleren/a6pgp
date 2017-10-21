@@ -96,6 +96,7 @@ class SequenciasController extends Controller
                             'cenario_id' =>  $request->input('cenario'),
                         ]);
 
+                        dd($sequencia);
                         $resultado = collect($detalhe)
                             ->where('atividadeId', $sequencia->atividade_id)
                             ->first()
@@ -390,6 +391,11 @@ class SequenciasController extends Controller
                                 ->first()
                             ;
 
+                            // Duração
+                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'duracao')) {
+                                $sequencia->duracao = $detalhe['detalhes']['duracao'];
+                            }
+
                             // Início Otimista
                             if ($this->verificarExistenciaChave($detalhe['detalhes'], 'inicioOtimista')) {
                                 $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
@@ -483,14 +489,14 @@ class SequenciasController extends Controller
         $has_exito = false;
 
         $regras = [
-            'duracao' => 'integer|min:0',
+            'duracao' => 'numeric|min:0',
             'requerRecursos' => [
                 Rule::in(['true', 'false', 'on', 'off', '1', '0', 1, 0, true, false ]),
             ]
         ];
 
         $mensagens = [
-            'duracao.integer' => 'Duração deve ser um número inteiro.',
+            'duracao.integer' => 'Duração deve ser um tipo numérico.',
             'duracao.min' => 'Duração deve ser maior quer zero.',
             'requerRecursos.in' => 'Requer Recurso deve ser um valor verdadeiro ou falso.',
             'inicioOtimista.date' => 'Início Otimista deve ter um formato de data.',
@@ -541,6 +547,7 @@ class SequenciasController extends Controller
 
         if ($sequencia) {
             /* Detalhes */
+            $json['detalhes']['duracao'] = $sequencia->duracao;
             $json['detalhes']['inicioOtimista'] = $sequencia->inicio_otimista;
             $json['detalhes']['inicioPessimista'] = $sequencia->inicio_pessimista;
             $json['detalhes']['fimOtimista'] = $sequencia->fim_otimista;
@@ -570,7 +577,7 @@ class SequenciasController extends Controller
                 array_push($json['recursos'], $valores);
             }
         } else {
-            $json = '{detalhes: {}, recursos: {}}';
+            $json = '{detalhes: {}, recursos: []}';
         }
 
         return $json;

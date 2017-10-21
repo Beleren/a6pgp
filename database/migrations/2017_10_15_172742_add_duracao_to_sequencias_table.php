@@ -14,7 +14,7 @@ class AddDuracaoToSequenciasTable extends Migration
     public function up()
     {
         Schema::table('sequencias', function (Blueprint $table) {
-            $table->time('duracao')->nullable();
+            $table->float('duracao')->nullable();
         });
     }
 

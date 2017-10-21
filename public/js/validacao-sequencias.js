@@ -126,13 +126,7 @@ $(function() {
             .addClass('col-sm-3')
             .addClass('col-md-3')
             .each(function (index, element) {
-                if ($(element).find('span').length > 0) {
-                    $(element).find('span').each(function (i, span) {
-                        if (!$(span).hasClass('glyphicon-remove-circle')) {
-                            $(span).addClass('glyphicon-remove-circle');
-                        }
-                    });
-                } else {
+                if ($(element).find('span.glyphicon.glyphicon-remove-circle').length <= 0) {
                     $(element).append('<span class="glyphicon glyphicon-remove-circle"></span>')
                 }
             })
@@ -142,13 +136,7 @@ $(function() {
             .addClass('col-sm-3')
             .addClass('col-md-3')
             .each(function (index, element) {
-                if ($(element).find('span').length > 0) {
-                    $(element).find('span').each(function (i, span) {
-                        if (! $(span).hasClass('glyphicon-remove-circle')) {
-                            $(span).addClass('glyphicon-remove-circle');
-                        }
-                    });
-                } else {
+                if ($(element).find('span.glyphicon.glyphicon-remove-circle').length <= 0) {
                     $(element).append('<span class="glyphicon glyphicon-remove-circle"></span>')
                 }
             })
@@ -386,6 +374,13 @@ $(function() {
         $(modal).on('shown.bs.modal', function() {
             var dados = JSON.parse($('#detalhes-' + id_atividade).val());
 
+            $(modal).find('#duracao').val(null);
+            $(modal).find('#requer-recursos').val(null);
+            $(modal).find('#inicio-otimista').val(null);
+            $(modal).find('#inicio_pessimista').val(null);
+            $(modal).find('#fim-otimista').val(null);
+            $(modal).find('#fim-pessimista').val(null);
+
             if (dados.hasOwnProperty('detalhes')) {
                 if (dados.detalhes.hasOwnProperty('duracao')) {
                     $(modal).find('#duracao').val(dados.detalhes.duracao);
@@ -396,19 +391,27 @@ $(function() {
                 }
 
                 if (dados.detalhes.hasOwnProperty('inicioOtimista')) {
-                    $(modal).find('#inicio-otimista').val(dados.detalhes.inicioOtimista.substr(0, 10));
+                    if (dados.detalhes.inicioOtimista) {
+                        $(modal).find('#inicio-otimista').val(dados.detalhes.inicioOtimista.substr(0, 10));
+                    }
                 }
 
                 if (dados.detalhes.hasOwnProperty('inicioPessimista')) {
-                    $(modal).find('#inicio_pessimista').val(dados.detalhes.inicioPessimista.substr(0, 10));
+                    if (dados.detalhes.inicioPessimista) {
+                        $(modal).find('#inicio_pessimista').val(dados.detalhes.inicioPessimista.substr(0, 10));
+                    }
                 }
 
                 if (dados.detalhes.hasOwnProperty('fimOtimista')) {
-                    $(modal).find('#fim-otimista').val(dados.detalhes.fimOtimista.substr(0, 10));
+                    if (dados.detalhes.fimOtimista) {
+                        $(modal).find('#fim-otimista').val(dados.detalhes.fimOtimista.substr(0, 10));
+                    }
                 }
 
                 if (dados.detalhes.hasOwnProperty('fimPessimista')) {
-                    $(modal).find('#fim-pessimista').val(dados.detalhes.fimPessimista.substr(0, 10));
+                    if (dados.detalhes.fimPessimista) {
+                        $(modal).find('#fim-pessimista').val(dados.detalhes.fimPessimista.substr(0, 10));
+                    }
                 }
             }
         });
@@ -434,7 +437,9 @@ $(function() {
     });
 
     function abrirModalDetalhesDeRecursos(alvo) {
-        $('#modal-detalhes-recursos')
+        var modal = $('#modal-detalhes-recursos');
+
+        $(modal)
             .modal('show')
             .find('.modal-header h4').text(
                 alvo.closest('tr').find('td:first-child').text()
@@ -443,6 +448,43 @@ $(function() {
 
         id_recurso = $(alvo).attr('data-recurso-id');
         id_atividade = alvo.closest('tr').find('td:first-child input[type=hidden][id*=detalhes]').attr('id');
+
+        $(modal).on('shown.bs.modal', function() {
+            var dados = JSON.parse($('#' + id_atividade).val());
+
+            $(modal).find('#quantidade-recurso').val(null);
+            $(modal).find('#data-inicio-disp-recurso').val(null);
+            $(modal).find('#tempo-alocado').val(null);
+
+            if (dados.hasOwnProperty('recursos')) {
+                if (dados.recursos.length >= 1) {
+                    var resultado = dados.recursos.filter(function(elem) {
+                        if (elem.recursoId == id_recurso) {
+                            return elem;
+                        }
+                    });
+
+                    if (resultado[0].hasOwnProperty('qtd')) {
+                        if (resultado[0].qtd) {
+                            $(modal).find('#quantidade-recurso').val(resultado[0].qtd);
+                        }
+                    }
+
+                    if (resultado[0].hasOwnProperty('dataDispRecurso')) {
+                        if (resultado[0].dataDispRecurso) {
+                            $(modal).find('#data-inicio-disp-recurso').val(resultado[0].dataDispRecurso.substr(0, 10));
+                        }
+                    }
+
+                    if (resultado[0].hasOwnProperty('tempoAlocado')) {
+                        if (resultado[0].tempoAlocado) {
+                            $(modal).find('#tempo-alocado').val(resultado[0].tempoAlocado.substr(0, 10));
+                        }
+                    }
+                }
+            }
+        });
+
         habilitarSalvarDetalhesRecursos();
     }
 
@@ -485,7 +527,7 @@ $(function() {
         Sequencia.detalhes = {};
         Sequencia.recursos = [];
 
-        limpezaFormDetalhesRecursos();
+        limpezaFormDetalhesDeRecursos();
     }
 
     function habilitarAbrirModalRecursos() {
@@ -496,7 +538,7 @@ $(function() {
 
     function habilitarSalvarDetalhesRecursos() {
 
-        $('button#botaoEnviarDetalhesRecursos').on('click', function(event) {
+        $('#botaoEnviarDetalhesRecursos').on('click', function() {
             event.preventDefault();
             event.stopPropagation();
 
@@ -505,6 +547,7 @@ $(function() {
         });
     }
 
+    habilitarSalvarDetalhesRecursos();
 
     function salvarDetalhesAtividades() {
         var modal = $('#modal-sequencia-detalhes');
@@ -549,7 +592,7 @@ $(function() {
 
     habilitarSalvarDetalhesAtividades();
     
-    function limpezaFormDetalhesDeAtividades() {
+    function limpezaFormDetalhesDeRecursos() {
         event.stopPropagation();
 
         var modal = $('#modal-detalhes-recursos');
@@ -561,7 +604,7 @@ $(function() {
         $(modal).modal('hide');
     }
     
-    function limpezaFormDetalhesRecursos() {
+    function limpezaFormDetalhesDeAtividades() {
         event.stopPropagation();
 
         var modal = $('#modal-sequencia-detalhes');
@@ -594,7 +637,8 @@ $(function() {
             if (! resultado.detalhes.inicioOtimista &&
                 ! resultado.detalhes.inicioPessimista &&
                 ! resultado.detalhes.fimOtimista &&
-                ! resultado.detalhes.fimPessimista
+                ! resultado.detalhes.fimPessimista &&
+                ! resultado.detalhes.duracao
             ) {
                 if (resultado.hasOwnProperty('recursos') &&
                     Array.isArray(resultado.recursos)) {
