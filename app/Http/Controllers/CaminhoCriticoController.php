@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Caminho;
+use App\No;
 use App\Cenario;
 use App\Projeto;
 use Illuminate\Http\Request;
@@ -20,22 +20,22 @@ class CaminhoCriticoController extends Controller
 
     public function caminhoCriticoPorMaiorDuracao()
     {
-        $inicio = new Caminho(0, 0, 'início');
-        $a = new Caminho(1, 2, 'a');
-        $b = new Caminho(2, 4, 'b');
-        $c = new Caminho(3, 10, 'c');
-        $d = new Caminho(4, 6, 'd');
-        $e = new Caminho(5, 4, 'e');
-        $f = new Caminho(6, 5, 'f');
-        $g = new Caminho(7, 7, 'g');
-        $h = new Caminho(8, 9, 'h');
-        $i = new Caminho(9, 7, 'i');
-        $j = new Caminho(10, 8, 'j');
-        $k = new Caminho(11, 4, 'k');
-        $l = new Caminho(12, 5, 'l');
-        $m = new Caminho(13, 2, 'm');
-        $n = new Caminho(14, 6, 'n');
-        $fim = new Caminho(15, 0, 'fim');
+        $inicio = new No(0, 0, 'início');
+        $a = new No(1, 2, 'a');
+        $b = new No(2, 4, 'b');
+        $c = new No(3, 10, 'c');
+        $d = new No(4, 6, 'd');
+        $e = new No(5, 4, 'e');
+        $f = new No(6, 5, 'f');
+        $g = new No(7, 7, 'g');
+        $h = new No(8, 9, 'h');
+        $i = new No(9, 7, 'i');
+        $j = new No(10, 8, 'j');
+        $k = new No(11, 4, 'k');
+        $l = new No(12, 5, 'l');
+        $m = new No(13, 2, 'm');
+        $n = new No(14, 6, 'n');
+        $fim = new No(15, 0, 'fim');
 
         $atividades = [$inicio, $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $n, $fim];
 
@@ -62,7 +62,8 @@ class CaminhoCriticoController extends Controller
         $html = '<ul>';
 
         foreach($atividades as $atividade) {
-            $html = $html . '<li>Atividade: ' . $atividade->nome;
+            $html = $html . '<li>Atividade: ' . $atividade->nome . ' (PDI: ' . $atividade->getPDI() .
+                ', PDF:' . $atividade->getPDF() .')';
 
             foreach ($atividade->predecessoras as $predecessora) {
                 $html = $html . '<li>' . $predecessora->nome . '</li>';
@@ -70,6 +71,7 @@ class CaminhoCriticoController extends Controller
             $html = $html . '</li>';
         }
         $html = $html . '</ul>';
+        dd($atividades);
         echo $html;
     }
 }
