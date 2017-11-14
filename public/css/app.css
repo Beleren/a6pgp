@@ -5688,7 +5688,7 @@ tbody.collapse.in {
 }
 
 .navbar-default {
-  background-color: #fff;
+  background-color: #F5F5F5;
   border-color: #e3e2e2;
 }
 
@@ -5720,7 +5720,7 @@ tbody.collapse.in {
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
   color: #555;
-  background-color: #eeeeee;
+  background-color: #e4e4e4;
 }
 
 .navbar-default .navbar-nav > .disabled > a,
@@ -5751,7 +5751,7 @@ tbody.collapse.in {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  background-color: #eeeeee;
+  background-color: #e4e4e4;
   color: #555;
 }
 
@@ -5770,7 +5770,7 @@ tbody.collapse.in {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #555;
-    background-color: #eeeeee;
+    background-color: #e4e4e4;
   }
 
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
@@ -11451,5 +11451,17 @@ strong .badge {
 .list-group-item.active a {
   color: #fff;
   font-weight: bold;
+}
+
+.tablesorter tbody tr {
+  cursor: pointer;
+}
+
+nav .active {
+  background-color: #F5F5F5;
+}
+
+.row {
+  margin-bottom: 1em;
 }
 

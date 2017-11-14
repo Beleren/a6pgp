@@ -23,9 +23,28 @@
                     <li>
                         <a href="{{ route('projetos.index') }}" class="active">Projetos</a>
                     </li>
+
+                    @if(isset($projeto))
                     <li>
-                        <a href="{{ route('home.contato') }}">Contato</a>
+                        <a href="{{ route('atividades.index', ['projeto' => $projeto->id]) }}">Atividades</a>
                     </li>
+                    <li>
+                        <a href="{{ route('recursos.index', ['projeto' => $projeto->id]) }}">Recursos</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('cenarios.index', ['projeto' => $projeto->id]) }}">Cenários</a>
+                    </li>
+                    @else
+                        <li>
+                            <a href="{{ route('atividades.index', ['projeto' => auth()->user()->projetos->first()]) }}">Atividades</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('recursos.index', ['projeto' => auth()->user()->projetos->first()]) }}">Recursos</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('cenarios.index', ['projeto' => auth()->user()->projetos->first()]) }}">Cenários</a>
+                        </li>
+                    @endif
                 @endif
                 <li>
                     <a href="{{ route('home.sobre') }}">Sobre</a>

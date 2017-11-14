@@ -27,7 +27,7 @@ $(function() {
 
     $('tr:not(:has(th))').each(function(index, linha) {
         $(linha).on('click', function() {
-            window.location.href = $('tr').find('td a').attr('href');
+            window.location.href = $(linha).find('td a').attr('href');
         });
     });
 

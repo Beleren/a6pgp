@@ -60,3 +60,15 @@ strong .badge {
   color: #fff;
   font-weight: bold;
 }
+
+.tablesorter tbody tr {
+  cursor: pointer;
+}
+
+nav .active {
+  background-color: #F5F5F5;
+}
+
+.row {
+  margin-bottom: 1em;
+}

@@ -2,12 +2,6 @@
 
 @section('conteudo')
     <div class="container">
-        <div class="row">
-            <div class="secao-botao-voltar col-sm-1">
-                <a href="{{ route('projetos.index') }}" class="btn btn-default">Voltar</a>
-            </div>
-
-        </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
