@@ -47,7 +47,7 @@ class CreateSequenciasTable extends Migration
                 ->on('atividades');
 
             $table->boolean('requer_recursos')->default(false);
-            $table->float('tempo_alocado')->nullable();
+            $table->time('tempo_alocado')->nullable();
 
             $table->timestamps();
         });
