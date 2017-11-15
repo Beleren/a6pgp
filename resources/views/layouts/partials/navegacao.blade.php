@@ -32,7 +32,7 @@
                         <a href="{{ route('recursos.index', ['projeto' => $projeto->id]) }}">Recursos</a>
                     </li>
                     <li>
-                        <a href="{{ route('cenarios.index', ['projeto' => $projeto->id]) }}">Cenários</a>
+                        <a href="{{ route('cenarios.index', ['projeto ' => $projeto->id]) }}">Cenários</a>
                     </li>
                     @else
                         <li>
