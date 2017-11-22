@@ -24,10 +24,10 @@ class Sequencia extends Model
         'duracao',
     ];
 
-    protected $dates = [
-        'inicio_otimista',
-        'fim_otimista',
-    ];
+//    protected $dates = [
+//        'inicio_otimista',
+//        'fim_otimista',
+//    ];
 
     protected $casts = [
         'requer_recursos' => 'boolean',

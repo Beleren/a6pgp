@@ -33,7 +33,6 @@ class ProjetosController extends Controller
     {
         $usuario = User::find(auth()->id());
         $projetos = $usuario->projetos;
-
         return view('projetos.index', ['projetos' => $projetos]);
     }
 
@@ -175,7 +174,8 @@ class ProjetosController extends Controller
         $info = false;
 
         if (! $dados) {
-
+            $erros = true;
+            $request->session()->flash('danger', 'Digite o(s) e-mail(s) do(s) usuário(s) com quem deseja compartilhar.');
         } else {
             try {
                 $vetor = explode(';', $dados);

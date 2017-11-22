@@ -9,7 +9,7 @@
                 <h4 class="modal-title">Atividade</h4>
             </div>
             <div class="modal-body">
-                <form id="form-detalhes-recursos" method="post">
+                <form id="form-detalhes-recursos">
                     {{ csrf_field() }}
 
                     <!-- Quantidade de Recursos -->

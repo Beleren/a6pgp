@@ -79,16 +79,19 @@ class ResultadoController extends Controller
                 ])->first();
 
                 //condição para verificar e ligar atividades do caminho crítico
-                if (
-                    $sequenciaPredecessora->inicio_otimista - $sequenciaPredecessora->inicio_pessimista == 0 &&
-                    $sequenciaPredecessora->fim_otimista - $sequenciaPredecessora->fim_pessimista == 0 &&
-                    $sequencia->inicio_otimista - $sequencia->inicio_pessimista == 0 &&
-                    $sequencia->fim_otimista - $sequencia->fim_pessimista == 0
-                ) {
-                    $diagrama = $diagrama . '[color=\"red\"]"+';
+                if (isset($sequenciaPredecessora->inicio_otimista)) {
+                    if (
+                        $sequenciaPredecessora->inicio_otimista - $sequenciaPredecessora->inicio_pessimista == 0 &&
+                        $sequenciaPredecessora->fim_otimista - $sequenciaPredecessora->fim_pessimista == 0 &&
+                        $sequencia->inicio_otimista - $sequencia->inicio_pessimista == 0 &&
+                        $sequencia->fim_otimista - $sequencia->fim_pessimista == 0
+                    ) {
+                        $diagrama = $diagrama . '[color=\"red\"]"+';
+                    } else
+                        $diagrama = $diagrama . '"+';
                 }
                 else
-                    $diagrama = $diagrama.'"+';
+                    $diagrama = $diagrama . '"+';
             }
         }
         //formato da imagem e encerramento do diagrama

@@ -147,5 +147,7 @@ Route::middleware(['web', 'auth'])->group(function (){
     Route::get('/projetos/{projeto}/cenarios/{cenario}/caminho-critico', 'CaminhoCriticoController@index')
         ->name('caminho-critico.index');
 
-    Route::get('/teste', 'CaminhoCriticoController@caminhoCriticoPorMaiorDuracao');
+    /* Resultado do cálculo */
+    Route::get('/projetos/{projeto}/cenarios/{cenario}/resultado', 'ResultadoController@index')
+        ->name('resultado.index');
 });

@@ -2,31 +2,10 @@
 
 @section('conteudo')
     <div class="container">
-
         <div class="row">
-            <div class="secao-botao-voltar col-md-1 col-xs-2">
-                <a href="{{ route('projetos.show', ['projeto' => $projeto->id]) }}" class="btn btn-default">Voltar</a>
+            <div class="col-md-4 col-xs-6">
+                <a href="{{ route('cenarios.create', ['projeto' => $projeto]) }}" class="btn btn-primary">Criar Cenário</a>
             </div>
-            <div class="dropdown col-md-1 col-xs-2">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Menu
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ route('atividades.index',$projeto->id) }}">Atividades</a></li>
-                    <li><a href="{{ route('recursos.index',$projeto->id) }}">Recursos</a></li>
-                </ul>
-            </div>
-
-            <div class="col-md-5 col-xs-7">
-                <div class="col-md-4 col-xs-6">
-                    <a href="{{ route('cenarios.create', ['projeto' => $projeto]) }}" class="btn btn-primary">Criar Cenário</a>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div>
-
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>

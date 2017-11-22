@@ -26,7 +26,7 @@ class RecursoRequest extends FormRequest
         return [
             'nome' => 'required|min:3|max:70',
             'tipo_recurso' => 'required',
-            'custo' => 'numeric|min:0',
+            'custo' => 'nullable|numeric|min:0',
         ];
     }
 }

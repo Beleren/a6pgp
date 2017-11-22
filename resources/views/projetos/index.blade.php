@@ -17,27 +17,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($projetos as $projeto)
+                @foreach($projetos as $p)
                     <tr>
                         <td>
-                            <a href="{{ route('projetos.show', ['id' => $projeto->id]) }}">
-                                {{ $projeto->nome }}
+                            <a href="{{ route('projetos.show', ['id' => $p->id]) }}">
+                                {{ $p->nome }}
                             </a>
                         </td>
                         <td>
-                            @if ($projeto->pivot->proprietario)
+                            @if ($p->pivot->proprietario)
                                 Própria
                             @else
                                 Compartilhado
                             @endif
                         </td>
                         <td>
-                            {{ $projeto->created_at->format('d/m/Y') }}
+                            {{ $p->created_at->format('d/m/Y') }}
                         </td>
                         <td>
                             <a href="#" class="compartilhar">Compartilhar</a> |
-                            <a href="{{ route('projetos.edit', ['id' => $projeto->id]) }}">Editar</a> |
-                            <a href="{{ route('projetos.confirmDelete', ['id' => $projeto->id]) }}">Excluir</a>
+                            <a href="{{ route('projetos.edit', ['id' => $p->id]) }}">Editar</a> |
+                            <a href="{{ route('projetos.confirmDelete', ['id' => $p->id]) }}">Excluir</a>
                         </td>
                     </tr>
                 @endforeach

@@ -21,29 +21,49 @@
             <ul class="nav navbar-nav">
                 @if (! Auth::guest())
                     <li>
-                        <a href="{{ route('projetos.index') }}" class="active">Projetos</a>
+                        <a href="{{ route('projetos.index') }}" class="active"
+                       data-toggle="tooltip" data-placement="bottom" title="Gerencie seus projetos.">Projetos</a>
                     </li>
 
                     @if(isset($projeto))
                     <li>
-                        <a href="{{ route('atividades.index', ['projeto' => $projeto->id]) }}">Atividades</a>
+                        <a href="{{ route('atividades.index', ['projeto' => $projeto->id]) }}"
+                        data-toggle="tooltip" data-placement="bottom" title="Gerencie suas atividades."
+                        >Atividades</a>
                     </li>
                     <li>
-                        <a href="{{ route('recursos.index', ['projeto' => $projeto->id]) }}">Recursos</a>
+                        <a href="{{ route('recursos.index', ['projeto' => $projeto->id]) }}"
+                        data-toggle="tooltip" data-placement="bottom" title="Gerencie seus recursos.">Recursos</a>
                     </li>
                     <li>
-                        <a href="{{ route('cenarios.index', ['projeto ' => $projeto->id]) }}">Cenários</a>
+                        <a href="{{ route('cenarios.index', ['projeto ' => $projeto->id]) }}"
+                        data-toggle="tooltip" data-placement="bottom" title="Gerencie os cenários de um mesmo projeto.">Cenários</a>
                     </li>
-                    @else
-                        <li>
-                            <a href="{{ route('atividades.index', ['projeto' => auth()->user()->projetos->first()]) }}">Atividades</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('recursos.index', ['projeto' => auth()->user()->projetos->first()]) }}">Recursos</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('cenarios.index', ['projeto' => auth()->user()->projetos->first()]) }}">Cenários</a>
-                        </li>
+                    <li>
+                        <a href="{{ route('sequencias.index', ['projeto' => $projeto->id,
+                        'cenario' => $projeto->cenarios->first() ]) }}"
+                        data-toggle="tooltip" data-placement="bottom" title="Gerencie as dependências das atividades de um determinado cenário."
+                        >Gerenciar Dependências</a>
+                    </li>
+                    {{--@else--}}
+                        {{--<li>--}}
+                            {{--<a href="{{ route('atividades.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
+                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie suas atividades."--}}
+                            {{-->teste</a>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
+                            {{--<a href="{{ route('recursos.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
+                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie seus recursos.">Recursos</a>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
+                            {{--<a href="{{ route('cenarios.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
+                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie os cenários de um mesmo projeto.">Cenários</a>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
+                            {{--<a href="{{ route('sequencias.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
+                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie as dependências das atividades de um determinado cenário."--}}
+                            {{-->Gerenciar Dependências</a>--}}
+                        {{--</li>--}}
                     @endif
                 @endif
                 <li>

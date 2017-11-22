@@ -1,8 +1,8 @@
 <div class="row">
-    <div id="projeto-besouro-carousel" class="carousel slide" style="width: 50%; margin: auto" data-ride="carousel">
+    <div id="projeto-besouro-carousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#projeto-besouro-carousel" data-slide-to="0" class="active"></li>
+        <ol class="carousel-indicators" >
+            <li data-target="#projeto-besouro-carousel" data-slide-to="0" class="active" ></li>
             <li data-target="#projeto-besouro-carousel" data-slide-to="1"></li>
             <li data-target="#projeto-besouro-carousel" data-slide-to="2"></li>
         </ol>
@@ -30,13 +30,13 @@
         </div>
 
         <!-- Controls -->
-        <a class="left carousel-control" href="#projeto-besouro-carousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#projeto-besouro-carousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+        {{--<a class="left carousel-control" href="#projeto-besouro-carousel" role="button" data-slide="prev">--}}
+            {{--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>--}}
+            {{--<span class="sr-only">Previous</span>--}}
+        {{--</a>--}}
+        {{--<a class="right carousel-control" href="#projeto-besouro-carousel" role="button" data-slide="next">--}}
+            {{--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>--}}
+            {{--<span class="sr-only">Next</span>--}}
+        {{--</a>--}}
     </div>
 </div>

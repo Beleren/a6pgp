@@ -89,51 +89,17 @@ class SequenciasController extends Controller
                     }
                 }
 
+                /*
+                 * Atividade não possui predecessora, mas possui detalhes de duração.
+                 * Neste caso é necessário criar um registro de sequência para salvar os detalhes.
+                 */
                 if ($detalhe) {
-                    if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                        $sequencia = Sequencia::firstOrCreate([
-                            'atividade_id' => $atividade->id,
-                            'cenario_id' =>  $request->input('cenario'),
-                        ]);
+                    $sequencia = Sequencia::firstOrCreate([
+                        'atividade_id' => $atividade->id,
+                        'cenario_id' => $request->input('cenario'),
+                    ]);
 
-                        dd($sequencia);
-                        $resultado = collect($detalhe)
-                            ->where('atividadeId', $sequencia->atividade_id)
-                            ->first()
-                        ;
-
-                        $this->limpezaDeCampos($sequencia);
-
-                        // Início Otimista
-                        if ($this->verificarExistenciaChave($resultado, 'inicioOtimista')) {
-                            $sequencia->inicio_otimista = $resultado['inicioOtimista'];
-                        }
-
-                        // Início Pessimista
-                        if ($this->verificarExistenciaChave($resultado, 'inicioPessimista')) {
-                            $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
-                        }
-
-                        // Fim Otimista
-                        if ($this->verificarExistenciaChave($recursos, 'fimOtimista')) {
-                            $sequencia->fim_otimista = $resultado['fimOtimista'];
-                        }
-
-                        // Fim Pessimista
-                        if ($this->verificarExistenciaChave($resultado, 'fimPessimista')) {
-                            $sequencia->fim_pessimista = $resultado['fimPessimista'];
-                        }
-
-                        // Fim Pessimista
-                        if (
-                        in_array($resultado['requerRecursos'],
-                            ['on', 'true', true, '1', 1]
-                        )
-                        ) {
-                            $sequencia->requer_recursos = true;
-                        }
-                    }
-
+                    $this->salvarDetalhes($sequencia, $detalhe);
                     $sequencia->save();
                 }
             }
@@ -165,77 +131,9 @@ class SequenciasController extends Controller
                          * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
                          */
                         if ($detalhe) {
-                            /* Remover valores do banco de dados. */
-                            $sequencia->quantidade_recurso = null;
-                            $sequencia->tempo_alocado = null;
-                            $sequencia->data_inicio_disp_recurso = null;
-
-
-                            if ($this->verificarExistenciaChave($detalhe, 'recursos')) {
-                                $resultado = collect($detalhe['recursos'])
-                                    ->where('recursoId', $sequencia->recurso_id)
-                                    ->where('atividadeId', $sequencia->atividade_id)
-                                    ->first()
-                                ;
-
-                                // Quantidade de Recursos
-                                if ($this->verificarExistenciaChave($resultado, 'qtd')) {
-                                    $sequencia->quantidade_recurso = $resultado['qtd'];
-                                }
-
-                                // Tempo Alocado
-                                if ($this->verificarExistenciaChave($resultado, 'tempoAlocado')) {
-                                    $sequencia->tempo_alocado = $resultado['tempoAlocado'];
-                                }
-
-                                // Data de Início de Disponibilização de Recurso
-                                if ($this->verificarExistenciaChave($resultado, 'dataDispRecurso')) {
-                                    $sequencia->data_inicio_disp_recurso = $resultado['dataDispRecurso'];
-                                }
-                            }
-
-
-                            if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                                if (count($detalhe['detalhes'])) {
-                                    $resultado = collect($detalhe['detalhes'])
-                                        ->where('recursoId', $sequencia->recurso_id)
-                                        ->where('atividadeId', $sequencia->atividade_id)
-                                        ->first()
-                                    ;
-
-                                    // Início Otimista
-                                    if ($this->verificarExistenciaChave($resultado, 'inicioOtimista')) {
-                                        $sequencia->inicio_otimista = $resultado['inicioOtimista'];
-                                    }
-
-                                    // Início Pessimista
-                                    if ($this->verificarExistenciaChave($resultado, 'inicioPessimista')) {
-                                        $sequencia->inicio_pessimista = $resultado['inicioPessimista'];
-                                    }
-
-                                    // Fim Otimista
-                                    if ($this->verificarExistenciaChave($resultado, 'fimOtimista')) {
-                                        $sequencia->fim_otimista = $resultado['fimOtimista'];
-                                    }
-
-                                    // Fim Pessimista
-                                    if ($this->verificarExistenciaChave($resultado, 'fimPessimista')) {
-                                        $sequencia->fim_pessimista = $resultado['fimPessimista'];
-                                    }
-
-                                    // Fim Pessimista
-                                    if (
-                                    in_array($resultado['requerRecursos'],
-                                        ['on', 'true', true, '1', 1]
-                                    )
-                                    ) {
-                                        $sequencia->requer_recursos = true;
-                                    }
-                                }
-                            }
+                            $this->salvarDetalhes($sequencia, $detalhe);
+                            $sequencia->save();
                         }
-
-                        $sequencia->save();
                     });
 
                     $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -250,8 +148,6 @@ class SequenciasController extends Controller
                     if ($para_excluir) {
                         Sequencia::destroy($para_excluir->pluck('id')->toArray());
                     }
-
-                    $sequencia->save();
                 }
             }
 
@@ -276,48 +172,9 @@ class SequenciasController extends Controller
                      * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
                      */
 
-                    if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                        if (count($detalhe['detalhes'])) {
-                            $resultado = collect($detalhe['detalhes'])
-                                ->where('recursoId', $sequencia->recurso_id)
-                                ->where('atividadeId', $sequencia->atividade_id)
-                                ->first();
-
-                            // Limpeza de dados.
-                            $sequencia->inicio_otimista = null;
-                            $sequencia->inicio_pessimista = null;
-                            $sequencia->fim_otimista = null;
-                            $sequencia->fim_pessimista = null;
-                            $sequencia->requer_recursos = false;
-
-                            // Início Otimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'inicioOtimista')) {
-                                $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
-                            }
-
-                            // Início Pessimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'inicioPessimista')) {
-                                $sequencia->inicio_pessimista = $detalhe['detalhes']['inicioPessimista'];
-                            }
-
-                            // Fim Otimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'fimOtimista')) {
-                                $sequencia->fim_otimista = $detalhe['detalhes']['fimOtimista'];
-                            }
-
-                            // Fim Pessimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'],'fimPessimista')) {
-                                $sequencia->fim_pessimista = $detalhe['detalhes']['fimPessimista'];
-                            }
-
-                            // Fim Pessimista
-                            if (
-                            in_array($detalhe['detalhes']['requerRecursos'],
-                                ['on', 'true', true, '1', 1])
-                            ) {
-                                $sequencia->requer_recursos = true;
-                            }
-                        }
+                    if ($detalhe) {
+                        $this->salvarDetalhes($sequencia, $detalhe);
+                        $sequencia->save();
                     }
                 }
 
@@ -356,82 +213,10 @@ class SequenciasController extends Controller
                      * O trecho abaixo foi refatorado porque havia problemas na leitura de datas.
                      */
 
-                    if ($this->verificarExistenciaChave($detalhe, 'recursos')) {
-                        if (count($detalhe['recursos'])) {
-
-                            $resultado = collect($detalhe['recursos'])
-                                ->where('recursoId', $sequencia->recurso_id)
-                                ->where('atividadeId', $sequencia->atividade_id)
-                                ->first()
-                            ;
-
-                            // Quantidade de Recursos
-                            if ($this->verificarExistenciaChave($resultado, 'qtd')) {
-                                $sequencia->quantidade_recurso = $resultado['qtd'];
-                            }
-
-                            // Tempo Alocado
-                            if ($this->verificarExistenciaChave($resultado, 'tempoAlocado')) {
-                                $sequencia->tempo_alocado = $resultado['tempoAlocado'];
-                            }
-
-                            // Data de Início de Disponibilização de Recurso
-                            if ($this->verificarExistenciaChave($resultado, 'dataDispRecurso')) {
-                                $sequencia->data_inicio_disp_recurso = $resultado['dataDispRecurso'];
-                            }
-                        }
+                    if ($detalhe) {
+                        $this->salvarDetalhes($sequencia, $detalhe);
+                        $sequencia->save();
                     }
-
-
-                    if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                        if (count($detalhe['detalhes'])) {
-                            $resultado = collect($detalhe['detalhes'])
-                                ->where('recursoId', $sequencia->recurso_id)
-                                ->where('atividadeId', $sequencia->atividade_id)
-                                ->first()
-                            ;
-
-                            // Duração
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'duracao')) {
-                                $sequencia->duracao = $detalhe['detalhes']['duracao'];
-                            }
-
-                            // Início Otimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'inicioOtimista')) {
-                                $sequencia->inicio_otimista = $detalhe['detalhes']['inicioOtimista'];
-                            }
-
-                            // Início Pessimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'inicioPessimista')) {
-                                $sequencia->inicio_pessimista = $detalhe['detalhes']['inicioPessimista'];
-                            }
-
-                            // Fim Otimista
-                            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'fimOtimista')) {
-                                $sequencia->fim_otimista = $detalhe['detalhes']['fimOtimista'];
-                            }
-
-                            // Fim Pessimista
-                            if ($detalhe['detalhes']['fimPessimista']) {
-                                $sequencia->fim_pessimista = $detalhe['detalhes']['fimPessimista'];
-                            } else {
-                                $sequencia->fim_pessimista = null;
-                            }
-
-                            // Fim Pessimista
-                            if (
-                            in_array($detalhe['detalhes']['requerRecursos'],
-                                ['on', 'true', true, '1', 1]
-                            )
-                            ) {
-                                $sequencia->requer_recursos = true;
-                            } else {
-                                $sequencia->requer_recursos = false;
-                            }
-                        }
-                    }
-
-                    $sequencia->save();
                 }
 
                 $para_excluir = $sequencias->filter(function ($item, $chave)
@@ -566,15 +351,17 @@ class SequenciasController extends Controller
             $json['recursos'] = [];
 
             foreach ($recursos as $recurso) {
-                $valores = [
-                    'atividadeId' => $recurso['atividade_id'],
-                    'recursoId' => $recurso['recurso_id'],
-                    'qtd' => $recurso['quantidade_recurso'],
-                    'tempoalocado' => $recurso['tempo_alocado'],
-                    'dataDispRecurso' => $recurso['data_inicio_disp_recurso'],
-                ];
+                if ($recurso['recurso_id']) {
+                    $valores = [
+                        'atividadeId' => $recurso['atividade_id'],
+                        'recursoId' => $recurso['recurso_id'],
+                        'qtd' => $recurso['quantidade_recurso'],
+                        'tempoalocado' => $recurso['tempo_alocado'],
+                        'dataDispRecurso' => $recurso['data_inicio_disp_recurso'],
+                    ];
 
-                array_push($json['recursos'], $valores);
+                    array_push($json['recursos'], $valores);
+                }
             }
         } else {
             $json = '{detalhes: {}, recursos: []}';
@@ -617,23 +404,53 @@ class SequenciasController extends Controller
         $sequencia->data_inicio_disp_recurso = null;
     }
 
-    private function ajustarFormatoDeDataJSON(array $vetor, $chave) {
-        if (array_key_exists($chave, $vetor)) {
-            if ($vetor[$chave]) {
-                return date($vetor[$chave]);
+    private function ajustarFormatoDeDataJSON($vetor, $chave) {
+        if (is_array($vetor)) {
+            if (array_key_exists($chave, $vetor)) {
+                if ($vetor[$chave]) {
+                    return date($vetor[$chave]);
+                }
+            } else {
+                return $vetor;
             }
-        } else {
-            return $vetor;
         }
+        return null;
     }
 
-    private function verificarExistenciaChave(array $vetor, $chave) {
-        if (array_key_exists($chave, $vetor)) {
-            if ($vetor[$chave]) {
-                return $vetor[$chave];
+    private function verificarExistenciaChave($vetor, $chave) {
+        if (is_array($vetor)) {
+            if (array_key_exists($chave, $vetor)) {
+                if ($vetor[$chave]) {
+                    return $vetor[$chave];
+                }
+            }
+        }
+        return null;
+    }
+
+    private function salvarDetalhes(Sequencia $sequencia, $detalhe){
+        if ($this->verificarExistenciaChave($detalhe, 'recursos')) {
+            if ($this->verificarExistenciaChave($detalhe['recursos'][0], 'qtd')) {
+                $sequencia->quantidade_recurso = $detalhe['recursos'][0]['qtd'];
+            }
+
+            if ($this->verificarExistenciaChave($detalhe['recursos'][0], 'dataDispRecurso')) {
+                $sequencia->data_inicio_disp_recurso = $detalhe['recursos'][0]['dataDispRecurso'];
+            }
+
+            if ($this->verificarExistenciaChave($detalhe['recursos'][0], 'tempoAlocado')) {
+                $sequencia->tempo_alocado = $detalhe['recursos'][0]['tempoAlocado'];
             }
         }
 
-        return null;
+        if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
+            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'duracao')) {
+                $sequencia->duracao = $detalhe['detalhes']['duracao'];
+            }
+
+            if ($this->verificarExistenciaChave($detalhe['detalhes'], 'requerRecursos')) {
+                $sequencia->requer_recursos = $detalhe['detalhes']['requerRecursos'];
+            }
+        }
     }
 }

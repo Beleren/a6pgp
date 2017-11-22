@@ -1,14 +1,14 @@
 @extends('layouts.app')
-
+@section('styles')
+    <style>
+        .navbar{
+            margin-bottom: 0px;
+        }
+    </style>
+@endsection
 @section('conteudo')
+    @include('layouts.partials.carousel')
     <div class="container">
-        <div id="area_grafico"></div>
-        @include('layouts.partials.carousel')
-        <div class="row">
-            <div class="alert alert-warning">
-                Descrição breve do projeto e sugestões de uso. Podemos colocar um vídeo de instrução de uso também.
-            </div>
-        </div>
         <div class="row" id="teste">
             <p>
                 O projeto Besouro nasceu como um requerimento da matéria de Práticas de Gerenciamento de Projetos (A6PGP)

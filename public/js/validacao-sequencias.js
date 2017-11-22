@@ -212,7 +212,6 @@ $(function() {
 
         if (caminho.substr(caminho.length - 1, 1) === '/') {
             caminho = caminho.substr(0, caminho.length - 1);
-            alert('Comp: ' + caminho);
         }
 
         var cenario = caminho.substr(caminho.lastIndexOf('/') + 1);
@@ -624,6 +623,10 @@ $(function() {
         var projeto_id = caminho[2];
         var cenario_id = caminho[5];
 
+        if (! cenario_id) {
+            cenario_id = $('#cenario').val();
+        }
+
         var url = '/projetos/' + projeto_id +
             '/atividades/' + atividade_id +
             '/cenarios/' + cenario_id;
@@ -642,10 +645,11 @@ $(function() {
             ) {
                 if (resultado.hasOwnProperty('recursos') &&
                     Array.isArray(resultado.recursos)) {
-                    if (resultado.recursos.length <= 1 &&
+
+                    if (resultado.recursos.length <= 1 || (
                         ! resultado.recursos[0].qtd &&
                         ! resultado.recursos[0].tempoAlocado &&
-                        ! resultado.recursos[0].dataDispRecurso
+                        ! resultado.recursos[0].dataDispRecurso)
                     ) {
                         resultado = '{}';
                     }
