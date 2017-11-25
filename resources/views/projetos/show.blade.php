@@ -15,7 +15,7 @@
             </div>
             <div class="panel-body collapse" id="detalhes">
                 <div class="col-sm-6  col-md-6">
-                    <h4>Descrição</h4>
+                    <h4>@lang('paginas.descricao')</h4>
                     <textarea name="descricao" id="descricao" class="form-control" cols="30" rows="6"
                       readonly="readonly">{{ $projeto->descricao }}
                     </textarea>
@@ -31,11 +31,11 @@
                         <a href="{{ route('atividades.index', [
                             'projeto' => $projeto->id]) }}"
                             class="btn btn-link"
-                            title="Clique aqui para visualizar mais atividades."
+                            title="@lang('paginas.projetos.show.descricoes.atividades')"
                             data-toggle="tooltip"
                             data-placement="top"
                         >
-                            Atividades
+                            @lang('paginas.projetos.show.atividades')
                         </a>
                         <span class="badge">{{ $projeto->atividades->count() }}</span>
                     </strong>
@@ -67,11 +67,11 @@
                         <a href="{{ route('recursos.index', [
                             'projeto' => $projeto->id]) }}"
                             class="btn btn-link"
-                            title="Clique aqui para visualizar mais recursos."
+                            title="@lang('paginas.projetos.show.descricoes.recursos')"
                             data-toggle="tooltip"
                             data-placement="top"
                         >
-                            Recursos
+                            @lang('paginas.projetos.show.recursos')
                         </a>
                         <span class="badge">{{ $projeto->recursos->count() }}</span>
                     </strong>
@@ -103,11 +103,11 @@
                         <a href="{{ route('cenarios.index', [
                             'projeto' => $projeto->id]) }}"
                             class="btn btn-link"
-                            title="Clique aqui para visualizar mais atividades."
+                            title="@lang('paginas.projetos.show.descricoes.cenarios')"
                             data-toggle="tooltip"
                             data-placement="top"
                         >
-                            Cenários
+                            @lang('paginas.projetos.show.cenarios')
                         </a>
                         <span class="badge">{{ $projeto->cenarios->count() }}</span>
                     </strong>

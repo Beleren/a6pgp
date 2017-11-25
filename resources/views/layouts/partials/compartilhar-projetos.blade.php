@@ -3,30 +3,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
-                <h4 class="modal-title">Compartilhar Projeto</h4>
+                <h4 class="modal-title">@lang('paginas.projetos.modal-compartilhar.compartilhar-projeto')</h4>
             </div>
             <div class="modal-body">
                 <p>
-                    Digite o(s) e-mail(s) do(s) usuário(s) que você deseja compartilhar
-                    este projeto separados por vírgula (&semi;).
+                    @lang('paginas.projetos.modal-compartilhar.digite-emails')
                 </p>
                 <form action="#" method="post">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <label for="projeto-nome" class="control-label">Projeto:</label>
+                        <label for="projeto-nome" class="control-label">@lang('paginas.projetos.modal-compartilhar.projeto')</label>
                         <div class="well">
                         </div>
                     </div>
                     <div class="form-group">
                         <textarea name="projeto-usuarios" id="projeto-usuarios"
                             cols="30" rows="6" class="form-control"
-                            placeholder="Digite os e-mails separados por vírgula (&semi;) aqui."></textarea>
+                            placeholder="@lang('paginas.projetos.modal-compartilhar.placeholder-emails')"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Sair</button>
-                <button type="button" class="btn btn-primary" id="botao-compartilhar">Compartilhar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@lang('paginas.sair')</button>
+                <button type="button" class="btn btn-primary" id="botao-compartilhar">@lang('paginas.projetos.index.botoes.compartilhar')</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -13,7 +13,7 @@
 
             <!-- Nome -->
             <div class="form-group">
-                <label for="nome" class="control-label col-sm-2 col-md-2">Nome:</label>
+                <label for="nome" class="control-label col-sm-2 col-md-2">@lang('paginas.nome')</label>
 
                 <div class="col-sm-6 col-md-6">
                     <input type="text" id="nome" name="nome" class="form-control"
@@ -23,7 +23,7 @@
 
             <!-- Descrição -->
             <div class="form-group">
-                <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>
+                <label for="descricao" class="control-label col-sm-2 col-md-2">@lang('paginas.descricao')</label>
                 <div class="col-sm-6 col-md-6">
                     <textarea name="descricao" id="descricao"
                         cols="30" rows="10" class="form-control">{{ $atividade->descricao }}
@@ -34,8 +34,8 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
                     <a href="{{ route('atividades.index', ['id' => $projeto->id]) }}"
-                       class="btn btn-default">Voltar</a> |
-                    <button type="submit" class="btn btn-primary">Alterar</button>
+                       class="btn btn-default">@lang('paginas.voltar')</a> |
+                    <button type="submit" class="btn btn-primary">@lang('paginas.alterar')</button>
                 </div>
             </div>
         </form>

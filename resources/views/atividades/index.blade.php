@@ -6,17 +6,17 @@
             <div class="col-md-4 col-xs-6">
                 <a href="{{ route('atividades.create', ['projeto' => $projeto->id]) }}"
                    class="btn btn-primary">
-                    Criar Atividade
+                    @lang('paginas.atividades.index.criar-atividade')
                 </a>
             </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Criado em</th>
-                    <th>Ações</th>
+                    <th>@lang('paginas.tabelas.atividades')</th>
+                    <th>@lang('paginas.tabelas.descricao')</th>
+                    <th>@lang('paginas.tabelas.criado-em')</th>
+                    <th>@lang('paginas.tabelas.acoes')</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,16 +30,21 @@
                             </a>
                         </td>
                         <td>{{ $atividade->descricao }}</td>
-                        <td>{{ $atividade->created_at->format('d/m/Y') }}</td>
+                        <td>@if(app()->getLocale() !== 'en')
+                            {{ $atividade->created_at->format('d/m/Y') }}
+                            @else
+                            {{ $atividade->created_at->format('m/d/Y') }}
+                            @endif
+                        </td>
                         <td>
-                            <a href="{{ route('atividades.edit', ['atividade' => $atividade->id, 'projeto' => $projeto->id ]) }}">Editar</a> |
-                            <a href="{{ route('atividades.confirm-delete', ['atividade' => $atividade->id, 'projeto' => $projeto->id ]) }}">Excluir</a>
+                            <a href="{{ route('atividades.edit', ['atividade' => $atividade->id, 'projeto' => $projeto->id ]) }}">@lang('paginas.tabelas.editar')</a> |
+                            <a href="{{ route('atividades.confirm-delete', ['atividade' => $atividade->id, 'projeto' => $projeto->id ]) }}">@lang('paginas.tabelas.excluir')</a>
                         </td>
                     </tr>
                 @empty
                     <tr>
                         <td>
-                            Não há atividades cadastradas.
+                            @lang('paginas.atividades.index.sem-atividades')
                         </td>
                         <td></td>
                         <td></td>

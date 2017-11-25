@@ -32,7 +32,7 @@
                             @endif
                         </td>
                         <td>
-                            @if(! app()->getLocale('en'))
+                            @if(app()->getLocale() !== 'en')
                             {{ $p->created_at->format('d/m/Y') }}
                             @else
                             {{ $p->created_at->format('m/d/Y') }}

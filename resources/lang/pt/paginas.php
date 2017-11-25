@@ -12,6 +12,9 @@ return [
     'voltar' => 'Voltar',
     'alterar' => 'Alterar',
     'confirmar-exclusao' => 'Confirmar Exclusão',
+    'sair' => 'Sair',
+    'descricao' => 'Descrição',
+    'nome' => 'Nome',
 
 
     // views/auth/
@@ -112,6 +115,44 @@ return [
         [
             'deseja-excluir' => 'Você deseja excluir permanentemente o projeto abaixo?',
         ],
+
+        // views/layouts/partials/compartilhar-projeto.blade.php
+        'modal-compartilhar' =>
+        [
+            'compartilhar-projeto' => 'Compartilhar Projeto',
+            'digite-emails' => 'Digite o(s) e-mail(s) do(s) usuário(s) que você deseja compartilhar este projeto separados por vírgula (&semi;).',
+            'projeto' => 'Projeto:',
+            'placeholder-emails' => 'Digite os e-mails separados por vírgula (&semi;) aqui.',
+        ],
+
+        'show' =>
+        [
+            'atividades' => 'Atividades',
+            'cenarios' => 'Cenários',
+            'recursos' => 'Recursos',
+
+            'descricoes' =>
+            [
+                'atividades' => 'Clique aqui para visualizar mais atividades.',
+                'recursos' => 'Clique aqui para visualizar mais recursos.',
+                'cenarios' => 'Clique aqui para visualizar mais cenários.'
+            ],
+        ],
+    ],
+
+    'atividades' =>
+    [
+        'index' =>
+        [
+            'criar-atividade' => 'Criar Atividade',
+            'sem-atividades' => 'Não há atividades cadastradas.',
+        ],
+
+        'confirm-delete' =>
+        [
+            'deseja-excluir' => 'Deseja excluir permanentemente a atividade abaixo?',
+            'excluir' => 'Excluir Atividade',
+        ],
     ],
 
     'tabelas' =>
@@ -120,5 +161,9 @@ return [
         'autoria' => 'Autoria',
         'criado-em' => 'Criado Em',
         'acoes' => 'Ações',
+        'atividades' => 'Atividades',
+        'descricao' => 'Descrição',
+        'editar' => 'Editar',
+        'excluir' => 'Excluir',
     ],
 ];

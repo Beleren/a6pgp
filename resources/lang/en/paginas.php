@@ -12,6 +12,10 @@ return [
     'voltar' => 'Go Back',
     'alterar' => 'Change',
     'confirmar-exclusao' => 'Confirm Delete',
+    'sair' => 'Exit',
+    'descricao' => 'Description',
+    'nome' => 'Name',
+    'excluir' => 'Delete',
 
     // views/auth/
     'auth' =>
@@ -111,6 +115,44 @@ return [
         [
             'deseja-excluir' => 'Are you sure you want to delete permanently the project below?',
         ],
+
+        // views/layouts/partials/compartilhar-projeto.blade.php
+        'modal-compartilhar' =>
+        [
+            'compartilhar-projeto' => 'Share Project',
+            'digite-emails' => 'Type in the user(s) e-mail(s) that you want to share this project separated by semicolon (&semi;).',
+            'projeto' => 'Project:',
+            'placeholder-emails' => 'Type in the e-mail(s) separated by semicolon (&semi;) here.',
+        ],
+
+        'show' =>
+        [
+            'atividades' => 'Activities',
+            'cenarios' => 'Scenarios',
+            'recursos' => 'Resources',
+
+            'descricoes' =>
+            [
+                'atividades' => 'Click here to see more activities.',
+                'recursos' => 'Click here to see more resources.',
+                'cenarios' => 'Click here to see more scenarios.',
+            ],
+        ],
+    ],
+
+    'atividades' =>
+    [
+        'index' =>
+        [
+            'criar-atividade' => 'Create Activity',
+            'sem-atividades' => 'There\'s no activity registered.',
+        ],
+
+        'confirm-delete' =>
+        [
+            'deseja-excluir' => 'Are you sure you want to delete permanently the activity below?',
+            'excluir' => 'Delete Activity',
+        ],
     ],
 
     'tabelas' =>
@@ -119,5 +161,9 @@ return [
         'autoria' => 'Ownership',
         'criado-em' => 'Created At',
         'acoes' => 'Actions',
+        'atividades' => 'Activities',
+        'descricao' => 'Description',
+        'editar' => 'Edit',
+        'excluir' => 'Delete',
     ],
 ];
