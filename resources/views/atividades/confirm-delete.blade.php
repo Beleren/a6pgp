@@ -37,7 +37,7 @@
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
                     <a href="{{ route('atividades.index', ['id' => $projeto->id ]) }}"
                        class="btn btn-default">@lang('paginas.voltar')</a>
-                    <button type="submit" class="btn btn-danger">@lang('paginas.atividades.confirm-delete.excluir')</button>
+                    <button type="submit" class="btn btn-danger">@lang('paginas.confirmar-exclusao')</button>
                 </div>
             </div>
         </form>

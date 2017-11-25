@@ -15,6 +15,7 @@ return [
     'sair' => 'Sair',
     'descricao' => 'Descrição',
     'nome' => 'Nome',
+    'excluir' => 'Excluir',
 
 
     // views/auth/
@@ -92,6 +93,8 @@ return [
                 'compartilhar-usuario-inexistente' => 'Não foi possível compartilhar o projeto com o seguinte usuário|Não foi possível compartilhar o projeto com os seguintes usuários',
                 'compartilhar-verificar-email' => 'Verifique o e-mail digitado.|Verifique os e-mails digitados.',
                 'compartilhar-usuarios-com-acesso' => 'O usuário a seguir já está com este projeto sendo compartilhado|Os usuários a seguir já estão com este projeto sendo compartilhado',
+                'proprio' => 'Próprio',
+                'compartilhado' => 'Compartilhado',
             ],
 
             'botoes' =>
@@ -155,6 +158,36 @@ return [
         ],
     ],
 
+    'recursos' =>
+    [
+        'index' =>
+        [
+            'criar-recurso' => 'Criar Recurso',
+            'tipo-recurso' => 'Tipo de Recurso',
+            'custo-unitario' => 'Custo Unitário',
+            'custo-unico' => 'Custo Único',
+            'sem-recursos' => 'Não há recursos cadastrados.',
+
+            'tipos-recursos' =>
+            [
+                'humano' => 'Humano',
+                'fisico' => 'Físico',
+                'financeiro' => 'Financeiro',
+                'tecnologico' => 'Tecnológico',
+            ],
+        ],
+
+        'deseja-excluir' => 'Deseja excluir permanentemente o recurso abaixo?',
+    ],
+
+    'cenarios' =>
+    [
+        'criar-cenario' => 'Criar Cenário',
+        'data-criacao' => 'Data de Criação',
+        'visualizar-sequencias' => 'Visualizar Sequências',
+        'deseja-excluir' => 'Deseja excluir permanentemente o cenário abaixo?',
+    ],
+
     'tabelas' =>
     [
         'projeto' => 'Projeto',
@@ -165,5 +198,29 @@ return [
         'descricao' => 'Descrição',
         'editar' => 'Editar',
         'excluir' => 'Excluir',
+        'recurso' => 'Recurso',
+        'cenario' => 'Cenário'
+    ],
+
+    'carousel' =>
+    [
+        'gerenciamento-projeto' => 'Gerenciamento de projetos mais inteligente com o planejamento dinâmico.',
+        'foco-didatico' => 'Gerenciamento de projetos com um foco mais didático.',
+        'open-source' => 'Sobre os ombros de gigantes da comunidade open source.',
+    ],
+
+    'home' =>
+    [
+        'como-nasceu' => 'O projeto Besouro nasceu como um requerimento da matéria de Práticas de Gerenciamento de Projetos (A6PGP)
+        para conclusão do curso de Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) do
+        Instituto Federal de São Paulo (IFSP).',
+        'objetivo-projeto' => 'O objetivo deste projeto é disponibilizar uma aplicação que permita o planejamento de projetos utilizando
+        a rede Program Evaluation and Review Technique (PERT) e o Critical Path Method (CPM). As funcionalidades
+        disponíveis são:',
+        'programacao-atividades' => 'Programação de atividades',
+        'construcao-rede' => 'Construção da rede',
+        'caminho-critico' => 'Cálculo de Caminho Crítico',
+        'importacao-exportacao-excel' => 'Importação e Exportação de Projeto em planilhas de Excel',
+        'disponivel-via-web' => 'Sistema disponível para diversas plataformas via web',
     ],
 ];

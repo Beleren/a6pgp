@@ -14,7 +14,7 @@
 
             <!-- Nome -->
             <div class="form-group">
-                <label for="nome" class="control-label col-sm-2 col-md-2">Nome:</label>
+                <label for="nome" class="control-label col-sm-2 col-md-2">@lang('paginas.nome')</label>
 
                 <div class="col-sm-6 col-md-6">
                     <input type="text" id="nome" name="nome" class="form-control"
@@ -24,7 +24,7 @@
 
             <!-- Custo Unitário -->
             <div class="form-group">
-                <label for="custo" class="control-label col-sm-2 col-md-2">Custo Unitário:</label>
+                <label for="custo" class="control-label col-sm-2 col-md-2">@lang('paginas.recursos.index.custo-unitario')</label>
 
                 <div class="col-sm-6 col-md-6">
                     <input type="number" id="custo" name="custo" step="10" min="0"
@@ -34,13 +34,17 @@
 
             <!-- Tipo de Recurso -->
             <div class="form-group">
-                <label for="tipo_recurso" class="control-label col-sm-2 col-md-2">Tipo de Recurso:</label>
+                <label for="tipo_recurso" class="control-label col-sm-2 col-md-2">@lang('paginas.recursos.index.tipo-recurso')</label>
                 <div class="col-sm-6 col-md-6">
                     <select name="tipo_recurso" id="tipo_recurso" class="form-control">
-                        <option value="1">Humano</option>
-                        <option value="2">Físico</option>
-                        <option value="3">Financeiro</option>
-                        <option value="4">Tecnológico</option>
+                        <option value="1" @if($recurso->tipoRecurso->nome === 'Humano') selected="selected" @endif>
+                            @lang('paginas.recursos.index.tipos-recursos.humano')</option>
+                        <option value="2" @if($recurso->tipoRecurso->nome === 'Físico') selected="selected" @endif>
+                            @lang('paginas.recursos.index.tipos-recursos.fisico')</option>
+                        <option value="3" @if($recurso->tipoRecurso->nome === 'Financeiro') selected="selected" @endif>
+                            @lang('paginas.recursos.index.tipos-recursos.financeiro')</option>
+                        <option value="4" @if($recurso->tipoRecurso->nome === 'Tecnológico') selected="selected" @endif>
+                            @lang('paginas.recursos.index.tipos-recursos.tecnologico')</option>
                     </select>
                 </div>
             </div>
@@ -48,8 +52,8 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
                     <a href="{{ route('recursos.index', ['id' => $projeto->id]) }}"
-                       class="btn btn-default">Voltar</a> |
-                    <button type="submit" class="btn btn-primary">Alterar</button>
+                       class="btn btn-default">@lang('paginas.voltar')</a> |
+                    <button type="submit" class="btn btn-primary">@lang('paginas.alterar')</button>
                 </div>
             </div>
         </form>

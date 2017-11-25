@@ -26,9 +26,9 @@
                         </td>
                         <td>
                             @if ($p->pivot->proprietario)
-                                Própria
+                                @lang('paginas.projetos.index.flash-messages.proprio')
                             @else
-                                Compartilhado
+                                @lang('paginas.projetos.index.flash-messages.compartilhado')
                             @endif
                         </td>
                         <td>

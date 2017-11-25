@@ -26,22 +26,27 @@
 
                     <!-- Data de Criação -->
                     <div class="form-group">
-                        <label for="data_criacao" class="control-label col-sm-2 col-md-2">Data de Criação:</label>
+                        <label for="data_criacao" class="control-label col-sm-2 col-md-2">@lang('paginas.cenarios.data-criacao')</label>
 
                         <div class="col-sm-6 col-md-6">
                             <input type="text" id="data_criacao" name="data_criacao"
-                                   class="form-control" value="{{ $cenario->created_at->format('d/m/Y') }}"
-                                   readonly="readonly">
+                               class="form-control"
+                               @if(app()->getLocale() !== 'en')
+                               value="{{ $cenario->created_at->format('d/m/Y') }}"
+                               @else
+                               value="{{ $cenario->created_at->format('m/d/Y') }}"
+                               @endif
+                               readonly="readonly">
                         </div>
                     </div>
 
                     <!-- Descrição -->
                     <div class="form-group">
-                        <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>
+                        <label for="descricao" class="control-label col-sm-2 col-md-2">@lang('paginas.descricao')</label>
 
                         <div class="col-sm-6 col-md-6">
                             <textarea name="descricao" id="descricao" class="form-control" cols="30" rows="10"
-                                      readonly="readonly">{{ $cenario->descricao }}
+                                readonly="readonly">{{ $cenario->descricao }}
                             </textarea>
                         </div>
                     </div>
@@ -49,13 +54,13 @@
                     <!-- Botões -->
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
-                            <a href="{{ route('cenarios.index', ['id' => $cenario->projeto->id]) }}" class="btn btn-default">Voltar</a> |
-                            <button type="submit" class="btn btn-primary" disabled="disabled">Alterar</button>
+                            <a href="{{ route('cenarios.index', ['id' => $cenario->projeto->id]) }}" class="btn btn-default">@lang('paginas.voltar')</a> |
+                            <button type="submit" class="btn btn-primary" disabled="disabled">@lang('paginas.alterar')</button>
                             <div class="pull-right">
                                 <a href="{{ route('sequencias.index', [
                                     'projeto' => $projeto, 'cenario' => $cenario->id
                                     ]) }}" class="btn btn-default">
-                                    Visualizar Sequências
+                                    @lang('paginas.cenarios.visualizar-sequencias')
                                 </a>
                             </div>
                         </div>

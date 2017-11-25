@@ -92,6 +92,8 @@ return [
                 'compartilhar-usuario-inexistente' => 'It was not possible to share this project with the following user|It was not possible to share this project with the following users',
                 'compartilhar-verificar-email' => 'Check the e-mail typed-in.|Check the e-mails typed-in.',
                 'compartilhar-usuarios-com-acesso' => 'The following user already has access to this project|The following users already have access to this project',
+                'proprio' => 'Own',
+                'compartilhado' => 'Shared',
             ],
 
             'botoes' =>
@@ -145,7 +147,7 @@ return [
         'index' =>
         [
             'criar-atividade' => 'Create Activity',
-            'sem-atividades' => 'There\'s no activity registered.',
+            'sem-atividades' => 'There\'s no activities registered.',
         ],
 
         'confirm-delete' =>
@@ -153,6 +155,36 @@ return [
             'deseja-excluir' => 'Are you sure you want to delete permanently the activity below?',
             'excluir' => 'Delete Activity',
         ],
+    ],
+
+    'recursos' =>
+    [
+        'index' =>
+        [
+            'criar-recurso' => 'Create Resource',
+            'tipo-recurso' => 'Resource Type',
+            'custo-unitario' => 'Unit Cost',
+            'custo-unico' => 'Single Cost',
+            'sem-recursos' => 'There\'s no resources registered.',
+
+            'tipos-recursos' =>
+            [
+                'humano' => 'Human',
+                'fisico' => 'Physical',
+                'financeiro' => 'Financial',
+                'tecnologico' => 'Technological',
+            ],
+        ],
+
+        'deseja-excluir' => 'Are you sure you want to delete permanently the resource below?',
+    ],
+
+    'cenarios' =>
+    [
+        'criar-cenario' => 'Create Scenario',
+        'data-criacao' => 'Creation Date',
+        'visualizar-sequencias' => 'See Dependencies',
+        'deseja-excluir' => 'Are you sure you want to delete permanently the scenario below?',
     ],
 
     'tabelas' =>
@@ -165,5 +197,28 @@ return [
         'descricao' => 'Description',
         'editar' => 'Edit',
         'excluir' => 'Delete',
+        'recurso' => 'Resource',
+        'cenario' => 'Scenario'
+    ],
+
+    'carousel' =>
+    [
+        'gerenciamento-projeto' => 'Smarter projects\' management with dynamic planning.',
+        'foco-didatico' => 'Projects\' management with a more educational focus.',
+        'open-source' => 'Upon giants\' shoulders of open source community.',
+    ],
+
+    'home' =>
+    [
+        'como-nasceu' => 'Besouro\'s project was born as an requirement for Project Management Practices (A6PGP in Portuguese Acronym) classes
+        to conclude the course of Systems Analysis and Development Technology (TADS in Portuguese Acronym) of
+        Instituto Federal de São Paulo (IFSP).',
+        'objetivo-projeto' => 'The objective of this project is to provide an application that permits the planning of projects
+        using Program Evaluation and Review Technique (PERT) and Critical Path Method (CPM). The features provided are:',
+        'programacao-atividades' => 'Activity Programming',
+        'construcao-rede' => 'Network Construction',
+        'caminho-critico' => 'Critical Path Calculation',
+        'importacao-exportacao-excel' => 'Excel\'s spreadsheets import and export',
+        'disponivel-via-web' => 'System available for several platforms by means of web access',
     ],
 ];

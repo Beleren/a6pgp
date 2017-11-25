@@ -11,30 +11,26 @@
     <div class="container">
         <div class="row" id="teste">
             <p>
-                O projeto Besouro nasceu como um requerimento da matéria de Práticas de Gerenciamento de Projetos (A6PGP)
-                para conclusão do curso de Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) do
-                Instituto Federal de São Paulo (IFSP).
+                @lang('paginas.home.como-nasceu')
             </p>
             <p>
-                O objetivo deste projeto é disponibilizar uma aplicação que permita o planejamento de projetos utilizando
-                a rede Program Evaluation and Review Technique (PERT) e o Critical Path Method (CPM). As funcionalidades
-                disponíveis são:
+                @lang('paginas.home.objetivo-projeto')
             </p>
             <ul class="list-group">
                 <li class="list-group-item">
-                    Programação de atividades
+                    @lang('paginas.home.programacao-atividades')
                 </li>
                 <li class="list-group-item">
-                    Construção da rede
+                    @lang('paginas.home.construcao-rede')
                 </li>
                 <li class="list-group-item">
-                    Cálculo de Caminho Crítico
+                    @lang('paginas.home.caminho-critico')
                 </li>
                 <li class="list-group-item">
-                    Importação e Exportação de Projeto em planilhas de Excel.
+                    @lang('paginas.home.importacao-exportacao-excel')
                 </li>
                 <li class="list-group-item">
-                    Sistema disponível para diversas plataformas via web
+                    @lang('paginas.home.disponivel-via-web')
                 </li>
             </ul>
         </div>

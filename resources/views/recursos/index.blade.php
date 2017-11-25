@@ -6,17 +6,18 @@
             <div class="col-md-4 col-xs-6">
                 <a href="{{ route('recursos.create', ['projeto' => $projeto->id]) }}"
                    class="btn btn-primary">
-                    Criar Recurso
+                    @lang('paginas.recursos.index.criar-recurso')
                 </a>
             </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>
             <tr>
-                <th>Nome</th>
-                <th>Tipo de Recurso</th>
-                <th>Custo Unitário</th>
-                <th>Ações</th>
+                <th>@lang('paginas.tabelas.recurso')</th>
+                <th>@lang('paginas.recursos.index.tipo-recurso')</th>
+                <th>@lang('paginas.recursos.index.custo-unitario')</th>
+                <th>@lang('paginas.recursos.index.custo-unico')</th>
+                <th>@lang('paginas.tabelas.acoes')</th>
             </tr>
             </thead>
             <tbody>
@@ -30,22 +31,24 @@
                     </td>
                     <td>{{ $recurso->tipoRecurso->nome }}</td>
                     <td>{{ $recurso->custo }}</td>
+                    <td>TODO: Falta implementar</td>
                     <td>
                         <a href="{{ route('recursos.edit',
                             ['recursos' => $recurso->id, 'projeto' => $projeto->id ]) }}">
-                            Editar
+                            @lang('paginas.tabelas.editar')
                         </a> |
                         <a href="{{ route('recursos.confirm-delete',
                             ['recursos' => $recurso->id, 'projeto' => $projeto->id ]) }}">
-                            Excluir
+                            @lang('paginas.tabelas.excluir')
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td>
-                        Não há recursos cadastrados.
+                        @lang('paginas.recursos.index.sem-recursos')
                     </td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

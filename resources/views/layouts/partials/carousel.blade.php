@@ -12,19 +12,19 @@
             <div class="item active">
                 <img src="{{ asset('img/software-de-gerenciamento-de-projetos.jpg') }}" alt="Gerente planejando o projeto.">
                 <div class="carousel-caption">
-                    Gerenciamento de projetos mais inteligente com o planejamento dinâmico.
+                    @lang('paginas.carousel.gerenciamento-projeto')
                 </div>
             </div>
             <div class="item">
                 <img src="{{ asset('img/foco-didatico.png') }}" alt="Foco didático para o ensino de gerenciamento de projetos.">
                 <div class="carousel-caption">
-                    Gerenciamento de projetos com um foco mais didático.
+                    @lang('paginas.carousel.foco-didatico')
                 </div>
             </div>
             <div class="item">
                 <img src="{{ asset('img/open-source.png') }}" alt="Ferramentas open source.">
                 <div class="carousel-caption">
-                    Sobre os ombros de gigantes da comunidade open source.
+                    @lang('paginas.carousel.open-source')
                 </div>
             </div>
         </div>

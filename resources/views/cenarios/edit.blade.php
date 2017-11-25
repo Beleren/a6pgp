@@ -13,17 +13,17 @@
 
             <!-- Nome -->
             <div class="form-group">
-                <label for="nome" class="control-label col-sm-2 col-md-2">Nome:</label>
+                <label for="nome" class="control-label col-sm-2 col-md-2">@lang('paginas.nome')</label>
 
                 <div class="col-sm-6 col-md-6">
                     <input type="text" id="nome" name="nome" class="form-control"
-                           value="{{ $cenario->nome }}">
+                       value="{{ $cenario->nome }}">
                 </div>
             </div>
 
             <!-- Descrição -->
             <div class="form-group">
-                <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>
+                <label for="descricao" class="control-label col-sm-2 col-md-2">@lang('paginas.descricao')</label>
                 <div class="col-sm-6 col-md-6">
                     <textarea name="descricao" id="descricao" cols="30" rows="10" class="form-control">{{ $cenario->descricao }}</textarea>
                 </div>
@@ -31,14 +31,14 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
-                    <a href="{{ route('cenarios.index', ['id' => $cenario->projeto->id]) }}" class="btn btn-default">Voltar</a> |
-                    <button type="submit" class="btn btn-primary">Alterar</button>
+                    <a href="{{ route('cenarios.index', ['id' => $cenario->projeto->id]) }}" class="btn btn-default">@lang('paginas.voltar')</a> |
+                    <button type="submit" class="btn btn-primary">@lang('paginas.alterar')</button>
                     <div class="pull-right">
                         <a href="{{ route('sequencias.index', [
                             'projeto' => $projeto,
                             'cenario' => $cenario->id,
                         ]) }}" class="btn btn-default">
-                            Visualizar Sequências
+                            @lang('paginas.cenarios.visualizar-sequencias')
                         </a>
                     </div>
                 </div>

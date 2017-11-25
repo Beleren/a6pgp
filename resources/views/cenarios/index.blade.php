@@ -4,16 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-xs-6">
-                <a href="{{ route('cenarios.create', ['projeto' => $projeto]) }}" class="btn btn-primary">Criar Cenário</a>
+                <a href="{{ route('cenarios.create', ['projeto' => $projeto]) }}" class="btn btn-primary">@lang('paginas.cenarios.criar-cenario')</a>
             </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>
                 <tr>
-                    <th>Cenário</th>
-                    <th>Data de Criação</th>
-                    <th>Descrição</th>
-                    <th>Ações</th>
+                    <th>@lang('paginas.tabelas.cenario')</th>
+                    <th>@lang('paginas.tabelas.criado-em')</th>
+                    <th>@lang('paginas.tabelas.descricao')</th>
+                    <th>@lang('paginas.tabelas.acoes')</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,16 +25,22 @@
                                 {{ $cenario->nome }}
                             </a>
                         </td>
-                        <td>{{ $cenario->created_at->format('d/m/Y') }}</td>
+                        <td>
+                            @if(app()->getLocale() !== 'en')
+                                {{ $cenario->created_at->format('d/m/Y') }}
+                            @else
+                                {{ $cenario->created_at->format('m/d/Y') }}
+                            @endif
+                        </td>
                         <td>{{ $cenario->descricao }}</td>
                         <td>
                             <a href="{{ route('cenarios.edit',
                                 ['cenario' => $cenario->id, 'projeto' => $cenario->projeto->id ]) }}">
-                                Editar
+                                @lang('paginas.alterar')
                             </a> |
                             <a href="{{ route('cenarios.confirm-delete',
                                 ['cenario' => $cenario->id, 'projeto' => $cenario->projeto->id ]) }}">
-                                Excluir
+                                @lang('paginas.excluir')
                             </a>
                         </td>
                     </tr>
