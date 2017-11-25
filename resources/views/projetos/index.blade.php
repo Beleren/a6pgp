@@ -4,16 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="secao-botao-voltar col-md-1 col-xs-2">
-                <a href="{{ route('projetos.create') }}" class="btn btn-primary">Criar Projeto</a>
+                <a href="{{ route('projetos.create') }}" class="btn btn-primary">@lang('paginas.projetos.index.botoes.criar')</a>
             </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
             <thead>
                 <tr>
-                    <th>Projeto</th>
-                    <th>Autoria</th>
-                    <th>Criado em</th>
-                    <th></th>
+                    <th>@lang('paginas.tabelas.projeto')</th>
+                    <th>@lang('paginas.tabelas.autoria')</th>
+                    <th>@lang('paginas.tabelas.criado-em')</th>
+                    <th>@lang('paginas.tabelas.acoes')</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,12 +32,16 @@
                             @endif
                         </td>
                         <td>
+                            @if(! app()->getLocale('en'))
                             {{ $p->created_at->format('d/m/Y') }}
+                            @else
+                            {{ $p->created_at->format('m/d/Y') }}
+                            @endif
                         </td>
                         <td>
-                            <a href="#" class="compartilhar">Compartilhar</a> |
-                            <a href="{{ route('projetos.edit', ['id' => $p->id]) }}">Editar</a> |
-                            <a href="{{ route('projetos.confirmDelete', ['id' => $p->id]) }}">Excluir</a>
+                            <a href="#" class="compartilhar">@lang('paginas.projetos.index.botoes.compartilhar')</a> |
+                            <a href="{{ route('projetos.edit', ['id' => $p->id]) }}">@lang('paginas.projetos.index.botoes.editar')</a> |
+                            <a href="{{ route('projetos.confirmDelete', ['id' => $p->id]) }}">@lang('paginas.projetos.index.botoes.excluir')</a>
                         </td>
                     </tr>
                 @endforeach

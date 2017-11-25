@@ -22,52 +22,33 @@
                 @if (! Auth::guest())
                     <li>
                         <a href="{{ route('projetos.index') }}" class="active"
-                       data-toggle="tooltip" data-placement="bottom" title="Gerencie seus projetos.">Projetos</a>
+                       data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.projetos')">@lang('paginas.navegacao.projetos')</a>
                     </li>
 
                     @if(isset($projeto))
                     <li>
                         <a href="{{ route('atividades.index', ['projeto' => $projeto->id]) }}"
-                        data-toggle="tooltip" data-placement="bottom" title="Gerencie suas atividades."
-                        >Atividades</a>
+                        data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.atividades')"
+                        >@lang('paginas.navegacao.atividades')</a>
                     </li>
                     <li>
                         <a href="{{ route('recursos.index', ['projeto' => $projeto->id]) }}"
-                        data-toggle="tooltip" data-placement="bottom" title="Gerencie seus recursos.">Recursos</a>
+                        data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.recursos')">@lang('paginas.navegacao.recursos')</a>
                     </li>
                     <li>
                         <a href="{{ route('cenarios.index', ['projeto ' => $projeto->id]) }}"
-                        data-toggle="tooltip" data-placement="bottom" title="Gerencie os cenários de um mesmo projeto.">Cenários</a>
+                        data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.cenarios')">@lang('paginas.navegacao.cenarios')</a>
                     </li>
                     <li>
                         <a href="{{ route('sequencias.index', ['projeto' => $projeto->id,
                         'cenario' => $projeto->cenarios->first() ]) }}"
-                        data-toggle="tooltip" data-placement="bottom" title="Gerencie as dependências das atividades de um determinado cenário."
-                        >Gerenciar Dependências</a>
+                        data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.gerenciar-dependencias')"
+                        >@lang('paginas.navegacao.gerenciar-dependencias')</a>
                     </li>
-                    {{--@else--}}
-                        {{--<li>--}}
-                            {{--<a href="{{ route('atividades.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
-                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie suas atividades."--}}
-                            {{-->teste</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                            {{--<a href="{{ route('recursos.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
-                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie seus recursos.">Recursos</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                            {{--<a href="{{ route('cenarios.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
-                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie os cenários de um mesmo projeto.">Cenários</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                            {{--<a href="{{ route('sequencias.index', ['projeto' => auth()->user()->projetos->first()]) }}"--}}
-                            {{--data-toggle="tooltip" data-placement="bottom" title="Gerencie as dependências das atividades de um determinado cenário."--}}
-                            {{-->Gerenciar Dependências</a>--}}
-                        {{--</li>--}}
                     @endif
                 @endif
                 <li>
-                    <a href="{{ route('home.sobre') }}">Sobre</a>
+                    <a href="{{ route('home.sobre') }}">@lang('paginas.navegacao.sobre')</a>
                 </li>
             </ul>
 
@@ -98,6 +79,10 @@
                         </ul>
                     </li>
                 @endif
+                <li id="idiomas">
+                    <img id="idioma-portugues" src="{{ asset('img/brazil-flag.png') }}" class="img-responsive pull-left" alt="Bandeira do Brasil">
+                    <img id="idioma-ingles" src="{{ asset('img/united-states-flag.png') }}" class="img-responsive pull-right" alt="Bandeira dos Estados Unidos">
+                </li>
             </ul>
         </div>
     </div>

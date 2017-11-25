@@ -69,11 +69,11 @@ class ProjetosController extends Controller
             ->updateExistingPivot(auth()->id(), ['proprietario' => true]);
 
         $cenario = Cenario::firstOrCreate([
-            'nome' => 'Cenário Padrão',
+            'nome' => trans('paginas.cenario_padrao'),
             'projeto_id' => $projeto->id,
         ]);
 
-        $request->session()->flash('success', 'Projeto criado com sucesso!');
+        $request->session()->flash('success', trans('paginas.projetos.index.flash-messages.projeto-criado-sucesso'));
         return redirect(route('projetos.index'));
     }
 
@@ -124,7 +124,7 @@ class ProjetosController extends Controller
 
         $projeto->save();
 
-        $request->session()->flash('success', 'Projeto alterado com sucesso!');
+        $request->session()->flash('success', trans('paginas.projetos.index.flash-messages.projeto-alterado-sucesso'));
 
         return redirect(route('projetos.show', ['projeto' => $projeto]));
     }
@@ -141,7 +141,7 @@ class ProjetosController extends Controller
 
         Projeto::destroy($projeto->id);
 
-        $request->session()->flash('info', 'O projeto foi excluído com sucesso e todas as atividades e recursos relacionados.');
+        $request->session()->flash('info', trans('paginas.projetos.index.flash-messages.projeto-excluido-sucesso'));
         return redirect(route('projetos.index'));
     }
 
@@ -159,14 +159,6 @@ class ProjetosController extends Controller
     }
 
     public function salvarCompartilhamento(Request $request, Projeto $projeto) {
-        /*
-         * TODO: Implementar tratamento de outros cenários, tais como:
-         * Usuário não cadastrou outros usuários para compartilhar projeto e
-         * clicou em enviar.
-         *
-         * Usuário informou um e-mail inválido.
-         */
-
         $this->authorize('view-projeto', $projeto);
 
         $dados = $request->input('projeto-usuarios');
@@ -175,7 +167,7 @@ class ProjetosController extends Controller
 
         if (! $dados) {
             $erros = true;
-            $request->session()->flash('danger', 'Digite o(s) e-mail(s) do(s) usuário(s) com quem deseja compartilhar.');
+            $request->session()->flash('danger', trans('paginas.projetos.index.flash-messages.compartilhar-emails-ausentes'));
         } else {
             try {
                 $vetor = explode(';', $dados);
@@ -206,11 +198,11 @@ class ProjetosController extends Controller
                             $usuarios_nao_cadastrados = str_replace_last(';', '', trim($usuarios_nao_cadastrados));
 
                             if (stripos($usuarios_nao_cadastrados, ';') > 0) {
-                                $request->session()->flash('warning', 'Não foi possível compartilhar o projeto com os usuários ['
-                                    . $usuarios_nao_cadastrados . ']. Verifique os e-mails digitados.');
+                                $request->session()->flash('warning', trans('paginas.projetos.index.flash-messages.compartilhar-usuario-inexistente') . '['
+                                    . $usuarios_nao_cadastrados . '].' . trans('paginas.projetos.index.flash-messages.compartilhar-verificar-email'));
                             } else {
-                                $request->session()->flash('warning', 'Não foi possível compartilhar o projeto com o usuário '
-                                    . $usuarios_nao_cadastrados . '. Verifique o e-mail digitado.');
+                                $request->session()->flash('warning', trans('paginas.projetos.index.flash-messages.compartilhar-usuario-inexistente') . '['
+                                    . $usuarios_nao_cadastrados . '].' . trans('paginas.projetos.index.flash-messages.compartilhar-verificar-email'));
                             }
                         }
 
@@ -219,25 +211,25 @@ class ProjetosController extends Controller
                             $usuarios_ja_cadastrados = str_replace_last(';', '', trim($usuarios_ja_cadastrados));
 
                             if (stripos($usuarios_ja_cadastrados, ';') > 0) {
-                                $request->session()->flash('info', 'Os usuários a seguir já estão com este projeto compartilhado ['
-                                    . $usuarios_ja_cadastrados . '].');
+                                $request->session()->flash('info', trans('paginas.projetos.index.flash-messages.compartilhar-usuarios-com-acesso') .
+                                    ' ' . $usuarios_ja_cadastrados . '.');
                             } else {
-                                $request->session()->flash('info', 'O usuário a seguir já está com este projeto compartilhado '
-                                    . $usuarios_ja_cadastrados . '.');
+                                $request->session()->flash('info', trans('paginas.projetos.index.flash-messages.compartilhar-usuarios-com-acesso') .
+                                    ' ' . $usuarios_ja_cadastrados . '.');
                             }
                         }
                     }
                 }
 
             } catch (Exception $e) {
-                $request->session()->flash('danger', 'Algo deu errado! Por favor, tente novamente');
+                $request->session()->flash('danger', trans('paginas.projetos.index.flash-messages.compartilhar-erro'));
                 $e->getMessage();
             }
 
         }
 
         if (! $erros && ! $info) {
-            $request->session()->flash('success', 'Projeto foi compartilhado com sucesso!');
+            $request->session()->flash('success', trans('paginas.projetos.index.flash-messages.compartilhar-sucesso'));
         }
 
         return redirect(route('projetos.index'));

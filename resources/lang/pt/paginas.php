@@ -8,6 +8,11 @@ return [
     'register' => 'Cadastrar',
     'login' => 'Acessar',
     'logout' => 'Sair',
+    'cenario_padrao' => 'Cenário Padrão',
+    'voltar' => 'Voltar',
+    'alterar' => 'Alterar',
+    'confirmar-exclusao' => 'Confirmar Exclusão',
+
 
     // views/auth/
     'auth' =>
@@ -46,5 +51,74 @@ return [
                 'confirm_password' => 'Confirmar Senha',
             ]
         ]
+    ],
+
+    'navegacao' =>
+    [
+        'projetos' => 'Projetos',
+        'sobre' => 'Sobre',
+        'atividades' => 'Atividades',
+        'recursos' => 'Recursos',
+        'cenarios' => 'Cenários',
+        'gerenciar-dependencias' => 'Gerenciar Dependências',
+
+        'descricoes' =>
+        [
+            'projetos' => 'Gerencie seus projetos.',
+            'atividades' => 'Gerencie suas atividades.',
+            'recursos' => 'Gerencie seus recursos.',
+            'cenarios' => 'Gerencie os cenários de um mesmo projeto.',
+            'gerenciar-dependencias' => 'Gerencie as dependências das atividades de um determinado cenário.',
+        ],
+    ],
+
+    // views/projetos
+    'projetos' =>
+    [
+        // views/projetos/index.blade.php
+        'index' =>
+        [
+            'flash-messages' =>
+            [
+                'compartilhar-sucesso' => 'Projeto foi compartilhado com sucesso!',
+                'compartilhar-erro' => 'Algo deu errado! Por favor, tente novamente.',
+                'projeto-criado-sucesso' => 'Projeto criado com sucesso!',
+                'projeto-alterado-sucesso' => 'Projeto alterado com sucesso!',
+                'projeto-excluido-sucesso' => 'O projeto foi excluído com sucesso e todas as atividades e recursos relacionados.',
+                'compartilhar-emails-ausentes' => 'Digite o(s) e-mail(s) do(s) usuário(s) com quem deseja compartilhar.',
+                'compartilhar-usuario-inexistente' => 'Não foi possível compartilhar o projeto com o seguinte usuário|Não foi possível compartilhar o projeto com os seguintes usuários',
+                'compartilhar-verificar-email' => 'Verifique o e-mail digitado.|Verifique os e-mails digitados.',
+                'compartilhar-usuarios-com-acesso' => 'O usuário a seguir já está com este projeto sendo compartilhado|Os usuários a seguir já estão com este projeto sendo compartilhado',
+            ],
+
+            'botoes' =>
+            [
+                'criar' => 'Criar Projeto',
+                'compartilhar' => 'Compartilhar',
+                'editar' => 'Editar',
+                'excluir' => 'Excluir',
+            ],
+        ],
+
+        // views/projetos/edit.blade.php
+        'edit' =>
+        [
+            'projeto' => 'Projeto:',
+            'descricao' => 'Descrição:',
+        ],
+
+        // views/projetos/confirm-delete.blade.php
+        'confirm-delete' =>
+        [
+            'deseja-excluir' => 'Você deseja excluir permanentemente o projeto abaixo?',
+        ],
+    ],
+
+    'tabelas' =>
+    [
+        'projeto' => 'Projeto',
+        'autoria' => 'Autoria',
+        'criado-em' => 'Criado Em',
+        'acoes' => 'Ações',
     ],
 ];

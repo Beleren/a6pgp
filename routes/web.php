@@ -11,22 +11,28 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home.index');
+/* Rotas que não precisam de autenticação */
+Route::middleware(['web', 'idioma'])->group(function() {
+    Route::get('/', function () {
+        return view('home.index');
+    });
+
+    Auth::routes();
+
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/sobre', 'HomeController@sobre')->name('home.sobre');
+    Route::get('/contato', 'HomeController@contato')->name('home.contato');
+    Route::post('/contato', 'HomeController@salvarMensagemContato')
+        ->name('home.salvar-contato');
+
+    /* Mudança de Idioma */
+    Route::get('/idiomas/{idioma}', 'IdiomasController@alterarIdioma')
+        ->name('idiomas.alterar-idioma');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/sobre', 'HomeController@sobre')->name('home.sobre');
-Route::get('/contato', 'HomeController@contato')->name('home.contato');
-Route::post('/contato', 'HomeController@salvarMensagemContato')
-    ->name('home.salvar-contato');
-
-/* Projetos */
-
-Route::middleware(['web', 'auth'])->group(function (){
-
+/* Rotas que precisam de autenticação */
+Route::middleware(['web', 'auth', 'idioma'])->group(function (){
+    /* Projetos */
     Route::get('/projetos', 'ProjetosController@index')
         ->name('projetos.index');
 

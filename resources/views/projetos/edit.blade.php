@@ -11,14 +11,14 @@
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="nome" class="control-label col-sm-2 col-md-2">Projeto:</label>
+                <label for="nome" class="control-label col-sm-2 col-md-2">@lang('paginas.projetos.edit.projeto')</label>
                 <div class="col-sm-6 col-md-6">
                     <input type="text" name="nome" id="nome" class="form-control" value="{{ $projeto->nome }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="descricao" class="control-label col-sm-2 col-md-2">Descrição:</label>
+                <label for="descricao" class="control-label col-sm-2 col-md-2">@lang('paginas.projetos.edit.descricao')</label>
 
                 <div class="col-sm-6 col-md-6">
                     <textarea name="descricao" id="descricao" cols="30" rows="10" class="form-control">{{ $projeto->descricao }}
@@ -28,8 +28,8 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-offset-2 col-sm-6 col-md-6">
-                    <a href="{{ route('projetos.index') }}" class="btn btn-default">Voltar</a> |
-                    <button type="submit" class="btn btn-primary">Alterar</button>
+                    <a href="{{ route('projetos.index') }}" class="btn btn-default">@lang('paginas.voltar')</a> |
+                    <button type="submit" class="btn btn-primary">@lang('paginas.alterar')</button>
                 </div>
             </div>
         </form>
