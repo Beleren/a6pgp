@@ -249,16 +249,16 @@ class SequenciasController extends Controller
         $regras = [
             'qtd' => 'integer|min:0',
             'dataDispRecurso' => 'date|after_or_equal:today',
-            'tempoAlocado' => 'timezone|min:0',
+            'tempoAlocado' => 'timezone|nullable|min:0',
         ];
 
         $mensagens = [
-            'qtd.numeric' => 'Quantidade deve ser um número inteiro.',
-            'qtd.min' => 'Quantidade deve ser maior que zero.',
-            'dataDispRecurso.date' => 'Data de Disponibilização do Recurso está em formato inválido.',
-            'data.after' => 'Data de Disponibilização do Recurso deve posterior ou igual a data de hoje.',
-            'tempoAlocado.timezone' => 'Tempo Alocado deve ter formato de horário.',
-            'tempoAlocado' => 'Tempo Alocado não pode ser negatívo.',
+            'qtd.numeric' => trans('paginas.sequencias.validacoes.detalhes.recursos.qtd.numeric'),
+            'qtd.min' => trans('paginas.sequencias.validacoes.detalhes.recursos.qtd.min'),
+            'dataDispRecurso.date' => trans('paginas.sequencias.validacoes.detalhes.recursos.dataDispRecurso.date'),
+            'data.after' => trans('paginas.sequencias.validacoes.detalhes.recursos.data.after'),
+            'tempoAlocado.timezone' => trans('paginas.sequencias.validacoes.detalhes.recursos.tempoAlocado.timezone'),
+            'tempoAlocado.min' => trans('paginas.sequencias.validacoes.detalhes.recursos.tempoAlocado.min'),
         ];
 
         $validator = Validator::make($valor, $regras, $mensagens);
@@ -281,13 +281,13 @@ class SequenciasController extends Controller
         ];
 
         $mensagens = [
-            'duracao.integer' => 'Duração deve ser um tipo numérico.',
-            'duracao.min' => 'Duração deve ser maior quer zero.',
-            'requerRecursos.in' => 'Requer Recurso deve ser um valor verdadeiro ou falso.',
-            'inicioOtimista.date' => 'Início Otimista deve ter um formato de data.',
-            'inicioPessimista.after_or_equal' => 'Início Pessimista deve ser posterior ou igual a data de hoje.',
-            'fimOtimista.date' => 'Fim Otimista deve ter um formato de data.',
-            'fimPessimista.after_or_equal' => 'Fim Pessimista deve ser posterior ou igual a data de hoje.',
+            'duracao.integer' => trans('paginas.sequencias.validacoes.detalhes.atividades.duracao.integer'),
+            'duracao.min' => trans('paginas.sequencias.validacoes.detalhes.atividades.duracao.min'),
+            'requerRecursos.in' => trans('paginas.sequencias.validacoes.detalhes.atividades.requerRecursos.in'),
+            'inicioOtimista.date' => trans('paginas.sequencias.validacoes.detalhes.atividades.inicioOtimista.date'),
+            'inicioPessimista.after_or_equal' => trans('paginas.sequencias.validacoes.detalhes.atividades.inicioPessimista.after_or_equal'),
+            'fimOtimista.date' => trans('paginas.sequencias.validacoes.detalhes.atividades.fimOtimista.date'),
+            'fimPessimista.after_or_equal' => trans('paginas.sequencias.validacoes.detalhes.atividades.fimPessimista.after_or_equal'),
         ];
 
         $validator = Validator::make($valor, $regras, $mensagens);

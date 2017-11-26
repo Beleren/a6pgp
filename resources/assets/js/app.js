@@ -27,6 +27,8 @@ const app = new Vue({
     }
 });
 
+window.Viz = require('viz.js');
+
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 

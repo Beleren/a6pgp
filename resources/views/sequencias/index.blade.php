@@ -11,18 +11,19 @@
                 <div class="row">
                     <div class="col-md-8 col-xs-12">
                         <button id="btnSalvar" name="btnSalvar" type="button" class="btn btn-primary">
-                            Salvar Cenário
+                            @lang('paginas.sequencias.salvar-cenario')
                         </button>
                         &nbsp;
                         <button id="btnSalvarNovoCenario" name="btnSalvar" type="button" class="btn btn-success">
-                            Salvar em Novo Cenário
+                            @lang('paginas.sequencias.salvar-novo-cenario')
                         </button>
                         &nbsp;
-                        <a href="{{ route('resultado.index', ['projeto' => $projeto->id, 'cenario' => $cenario->id]) }}" class="btn btn-default">Diagrama</a>
+                        <a href="{{ route('resultado.index', ['projeto' => $projeto->id, 'cenario' => $cenario->id]) }}"
+                           class="btn btn-default">@lang('paginas.sequencias.diagrama')</a>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="cenario" class="control-label">Cenário:</label>
+                    <label for="cenario" class="control-label">@lang('paginas.cenarios.cenario')</label>
                     <div>
                         <select id="cenario" name="cenario" class="form-control">
                             @foreach($cenarios as $cenario)
@@ -34,9 +35,9 @@
                 <table class="table table-striped table-bordered table-hover tablesorter col-sm-8 col-md-8">
                     <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Atividades Predecessoras</th>
-                        <th>Recursos</th>
+                        <th>@lang('paginas.cenarios.atividade')</th>
+                        <th>@lang('paginas.cenarios.atividades-predecessoras')</th>
+                        <th>@lang('paginas.cenarios.recursos')</th>
                     </tr>
                     </thead>
                     <tbody>

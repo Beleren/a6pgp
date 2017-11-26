@@ -53,7 +53,7 @@ class RecursosController extends Controller
 
         $projeto->recursos()->save($recurso);
 
-        $request->session()->flash('success', 'Recurso criado com sucesso!');
+        $request->session()->flash('success', trans('paginas.recursos.recurso-criado'));
 
         return redirect(route('recursos.index', [
             'projeto' => $projeto,
@@ -80,7 +80,7 @@ class RecursosController extends Controller
         $recurso->tipo_recurso_id = $request->input('tipo_recurso');
         $recurso->save();
 
-        $request->session()->flash('success', 'Recurso alterado com sucesso!');
+        $request->session()->flash('success', trans('paginas.recursos.recurso-atualizado'));
 
         return redirect(route('recursos.index', [
             'projeto' => $projeto,
@@ -98,7 +98,7 @@ class RecursosController extends Controller
 
         Recurso::destroy($recurso);
 
-        session()->flash('info', 'Recurso excluído com sucesso e todas as sequências relacionadas!');
+        session()->flash('info', trans('paginas.recursos.recurso-excluido'));
 
         return redirect(route('recursos.index', [
             'projeto' => $projeto,

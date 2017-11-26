@@ -10,7 +10,7 @@ return [
     'logout' => 'Sair',
     'cenario_padrao' => 'Cenário Padrão',
     'voltar' => 'Voltar',
-    'alterar' => 'Alterar',
+    'alterar' => 'Atualizar',
     'confirmar-exclusao' => 'Confirmar Exclusão',
     'sair' => 'Sair',
     'descricao' => 'Descrição',
@@ -156,6 +156,10 @@ return [
             'deseja-excluir' => 'Deseja excluir permanentemente a atividade abaixo?',
             'excluir' => 'Excluir Atividade',
         ],
+
+        'atividade-criada-sucesso' => 'Atividade criada com sucesso!',
+        'atividade-alterada-sucesso' => 'Atividade alterada com sucesso!',
+        'atividade-excluida-sucesso' => 'Atividade excluída com sucesso e todas as sequências relacionadas!',
     ],
 
     'recursos' =>
@@ -178,6 +182,9 @@ return [
         ],
 
         'deseja-excluir' => 'Deseja excluir permanentemente o recurso abaixo?',
+        'recurso-criado' => 'Recurso criado com sucesso!',
+        'recurso-atualizado' => 'Recurso alterado com sucesso!',
+        'recurso-excluido' => 'Recurso excluído com sucesso e todas as sequências relacionadas!',
     ],
 
     'cenarios' =>
@@ -186,6 +193,17 @@ return [
         'data-criacao' => 'Data de Criação',
         'visualizar-sequencias' => 'Visualizar Sequências',
         'deseja-excluir' => 'Deseja excluir permanentemente o cenário abaixo?',
+        'cenario-criado-sucesso' => 'Cenário criado com sucesso!',
+        'cenario-atualizado' => 'Cenário atualizado com sucesso!',
+        'cenario-excluido' => 'Cenário excluído com sucesso com todas as sequências relacionadas!',
+        'cenario' => 'Cenário',
+        'atividade' => 'Atividade',
+        'atividades-predecessoras' => 'Atividades Predecessoras',
+        'recursos' => 'Recursos',
+        'atividades' => 'Atividades',
+        'recursos' => 'Recursos',
+        'sem-atividades' => 'Não há atividades cadastradas.',
+        'sem-recursos' => 'Não há recursos cadastrados.',
     ],
 
     'tabelas' =>
@@ -222,5 +240,77 @@ return [
         'caminho-critico' => 'Cálculo de Caminho Crítico',
         'importacao-exportacao-excel' => 'Importação e Exportação de Projeto em planilhas de Excel',
         'disponivel-via-web' => 'Sistema disponível para diversas plataformas via web',
+    ],
+
+    'sequencias' =>
+    [
+        'validacoes' =>
+        [
+            'detalhes' =>
+            [
+                'atividades' =>
+                [
+                    'duracao' =>
+                    [
+                        'integer' => 'Duração deve ser um tipo numérico.',
+                        'min' => 'Duração deve ser maior quer zero.',
+                    ],
+
+                    'requerRecursos.in' => 'Requer Recurso deve ser um valor verdadeiro ou falso.',
+                    'inicioOtimista.date' => 'Início Otimista deve ter um formato de data.',
+                    'inicioPessimista.after_or_equal' => 'Início Pessimista deve ser posterior ou igual a data de hoje.',
+                    'fimOtimista.date' => 'Fim Otimista deve ter um formato de data.',
+                    'fimPessimista.after_or_equal' => 'Fim Pessimista deve ser posterior ou igual a data de hoje.',
+                ],
+
+                'recursos' =>
+                [
+                    'qtd' =>
+                    [
+                        'numeric' => 'Quantidade deve ser um número inteiro.',
+                        'min' => 'Quantidade deve ser maior que zero.',
+                    ],
+                    'dataDispRecurso.date' => 'Data de Disponibilização do Recurso está em formato inválido.',
+                    'data.after' => 'Data de Disponibilização do Recurso deve posterior ou igual a data de hoje.',
+
+                    'tempoAlocado' =>
+                    [
+                        'timezone' => 'Tempo Alocado deve ter formato de horário.',
+                        'min' => 'Tempo Alocado não pode ser negatívo.',
+                    ],
+                ],
+            ],
+        ],
+        'salvar-cenario' => 'Salvar Cenário',
+        'salvar-novo-cenario' => 'Salvar em Novo Cenário',
+        'diagrama' => 'Diagrama',
+    ],
+
+    'registrar' =>
+    [
+        'name' =>
+        [
+            'required' => 'O campo nome é obrigatório.',
+            'string' => 'O campo nome deve ser um tipo textual.',
+            'max' => 'O campo nome não pode exceder 255 caracteres',
+            'min' => 'O campo nome deve possuir pelos menos 3 caracteres',
+        ],
+
+        'email' =>
+        [
+            'required' => 'O campo e-mail é obrigatório.',
+            'string' => 'O campo e-mail deve ser do tipo textual.',
+            'formato' => 'O e-mail está em formato inválido.',
+            'unique' => 'Este e-mail já está sendo utilizado.',
+        ],
+
+        'password' =>
+        [
+            'require' => 'O campo senha é obrigatório.',
+            'string' => 'O campo senha deve ser do tipo textual.',
+            'min' => 'O campo senha deve possuir pelo menos 6 caracteres.',
+            'confirmed' => 'Os campos referentes à senha não conferem.',
+            'regex' => 'Digite uma senha com pelos menos duas letras minúsculas, uma maiúscula e um caractere especial.',
+        ],
     ],
 ];

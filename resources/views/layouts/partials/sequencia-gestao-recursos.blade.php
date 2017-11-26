@@ -6,7 +6,7 @@
                 <a role="button" data-toggle="collapse" data-parent="#accordion"
                     href="#collapseAtividades" aria-expanded="true"
                     aria-controls="collapseAtividades">
-                    Atividades
+                    @lang('paginas.cenarios.atividades')
                     <a class="btn btn-primary adicionar"
                        href="{{ route('atividades.create', [
                     'projeto' => $projeto->id]) }}"
@@ -28,7 +28,7 @@
                             <span>{{ $atividade->nome }}</span>
                         </li>
                     @empty
-                        <span>Não há atividades cadastradas.</span>
+                        <span>@lang('paginas.cenarios.sem-atividades')</span>
                     @endforelse
                 </ul>
             </div>
@@ -41,7 +41,7 @@
             <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
                     href="#collapseRecursos" aria-expanded="false" aria-controls="collapseRecursos">
-                    Recursos
+                    @lang('paginas.cenarios.recursos')
                     <a class="btn btn-primary adicionar"
                        href="{{ route('recursos.create', [
                     'projeto' => $projeto->id]) }}"
@@ -61,7 +61,7 @@
                             <span>{{ $recurso->nome }}</span>
                         </li>
                     @empty
-                        <span>Não há recursos cadastrados.</span>
+                        <span>@lang('paginas.cenarios.sem-recursos')</span>
                     @endforelse
                 </ul>
             </div>

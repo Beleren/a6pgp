@@ -10,7 +10,7 @@ return [
     'logout' => 'Logout',
     'cenario_padrao' => 'Default Scenario',
     'voltar' => 'Go Back',
-    'alterar' => 'Change',
+    'alterar' => 'Update',
     'confirmar-exclusao' => 'Confirm Delete',
     'sair' => 'Exit',
     'descricao' => 'Description',
@@ -86,7 +86,7 @@ return [
                 'compartilhar-sucesso' => 'Project was shared successfully!',
                 'compartilhar-erro' => 'Something is wrong! Please, try again.',
                 'projeto-criado-sucesso' => 'Project was created sucessfully!',
-                'projeto-alterado-sucesso' => 'Project was changed successfully!',
+                'projeto-alterado-sucesso' => 'Project was updated successfully!',
                 'projeto-excluido-sucesso' => 'Project was deleted successfully with all related activities and resources.',
                 'compartilhar-emails-ausentes' => 'Type in user(s) e-mail(s) with whom you want to share this project.',
                 'compartilhar-usuario-inexistente' => 'It was not possible to share this project with the following user|It was not possible to share this project with the following users',
@@ -155,6 +155,10 @@ return [
             'deseja-excluir' => 'Are you sure you want to delete permanently the activity below?',
             'excluir' => 'Delete Activity',
         ],
+
+        'atividade-criada-sucesso' => 'Activity was created successfully!',
+        'atividade-alterada-sucesso' => 'Activity was updated successfully!',
+        'atividade-excluida-sucesso' => 'Activity was deleted successfully with all its related dependencies!',
     ],
 
     'recursos' =>
@@ -177,6 +181,9 @@ return [
         ],
 
         'deseja-excluir' => 'Are you sure you want to delete permanently the resource below?',
+        'recurso-criado' => 'Resource was created successfully!',
+        'recurso-atualizado' => 'Resource was updated successfully!',
+        'recurso-excluido' => 'Resource was deleted successfully with all its related dependencies!',
     ],
 
     'cenarios' =>
@@ -185,6 +192,17 @@ return [
         'data-criacao' => 'Creation Date',
         'visualizar-sequencias' => 'See Dependencies',
         'deseja-excluir' => 'Are you sure you want to delete permanently the scenario below?',
+        'cenario-criado-sucesso' => 'Scenario was created successfully!',
+        'cenario-atualizado' => 'Scenario was updated successfully!',
+        'cenario-excluido' => 'Scenario was deleted successfully with its all related dependencies!',
+        'cenario' => 'Scenario',
+        'atividade' => 'Activity',
+        'atividades-predecessoras' => 'Predecessor Activities',
+        'recursos' => 'Resources',
+        'atividades' => 'Activities',
+        'recursos' => 'Resources',
+        'sem-atividades' => 'There\'re no activities registered.',
+        'sem-recursos' => 'There\'re no resources registered.',
     ],
 
     'tabelas' =>
@@ -220,5 +238,78 @@ return [
         'caminho-critico' => 'Critical Path Calculation',
         'importacao-exportacao-excel' => 'Excel\'s spreadsheets import and export',
         'disponivel-via-web' => 'System available for several platforms by means of web access',
+    ],
+
+    'sequencias' =>
+    [
+        'validacoes' =>
+        [
+            'detalhes' =>
+            [
+                'atividades' =>
+                [
+                    'duracao' =>
+                    [
+                        'integer' => 'Duration must be an numeric type.',
+                        'min' => 'Duration must be greater than zero.',
+                    ],
+                    'requerRecursos.in' => 'Demands Resources must be true or false value.',
+                    'inicioOtimista.date' => 'Optimistic Start must be a date format.',
+                    'inicioPessimista.after_or_equal' => 'Pessimistic Start must be greater than or equal to today.',
+                    'fimOtimista.date' => 'Optimistic End must be a date format.',
+                    'fimPessimista.after_or_equal' => 'Pessimistic End must be greater than or equal to today.',
+                ],
+
+                'recursos' =>
+                [
+                    'qtd' =>
+                    [
+                        'numeric' => 'Amount must be an integer number.',
+                        'min' => 'Amount must be greater than zero.',
+                    ],
+
+                    'dataDispRecurso.date' => 'Resource Availability Date is in an invalid format.',
+                    'data.after' => 'Resource Availability Date must greater or equal to today.',
+
+                    'tempoAlocado' =>
+                    [
+                        'timezone' => 'Allotted Time must be in a time format.',
+                        'min' => 'Allotted Time must be positive.',
+                    ],
+                ],
+            ],
+        ],
+
+        'salvar-cenario' => 'Save Scenario',
+        'salvar-novo-cenario' => 'Save in New Scenario',
+        'diagrama' => 'Diagram',
+    ],
+
+    'registrar' =>
+    [
+        'name' =>
+        [
+            'required' => 'Name is required.',
+            'string' => 'Name must be a string of characters.',
+            'max' => 'Name must be less than 255 characteres.',
+            'min' => 'Name must have at least 3 characters.',
+        ],
+
+        'email' =>
+        [
+            'required' => 'E-mail is required.',
+            'string' => 'E-mail must be a string of characters.',
+            'formato' => 'E-mail is in an invalid format.',
+            'unique' => 'This e-mail is already in use.',
+        ],
+
+        'password' =>
+        [
+            'require' => 'Password is required.',
+            'string' => 'Password must be a string of characters.',
+            'min' => 'Password must have at least 6 characters.',
+            'confirmed' => 'Password fields don\'t match.',
+            'regex' => 'Type in a password with at least two lowercase letters, one uppercase letter and one special character.',
+        ],
     ],
 ];

@@ -56,7 +56,7 @@ class AtividadesController extends Controller
             'atividade_id' => $atividade->id,
         ]);
 
-        $request->session()->flash('success', 'Atividade criada com sucesso!');
+        $request->session()->flash('success', trans('paginas.atividades.atividade-criada-sucesso'));
         return redirect(route('atividades.index', [
             'projeto' => $projeto,
         ]));
@@ -81,7 +81,7 @@ class AtividadesController extends Controller
         $atividade->descricao = $request->input('descricao');
         $atividade->save();
 
-        $request->session()->flash('success', 'Atividade alterada com sucesso!');
+        $request->session()->flash('success', trans('paginas.atividades.atividade-alterada-sucesso'));
 
         return redirect(route('atividades.index', [
             'projeto' => $projeto,
@@ -110,7 +110,7 @@ class AtividadesController extends Controller
 
         Atividade::destroy($atividade->id);
 
-        session()->flash('info', 'Atividade excluída com sucesso e todas as sequências relacionadas!');
+        session()->flash('info', trans('paginas.atividades.atividade-excluida-sucesso'));
 
         return redirect(route('atividades.index', [
             'projeto' => $projeto,

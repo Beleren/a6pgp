@@ -59,7 +59,7 @@ class CenariosController extends Controller
             ]);
         }
 
-        $request->session()->flash('success', 'Cenário criado com sucesso!');
+        $request->session()->flash('success', trans('paginas.cenarios.cenario-criado-sucesso'));
 
         return redirect(route('cenarios.index', [
             'projeto' => $projeto
@@ -85,7 +85,7 @@ class CenariosController extends Controller
         $cenario->descricao = $request->input('descricao');
         $cenario->save();
 
-        $request->session()->flash('success', 'Cenário atualizado com sucesso!');
+        $request->session()->flash('success', trans('paginas.cenarios.cenario-atualizado'));
 
         return redirect(route('cenarios.show', [
             'projeto' => $projeto,
@@ -108,7 +108,7 @@ class CenariosController extends Controller
 
         Cenario::destroy($cenario->id);
 
-        session()->flash('info', 'Cenário excluído com sucesso com todas as sequências relacionadas!');
+        session()->flash('info', trans('paginas.cenarios.cenario-excluido'));
 
         return redirect(route('cenarios.index', [
             'projeto' => $projeto,
