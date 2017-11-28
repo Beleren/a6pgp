@@ -8,19 +8,21 @@
 
 namespace App;
 
+use Doctrine\Common\Comparable;
 
-class No
+class No implements Comparable
 {
-    public $id;
-    public $duracao;
-    public $predecessoras = [];
-    public $nome;
-    public $pdi; // Primeira Data de Início
-    public $pdf; // Primeira Data de Fim
-    public $udi; // Última Data de Início
-    public $udf; // Última Data de Fim
-    public $folga;
-
+    private $id;
+    private $duracao;
+    private $predecessoras = [];
+    private $sucessoras = [];
+    private $nome;
+    private $pdi; // Primeira Data de Início
+    private $pdf; // Primeira Data de Fim
+    private $udi; // Última Data de Início
+    private $udf; // Última Data de Fim
+    private $folga;
+    private static $maiorPDF;
 
     public function __construct($id, $duracao, $nome)
     {
@@ -33,43 +35,124 @@ class No
         array_push($this->predecessoras, $atividade);
     }
 
-    public function calcPDI() {
-        $soma = 0;
-
-        foreach ($this->predecessoras as $predecessora) {
-            $soma += $predecessora->getPDF();
-        }
-
-        if ($soma <= 0 && $this->duracao == 0) {
-            $soma = 0;
-        } else {
-            $soma += 1;
-        }
-
-        $this->pdi = $soma;
-    }
-
-    public function calcPDF() {
-        $soma = 0;
-
-        $this->calcPDI();
-
-        if ($this->pdi) {
-            $soma = $this->pdi + $this->duracao - 1;
-        } else {
-            $soma = $this->duracao;
-        }
-
-        $this->pdf = $soma;
-    }
-
+    /* Getters */
     public function getPDI() {
-        $this->calcPDI();
         return $this->pdi;
     }
 
     public function getPDF() {
-        $this->calcPDF();
         return $this->pdf;
+    }
+
+    public function getUDI() {
+        return $this->udi;
+    }
+
+    public function getUDF() {
+        return $this->udf;
+    }
+
+    public static function getMaiorPDF() {
+        return self::$maiorPDF;
+    }
+
+    public function getDuracao() {
+        return $this->duracao;
+    }
+
+    /* Setters */
+    public function setPDI($valor) {
+        $this->pdi = $valor;
+    }
+
+    public function setPDF($valor) {
+        $this->pdf = $valor;
+    }
+
+    public function setUDI($valor) {
+        $this->udi = $valor;
+    }
+
+    public function setUDF($valor) {
+        $this->udf = $valor;
+    }
+
+    public function calcPDI() {
+        $resultado = 0;
+
+        foreach ($this->predecessoras as $predecessora) {
+            if ($predecessora->getPDF() > 0) {
+                if ($predecessora->getPDF() > $resultado) {
+                    $resultado = $predecessora->getPDF();
+                }
+            } else {
+                $resultado = 0;
+            }
+        }
+
+        $this->setPDI($resultado);
+    }
+
+    public function calcPDF() {
+        $resultado = 0;
+        $maior_pdf = 0;
+
+        foreach ($this->predecessoras as $predecessora) {
+            if ($predecessora->getPDF() > 0) {
+                if ($predecessora->getPDF() > $maior_pdf) {
+                    $maior_pdf = $predecessora->getPDF();
+                    $resultado = $maior_pdf + $this->duracao;
+                }
+            } else {
+                $resultado = $this->duracao;
+            }
+        }
+
+        $this->setPDF($resultado);
+    }
+
+    public function calcUDI() {
+        $resultado = $this->getUDF() - $this->getDuracao();
+
+        $this->setUDI($resultado);
+    }
+
+    public function calcUDF() {
+        $udf_procurado = self::getMaiorPDF();
+        $resultado = $this->getPDF();
+
+        foreach($this->predecessoras as $predecessora) {
+            if ($predecessora->getUDF() > 0 && $predecessora->getUDI() < $udf_procurado) {
+                $udf_procurado = $predecessora->getUDI();
+            } else {
+                if ($predecessora->getPDF() != self::getMaiorPDF()) {
+                    $predecessora->calcUDF();
+                    $predecessora->calcUDI();
+                    $udf_procurado = $predecessora->getUDF();
+                } else {
+                    $udf_procurado = self::getMaiorPDF();
+                    $resultado = $udf_procurado;
+                    $this->setUDF($resultado);
+                    $this->calcUDI();
+                }
+            }
+        }
+
+        $this->setUDF($resultado);
+    }
+
+    /* Método para comparar atividades. */
+    public function compareTo($outra) {
+        if (! $outra instanceof No) {
+            throw new \Exception('Não é possível fazer a comparação.');
+        }
+
+        if ($this->getPDF() > $outra->getPDF()) {
+            return 1;
+        } else if ($this->getPDF() < $outra->getPDF()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

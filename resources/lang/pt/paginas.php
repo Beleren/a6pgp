@@ -16,6 +16,8 @@ return [
     'descricao' => 'Descrição',
     'nome' => 'Nome',
     'excluir' => 'Excluir',
+    'sair' => 'Sair',
+    'salvar' => 'Salvar',
 
 
     // views/auth/
@@ -284,6 +286,16 @@ return [
         'salvar-cenario' => 'Salvar Cenário',
         'salvar-novo-cenario' => 'Salvar em Novo Cenário',
         'diagrama' => 'Diagrama',
+        'atividade' => 'Atividade',
+        'duracao' => 'Duração',
+        'requer-recursos' => 'Requer Recursos?',
+        'inicio-otimista' => 'Início Otimista',
+        'inicio-pessimista' => 'Início Pessimista',
+        'fim-otimista' => 'Fim Otimista',
+        'fim-pessimista' => 'Fim Pessimista',
+        'quantidade-recurso' => 'Quantidade de Recurso',
+        'data-disp-recurso' => 'Data de Disponibilização do Recurso',
+        'tempo-alocado' => 'Tempo Alocado',
     ],
 
     'registrar' =>
