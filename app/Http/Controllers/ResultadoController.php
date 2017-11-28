@@ -79,7 +79,11 @@ class ResultadoController extends Controller
                 ])->first();
 
                 //condição para verificar e ligar atividades do caminho crítico
-                if (isset($sequenciaPredecessora->inicio_otimista)) {
+                if (isset($sequenciaPredecessora->inicio_otimista) &&
+                    isset($sequenciaPredecessora->fim_otimista) &&
+                    isset($sequenciaPredecessora->inicio_pessimista) &&
+                    isset($sequenciaPredecessora->fim_pessimista)
+                ) {
                     if (
                         $sequenciaPredecessora->inicio_otimista - $sequenciaPredecessora->inicio_pessimista == 0 &&
                         $sequenciaPredecessora->fim_otimista - $sequenciaPredecessora->fim_pessimista == 0 &&

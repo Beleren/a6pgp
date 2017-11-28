@@ -24,10 +24,16 @@ class CaminhoCriticoController extends Controller
     }
 
     private function caminhoCriticoPorMaiorDuracao(Projeto $projeto, Cenario $cenario) {
-        $atividades = $projeto->sequencias()->where('cenario_id', $cenario->id);
+        $atividades = $projeto->sequencias()
+            ->where('cenario_id', $cenario->id)
+            ->groupBy('atividade_id')
+            ->get();
+        ;
 
+        dd($atividades);
         foreach ($atividades as $atividade) {
-            $no = new No()
+            dd($atividade);
+
         }
 
         dd($atividades);
