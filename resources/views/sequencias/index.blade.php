@@ -126,5 +126,6 @@
     <script src="{{ asset('js/jquery.tablesorter.min.js') }}"></script>
     <script src="{{ asset('js/jquery.tablesorter.widgets.min.js') }}"></script>
     <script src="{{ asset('js/widget-filter.min.js') }}"></script>
+    <script src="{{ asset('js/app.tablesorter.config.js') }}"></script>
     <script src="{{ asset('js/validacao-sequencias.js') }}"></script>
 @endsection

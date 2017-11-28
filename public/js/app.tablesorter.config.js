@@ -1,4 +1,24 @@
 $(function() {
+    function obterPlaceholderTranslation() {
+        var app_lang = $('html').attr('lang');
+        var placeholder_translation;
+
+        switch (app_lang)
+        {
+            case 'en':
+                placeholder_translation = 'Search ...';
+                break;
+
+            case 'pt':
+                placeholder_translation = 'Procurar ...';
+                break;
+            default:
+                placeholder_translation = 'Procurar ...';
+        };
+
+        return placeholder_translation;
+    };
+
     // NOTE: $.tablesorter.theme.bootstrap is ALREADY INCLUDED in the jquery.tablesorter.widgets.js
     // file; it is included here to show how you can modify the default classes
     $.tablesorter.themes.bootstrap = {
@@ -31,6 +51,7 @@ $(function() {
         });
     });
 
+
     $('.tablesorter').tablesorter({
         theme : "bootstrap",
         widgets : [ "uitheme", "filter", "zebra", "column" ],
@@ -46,7 +67,7 @@ $(function() {
             filter_defaultFilter: { 1 : '~{query}' },
             // include column filters
             filter_columnFilters: true,
-            filter_placeholder: { search : 'Procurar ...' },
+            filter_placeholder: { search : obterPlaceholderTranslation() },
             filter_saveFilters : true,
             filter_reset: '.reset',
             filter_cssFilter: "form-control",

@@ -1019,7 +1019,7 @@ $(function () {
             console.log('Idioma português selecionado.');
         });
 
-        window.location.reload(true);
+        location.reload();
     });
 
     $('#idioma-ingles').on('click', function (event) {
@@ -1029,7 +1029,7 @@ $(function () {
             console.log('Idioma inglês selecionado.');
         });
 
-        window.location.reload(true);
+        location.reload();
     });
 });
 
