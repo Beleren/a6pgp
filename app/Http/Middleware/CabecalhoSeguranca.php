@@ -15,15 +15,11 @@ class CabecalhoSeguranca
      */
     public function handle($request, Closure $next)
     {
-        $response = $next($request);
-
-        $response
-            ->header('Content-Security-Policy', "script-src 'self'")
+        return $next($request)
             ->header('X-Frame-Options', 'SAMEORIGIN')
             ->header('X-XSS-Protection', '1; mode=block')
             ->header('X-Content-Type-Options', 'nosniff')
             ->header('Referrer-Policy', 'same-origin')
         ;
-        return $response;
     }
 }

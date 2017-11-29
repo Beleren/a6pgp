@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         // Mudança de Idioma
         'idioma' => \App\Http\Middleware\MudancaIdioma::class,
 
-        // Cabeçalhos de Segurança
+        // Cabeçalho de Segurança
         'cabecalhos' => \App\Http\Middleware\CabecalhoSeguranca::class,
     ];
 }
