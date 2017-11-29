@@ -29,10 +29,6 @@ class CabecalhoSeguranca
             ->header('Referrer-Policy', 'no-referrer')
         ;
 
-        if (! app()->environment('local', 'development')) {
-            $response->header('Content-Security-Policy', 'default-src https:');
-        }
-
         return $response;
     }
 }
