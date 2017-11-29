@@ -22,11 +22,8 @@ class CabecalhoSeguranca
             ->header('X-XSS-Protection', '1; mode=block')
             ->header('X-Content-Type-Options', 'nosniff')
             ->header('Referrer-Policy', 'same-origin')
+            ->header('Strict-Transport-Security', 'max-age=86400; includeSubDomains')
         ;
-
-        if (! app()->environment('local')) {
-            $response->header('Content-Security-Policy', "default-src 'self' cod-besouro.herokuapp.com");
-        }
 
         return $response;
     }
