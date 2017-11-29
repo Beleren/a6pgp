@@ -12,7 +12,7 @@
 */
 
 /* Rotas que não precisam de autenticação */
-Route::middleware(['web', 'idioma'])->group(function() {
+Route::middleware(['web', 'idioma', 'cabecalhos'])->group(function() {
     Route::get('/', function () {
         return view('home.index');
     });
@@ -31,7 +31,7 @@ Route::middleware(['web', 'idioma'])->group(function() {
 });
 
 /* Rotas que precisam de autenticação */
-Route::middleware(['web', 'auth', 'idioma'])->group(function (){
+Route::middleware(['web', 'auth', 'idioma', 'cabecalhos'])->group(function (){
     /* Projetos */
     Route::get('/projetos', 'ProjetosController@index')
         ->name('projetos.index');

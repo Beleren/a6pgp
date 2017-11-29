@@ -2,7 +2,7 @@
 
 @section('conteudo')
     <div class="container-fluid">
-        {{$diagrama}}
+
     </div>
 @endsection
 

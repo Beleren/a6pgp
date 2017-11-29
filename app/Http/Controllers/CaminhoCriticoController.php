@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Atividade;
+use App\Caminho;
 use App\No;
 use App\Cenario;
 use App\Projeto;
@@ -14,7 +16,6 @@ class CaminhoCriticoController extends Controller
 
         $this->caminhoCriticoPorMaiorDuracao($projeto, $cenario);
 
-        dd('TODO');
         return 'CaminhoCriticoController@index';
     }
 
@@ -24,21 +25,35 @@ class CaminhoCriticoController extends Controller
     }
 
     private function caminhoCriticoPorMaiorDuracao(Projeto $projeto, Cenario $cenario) {
-        $atividades = $projeto->sequencias()
-            ->groupBy('cenario_id')
-            ->having('cenario_id', '=', $cenario->id)
-            ->get('')
-        ;
+        $atividades = $projeto->atividades;
 
-        dd($atividades);
         foreach ($atividades as $atividade) {
-            dd($atividade);
+            $predecessoras = $atividade->sequencias->where('cenario_id', $cenario->id);
+
+            $duracao = $predecessoras->first();
+
+            if (! $duracao) {
+                $duracao = null;
+            }
+
+            $no = new No($atividade->id, $duracao, $atividade->nome);
+
+            foreach ($predecessoras as $predecessora) {
+                $no_pred = new No($predecessora->atividade_id, $predecessora->duracao, $predecessora->atividade->nome);
+
+                $no->adicionarPredecessora($no_pred);
+            }
         }
 
-        dd($atividades);
+        $this->mostrarCaminhoCritico($atividades);
     }
 
     public function verificarDependenciaRecursiva() {
 
+    }
+
+    public function mostrarCaminhoCritico($atividades) {
+        $caminho = new Caminho($atividades);
+        $caminho->mostrarCaminhoCritico();
     }
 }

@@ -60,6 +60,10 @@ class No implements Comparable
         return $this->duracao;
     }
 
+    public function getPredecessoras() {
+        return $this->predecessoras;
+    }
+
     /* Setters */
     public function setPDI($valor) {
         $this->pdi = $valor;
@@ -75,6 +79,10 @@ class No implements Comparable
 
     public function setUDF($valor) {
         $this->udf = $valor;
+    }
+
+    public function setMaiorPDF($valor) {
+        self::$maiorPDF = $valor;
     }
 
     public function calcPDI() {

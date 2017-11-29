@@ -19,7 +19,7 @@
         <div id="collapseAtividades" class="panel-collapse collapse in"
             role="tabpanel" aria-labelledby="headingAtividades">
             <div class="panel-body">
-                <input type="text" id="filtroAtividade" onkeyup="filtrarPainel(this)" class="form-control" placeholder="Filtro de atividade">
+                <input type="text" id="filtroAtividade" onkeyup="filtrarPainel(this)" class="form-control" placeholder="">
 
                 <ul id="lista-atividades" class="atividades list-group">
                     @forelse($atividades as $atividade)
@@ -53,7 +53,7 @@
         </div>
         <div id="collapseRecursos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingRecursos">
             <div class="panel-body">
-                <input type="text" id="filtroRecurso" onkeyup="filtrarPainel(this)" class="form-control" placeholder="Filtro de recurso">
+                <input type="text" id="filtroRecurso" onkeyup="filtrarPainel(this)" class="form-control" placeholder="">
                 <ul id="lista-recursos" class="recursos list-group">
                     @forelse($recursos as $recurso)
                         <li class="list-group-item recursos"
@@ -72,8 +72,25 @@
 @section('scripts')
     @parent
     <script>
-        //$(function () {
-            //$('#myInput').on('keyup', myFunction);
+        $(function(){
+
+                var app_lang = $('html').attr('lang');
+                switch (app_lang) {
+                    case 'en':
+                        $('#filtroRecurso').attr('placeholder', 'Search ...');
+                        $('#filtroAtividade').attr('placeholder', 'Search ...');
+                        break;
+
+                    case 'pt':
+                        $('#filtroRecurso').attr('placeholder', 'Procurar ...');
+                        $('#filtroAtividade').attr('placeholder', 'Procurar ...');
+                        break;
+                    default:
+                        $('#filtroRecurso').attr('placeholder', 'Procurar ...');
+                        $('#filtroAtividade').attr('placeholder', 'Procurar ...');
+                };
+
+        });
 
             //colocar parametro para saber qual input esta chamando
             function filtrarPainel(elem) {

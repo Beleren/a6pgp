@@ -10,17 +10,66 @@ namespace App;
 
 class Caminho
 {
-    public $nos = [];
-    public $duracao;
+    private $atividades = [];
+    private static $caminhoCritico = [];
 
-    public function __construct(Caminho $caminho = null) {
-        if ($caminho) {
-            $this->duracao = $caminho->duracao;
-            $this->nos = $caminho->nos;
+    public function __construct($atividades) {
+        foreach ($atividades as $atividade) {
+            array_push($this->atividades, $atividade);
         }
     }
 
-    public function adicionarNo(No $no){
-        array_push($this->nos, $no);
+    public function adicionarAtividade(No $atividade) {
+        array_push($this->atividades, $atividade);
+    }
+
+    public function __toString() {
+        $resultado = '';
+
+        foreach ($this->atividades as $atividade) {
+            $resultado .= $atividade->getNome() . ', PDF: ' . $atividade->getPDF() . '<br>';
+        }
+
+        return $resultado;
+    }
+
+    public function mostrarCaminhoCritico() {
+        $this->atividades = collect($this->atividades)->sortBy(function($item, $chave) {
+            return $item->getPDF();
+        });
+
+        $atividade = $this->atividades->last();
+
+        No::setMaiorPDF($atividade->getPDF());
+
+        array_push(self::$caminhoCritico, $atividade);
+        $maior_pdf = 0;
+        $temp = null;
+
+        while ($atividade != null && $atividade->getPredecessoras() != null) {
+
+            foreach ($atividade->getPredecessoras() as $atividade) {
+                if ($atividade->getPDF() >= $maior_pdf) {
+                    $maior_pdf = $atividade->getPDF();
+                    $temp = $atividade;
+                }
+            }
+
+            array_push(self::$caminhoCritico, $temp);
+
+            $atividade = $temp;
+
+            if (!($atividade->getPDF() > 0)) {
+                $atividade = null;
+            }
+
+            foreach (self::$caminhoCritico as $atividade) {
+                echo $atividade;
+            }
+        }
+    }
+
+    public function getCaminhoCritico() {
+        return self::$caminhoCritico;
     }
 }

@@ -677,4 +677,8 @@ $(function() {
      * TODO: Melhorar a usabilidadde da aplicação com o carregamento automático
      * dos valores cadastrados de recursos e atividades.
      */
+
+    $('tr:not(:has(th))').each(function(index, linha) {
+        $(linha).off('click');
+    });
 });

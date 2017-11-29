@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecursoRequest;
 use App\Projeto;
+use App\ProjetoRecurso;
 use App\Recurso;
 use App\Sequencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RecursosController extends Controller
 {
@@ -94,9 +96,18 @@ class RecursosController extends Controller
         /* TODO: Pesquisar porque não exclui. */
 
         $sequencias = Sequencia::where('recurso_id', $recurso->id);
-        $sequencias->delete();
 
-        Recurso::destroy($recurso);
+        foreach ($sequencias as $sequencia) {
+            $sequencia->recurso_id = null;
+        }
+
+        $projetos = $recurso->projetos();
+
+        if ($projetos) {
+            $projetos->detach($recurso->id);
+        }
+
+        Recurso::destroy($recurso->id);
 
         session()->flash('info', trans('paginas.recursos.recurso-excluido'));
 
