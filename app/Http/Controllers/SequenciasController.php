@@ -161,8 +161,10 @@ class SequenciasController extends Controller
                     ]);
 
                     if ($sequencia->recurso_id) {
-                        $sequencias->recurso_id = null;
+                        $sequencia->recurso_id = null;
                     }
+
+                    $sequencia->save();
 
                     $this->limpezaDeCampos($sequencia);
 

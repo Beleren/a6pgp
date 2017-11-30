@@ -25,8 +25,6 @@ class CabecalhoSeguranca
             ->header('Strict-Transport-Security', 'max-age=86400; includeSubDomains')
             ->header('X-Frame-Options', 'SAMEORIGIN')
             ->header('X-XSS-Protection', '1; mode=block')
-            ->header('X-Content-Type-Options', 'nosniff')
-            ->header('Referrer-Policy', 'no-referrer')
         ;
 
         return $response;
