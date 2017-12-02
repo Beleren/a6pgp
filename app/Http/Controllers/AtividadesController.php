@@ -103,7 +103,7 @@ class AtividadesController extends Controller
         $this->authorize('view-projeto', $projeto);
 
         /* Excluir sequências relacionadas. */
-
+        //se houver sequencia, deve haver um impedimento até o usuário retirar as sequencias
         $sequencias = Sequencia::where('atividade_id', $atividade->id)
             ->orWhere('atividade_predecessora_id', $atividade->id);
         $sequencias->delete();

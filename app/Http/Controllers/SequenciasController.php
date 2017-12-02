@@ -6,8 +6,10 @@ use App\Cenario;
 use App\Atividade;
 use App\Projeto;
 use App\Sequencia;
+use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Symfony\Component\Console\Tests\Fixtures\DescriptorApplicationMbString;
 use Validator;
 use Carbon\Carbon;
 
@@ -73,27 +75,20 @@ class SequenciasController extends Controller
              * Se não houver recursos e atividades enviadas para processamento,
              * as sequências cadastradas no banco de dados devem ser excluídos.
              */
-
+            /*
+             * 1- só posso deletar da sequência se a atividade não tiver sucessora nem predecessora;
+             * 2- atividades sem predecessoras mas com sucessoras devem ser incluídas na sequência;
+             * 3- atividades que possuíam predecessoras mas não possuem mais são apenas retiradas as atividades predecessoras;
+             */
             if (! $has_post_predecessoras && ! $has_post_recursos) {
                 if ($has_post_detalhes) {
                     $detalhe = $this->processarDetalhes($detalhes);
                 }
-
-                if (
-                    ! $detalhe &&
-                    ! array_key_exists('detalhes', $detalhe)
-                ) {
-                    if ($sequencias) {
-                        Sequencia::whereIn('id', $sequencias->pluck('id'))
-                            ->delete();
-                    }
-                }
-
                 /*
                  * Atividade não possui predecessora, mas possui detalhes de duração.
                  * Neste caso é necessário criar um registro de sequência para salvar os detalhes.
                  */
-                if ($detalhe) {
+                if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
                     $sequencia = Sequencia::firstOrCreate([
                         'atividade_id' => $atividade->id,
                         'cenario_id' => $request->input('cenario'),
@@ -101,6 +96,15 @@ class SequenciasController extends Controller
 
                     $this->salvarDetalhes($sequencia, $detalhe);
                     $sequencia->save();
+                }
+
+                if (! $this->verificarExistenciaChave($detalhe, 'detalhes')) {
+                    $para_excluir = Sequencia::where('cenario_id', $request->input('cenario'))
+                        ->where('atividade_id', $atividade->id)->first();
+
+                    if ($para_excluir) {
+                        Sequencia::destroy($para_excluir->id);
+                    }
                 }
             }
 
@@ -159,7 +163,6 @@ class SequenciasController extends Controller
                         'atividade_id' => $atividade->id,
                         'atividade_predecessora_id' => $predecessora,
                     ]);
-
                     if ($sequencia->recurso_id) {
                         $sequencia->recurso_id = null;
                     }
@@ -180,16 +183,6 @@ class SequenciasController extends Controller
                     }
                 }
 
-                $para_excluir = $sequencias->filter(function ($item, $chave)
-                    use ($predecessoras) {
-                    return $item->recurso_id ||
-                        ! in_array($item->atividade_predecessora_id, $predecessoras);
-                });
-
-                if ($para_excluir) {
-                    Sequencia::destroy($para_excluir->pluck('id')->toArray());
-                }
-
                 $sequencia->save();
             }
 
@@ -202,10 +195,11 @@ class SequenciasController extends Controller
                         'atividade_id' => $atividade->id,
                         'recurso_id' => $recurso,
                     ]);
-
                     if ($sequencia->atividade_predecessora_id) {
                         $sequencia->atividade_predecessora_id = null;
                     }
+
+                    $sequencia->save();
 
                     $this->limpezaDeCampos($sequencia);
 
@@ -219,16 +213,6 @@ class SequenciasController extends Controller
                         $this->salvarDetalhes($sequencia, $detalhe);
                         $sequencia->save();
                     }
-                }
-
-                $para_excluir = $sequencias->filter(function ($item, $chave)
-                    use ($recursos) {
-                    return $item->atividade_predecessora_id ||
-                        ! in_array($item->recurso_id, $recursos);
-                });
-
-                if ($para_excluir) {
-                    Sequencia::destroy($para_excluir->pluck('id')->toArray());
                 }
 
                 $sequencia->save();

@@ -26,34 +26,48 @@ class CaminhoCriticoController extends Controller
 
     private function caminhoCriticoPorMaiorDuracao(Projeto $projeto, Cenario $cenario) {
         $atividades = $projeto->atividades;
+        $nos = [];
 
         foreach ($atividades as $atividade) {
-            $predecessoras = $atividade->sequencias->where('cenario_id', $cenario->id);
+            $sequencias = $atividade->sequencias->where('cenario_id', $cenario->id);
 
-            $duracao = $predecessoras->first();
+            $aux = $sequencias->first();
 
-            if (! $duracao) {
+            if ($aux) {
+                $duracao = $aux->duracao;
+            } else {
                 $duracao = null;
             }
 
             $no = new No($atividade->id, $duracao, $atividade->nome);
 
-            foreach ($predecessoras as $predecessora) {
-                $no_pred = new No($predecessora->atividade_id, $predecessora->duracao, $predecessora->atividade->nome);
+            foreach ($sequencias as $sequencia) {
 
-                $no->adicionarPredecessora($no_pred);
+                if ($sequencia->atividade_predecessora_id) {
+                    dd($sequencia);
+
+                    /* Corrigir este foreach */
+                    $no->adicionarPredecessora($no_pred);
+                }
             }
+
+            array_push($nos, $no);
         }
 
-        $this->mostrarCaminhoCritico($atividades);
+        foreach ($nos as $no) {
+            $no->calcPDI();
+            $no->calcPDF();
+        }
+
+        $this->mostrarCaminhoCritico($nos);
     }
 
-    public function verificarDependenciaRecursiva() {
+    private function verificarDependenciaRecursiva() {
 
     }
 
-    public function mostrarCaminhoCritico($atividades) {
-        $caminho = new Caminho($atividades);
+    private function mostrarCaminhoCritico($nos) {
+        $caminho = new Caminho($nos);
         $caminho->mostrarCaminhoCritico();
     }
 }

@@ -153,6 +153,7 @@ $(function() {
             event.preventDefault();
             inserirAtividadesPredecessoras();
             inserirRecursosComoDependencia();
+            $('.tablesorter').trigger('sortReset');
             $('#form-dependencias').submit();
         });
     }

@@ -10,23 +10,23 @@ namespace App;
 
 class Caminho
 {
-    private $atividades = [];
+    private $nos = [];
     private static $caminhoCritico = [];
 
     public function __construct($atividades) {
         foreach ($atividades as $atividade) {
-            array_push($this->atividades, $atividade);
+            array_push($this->nos, $atividade);
         }
     }
 
     public function adicionarAtividade(No $atividade) {
-        array_push($this->atividades, $atividade);
+        array_push($this->nos, $atividade);
     }
 
     public function __toString() {
         $resultado = '';
 
-        foreach ($this->atividades as $atividade) {
+        foreach ($this->nos as $atividade) {
             $resultado .= $atividade->getNome() . ', PDF: ' . $atividade->getPDF() . '<br>';
         }
 
@@ -34,12 +34,13 @@ class Caminho
     }
 
     public function mostrarCaminhoCritico() {
-        $this->atividades = collect($this->atividades)->sortBy(function($item, $chave) {
-            return $item->getPDF();
+        dd($this->nos);
+
+        $this->nos = collect($this->nos)->sortBy(function($item, $chave) {
+            return dd($item);
         });
 
-        $atividade = $this->atividades->last();
-
+        $atividade = $this->nos->last();
         No::setMaiorPDF($atividade->getPDF());
 
         array_push(self::$caminhoCritico, $atividade);

@@ -93,22 +93,24 @@ class RecursosController extends Controller
     {
         $this->authorize('view-projeto', $projeto);
 
-        /* TODO: Pesquisar porque não exclui. */
+        $sequencias = Sequencia::where('recurso_id', $recurso->id)->get();
+        //não deve remover sequência, apenas o recurso dela
 
-        $sequencias = Sequencia::where('recurso_id', $recurso->id);
-
-        foreach ($sequencias as $sequencia) {
-            $sequencia->recurso_id = null;
-        }
 
         $projetos = $recurso->projetos();
 
-        if ($projetos) {
-            $projetos->detach($recurso->id);
+        if (isset($projetos)) {
+            if (isset($sequencias)){
+                foreach ($sequencias as $sequencia){
+                    $sequencia->recurso_id = null;
+                    $sequencia->save();
+                }
+            }
+
+            DB::table('projetos_recursos')->where('recurso_id',$recurso->id)->delete();
         }
 
         Recurso::destroy($recurso->id);
-
         session()->flash('info', trans('paginas.recursos.recurso-excluido'));
 
         return redirect(route('recursos.index', [

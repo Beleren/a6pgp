@@ -33,6 +33,11 @@ class No implements Comparable
 
     public function adicionarPredecessora(No $atividade){
         array_push($this->predecessoras, $atividade);
+        $atividade->adicionarSucessora($this);
+    }
+
+    public function adicionarSucessora(No $atividade) {
+        array_push($this->sucessoras, $atividade);
     }
 
     /* Getters */
@@ -64,6 +69,10 @@ class No implements Comparable
         return $this->predecessoras;
     }
 
+    public function getSucessoras() {
+        return $this->sucessoras;
+    }
+
     /* Setters */
     public function setPDI($valor) {
         $this->pdi = $valor;
@@ -85,6 +94,7 @@ class No implements Comparable
         self::$maiorPDF = $valor;
     }
 
+    /* Processos */
     public function calcPDI() {
         $resultado = 0;
 

@@ -130,10 +130,10 @@ Route::middleware(['web', 'auth', 'idioma', 'cabecalhos'])->group(function (){
     Route::get('/projetos/{projeto}/recursos/{recurso}/edit', 'RecursosController@edit')
         ->name('recursos.edit');
 
-    Route::match(['patch', 'put'], '/projetos/{projeto}/recursos/{recursos}', 'RecursosController@update')
+    Route::match(['patch', 'put'], '/projetos/{projeto}/recursos/{recurso}', 'RecursosController@update')
         ->name('recursos.update');
 
-    Route::delete('/projetos/{projeto}/recursos/{recursos}', 'RecursosController@destroy')
+    Route::delete('/projetos/{projeto}/recursos/{recurso}', 'RecursosController@destroy')
         ->name('recursos.destroy');
 
     Route::get('/projetos/{projeto}/recursos/{recurso}/delete', 'RecursosController@confirmDelete')
