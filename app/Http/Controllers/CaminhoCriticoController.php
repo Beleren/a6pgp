@@ -87,8 +87,8 @@ class CaminhoCriticoController extends Controller
         }
 
         foreach ($nos as $i => $no) {
-            $no->calcPDF();
             $no->calcPDI();
+            $no->calcPDF();
         }
 
         $this->mostrarCaminhoCritico($nos);

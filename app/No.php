@@ -137,7 +137,9 @@ class No implements Comparable
         $resultado = 0;
 
         foreach ($this->predecessoras as $predecessora) {
-            if ($predecessora->getPDF());
+            if (! $predecessora->getPDF()) {
+                $predecessora->calcPDF();
+            }
 
             if ($predecessora->getPDF()) {
                 if ($predecessora->getPDF() > $resultado) {
