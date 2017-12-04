@@ -98,6 +98,4 @@ class CaminhoCriticoController extends Controller
         $caminho = new Caminho($nos);
         $caminho->mostrarCaminhoCritico();
     }
-
-    /*asdfa */
 }
