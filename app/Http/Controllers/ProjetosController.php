@@ -54,8 +54,6 @@ class ProjetosController extends Controller
      */
     public function store(ProjetoRequest $request)
     {
-        $projeto = new Projeto;
-
         $projeto = Projeto::create([
             'nome' => $request->input('nome'),
             'medida_tempo' => $request->input('medida_tempo'),
@@ -68,7 +66,7 @@ class ProjetosController extends Controller
             ->users()
             ->updateExistingPivot(auth()->id(), ['proprietario' => true]);
 
-        $cenario = Cenario::firstOrCreate([
+        Cenario::firstOrCreate([
             'nome' => trans('paginas.cenario_padrao'),
             'projeto_id' => $projeto->id,
         ]);

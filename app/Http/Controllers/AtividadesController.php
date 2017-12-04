@@ -51,6 +51,10 @@ class AtividadesController extends Controller
 
         $projeto->atividades()->save($atividade);
 
+        /*
+         * Código abaixo obtém sequência existente. Se não houver sequências no banco
+         * de dados, ele cria uma nova sequência.
+         */
         $sequencia = Sequencia::firstOrCreate([
             'cenario_id' => $projeto->cenarios->first()->id,
             'atividade_id' => $atividade->id,

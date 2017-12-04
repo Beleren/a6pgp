@@ -120,9 +120,10 @@ class SequenciasController extends Controller
                         /*
                          * Criação de sequências com seus respectivos recursos.
                          */
+
                         $sequencia = Sequencia::firstOrCreate([
-                            'cenario_id' => $request->input('cenario'),
                             'atividade_id' => $atividade->id,
+                            'cenario_id' => $request->input('cenario'),
                             'atividade_predecessora_id' => $predecessora,
                             'recurso_id' => $recurso,
                         ]);
@@ -163,6 +164,7 @@ class SequenciasController extends Controller
                         'atividade_id' => $atividade->id,
                         'atividade_predecessora_id' => $predecessora,
                     ]);
+
                     if ($sequencia->recurso_id) {
                         $sequencia->recurso_id = null;
                     }
@@ -195,6 +197,7 @@ class SequenciasController extends Controller
                         'atividade_id' => $atividade->id,
                         'recurso_id' => $recurso,
                     ]);
+
                     if ($sequencia->atividade_predecessora_id) {
                         $sequencia->atividade_predecessora_id = null;
                     }

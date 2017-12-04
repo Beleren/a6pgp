@@ -6,21 +6,15 @@ use App\Cenario;
 use App\Atividade;
 use App\Projeto;
 use App\Sequencia;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Validator;
-use Carbon\Carbon;
 
 class ResultadoController extends Controller
 {
     public function index(Projeto $projeto, Cenario $cenario = null)
     {
         $this->authorize('view-projeto', $projeto);
-        $sequencias = $projeto->sequencias->where('cenario_id', $cenario->id);
-
         //agrupamento de sequencias por atividade para construção de elementos únicos
-        $elementos = Sequencia::selectRaw(
+        $sequencias = Sequencia::selectRaw(
             'atividade_id,
             ANY_VALUE(inicio_otimista) as inicio_otimista,
             ANY_VALUE(fim_otimista) as fim_otimista,
@@ -29,15 +23,13 @@ class ResultadoController extends Controller
             ANY_VALUE(atividade_predecessora_id) as atividade_predecessora_id,
             ANY_VALUE(duracao) as duracao')
             ->where('cenario_id', $cenario->id)
-            ->groupBy('atividade_id')
+            ->groupBy('atividade_id','atividade_predecessora_id')
             ->get();
-
         //variável com código javascript para construção do diagrama
-        $diagrama = $this->contruirDiagrama($elementos, $sequencias);
+        $diagrama = $this->contruirDiagrama($sequencias);
         return view('resultado.index', [
             'projeto' => $projeto,
             'sequencias' => $sequencias,
-            'elementos' => $elementos,
             'cenario' => $cenario,
             'cenarios' => $projeto->cenarios,
             'diagrama' => $diagrama,
@@ -46,15 +38,15 @@ class ResultadoController extends Controller
         ]);
     }
     //construção do diagrama em javascript
-    public function contruirDiagrama($elementos, $sequencias){
+    public function contruirDiagrama($sequencias){
         //inicializa diagrama
         $diagrama = 'image = Viz("digraph g { node [shape=record];\n" +';
         //construção dos elementos
-        foreach ($elementos as $elemento){
+        foreach ($sequencias as $elemento){
             $atividade = Atividade::where([
                 'id' => $elemento->atividade_id
             ])->first();
-            $diagrama = $diagrama.'"\"'.$atividade->nome.'\"[label = \"{'.$elemento->inicio_otimista.' | '.$elemento->inicio_pessimista.'}|{'.$atividade->nome.'|'.$atividade->duracao.'}| {'.$elemento->fim_otimista.'|'.$elemento->fim_pessimista.'}\"]"+';
+            $diagrama = $diagrama.'"\"'.$atividade->nome.'\"[label = \"{'.$elemento->inicio_otimista.' | '.$elemento->inicio_pessimista.'}|{'.$atividade->nome.'|'.$elemento->duracao.'}| {'.$elemento->fim_otimista.'|'.$elemento->fim_pessimista.'}\"]"+';
         }
 
         //construção do sequenciamento, não é necessário ordernar

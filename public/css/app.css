@@ -11407,10 +11407,6 @@ button.close {
   height: 12em;
 }
 
-.panel-group {
-  padding-top: 11%;
-}
-
 .carousel-caption {
   color: #D50000;
   font-size: 150%;
@@ -11475,5 +11471,12 @@ nav .active {
 
 #idiomas img {
   margin: 0.4em 0.2em;
+}
+
+#accordion {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 5%;
+  margin-top: 11%;
 }
 
