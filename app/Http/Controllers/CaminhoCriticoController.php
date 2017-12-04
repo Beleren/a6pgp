@@ -71,12 +71,11 @@ class CaminhoCriticoController extends Controller
 
                     /*
                      * Verifica a existência de atividade predecessora no banco de dados.
-                     *
-                     * Observação: Não é possível usar array como parâmetro no método where. Neste caso,
-                     * é necessário aninhar wheres.
                      */
                     $predecessoras = $sequencias_f->where('atividade_id', $sequencia->atividade_predecessora_id);
                     $predecessora = $predecessoras->first();
+
+                    //percorre os nós para referenciar predecessoras
                     foreach ($nos as $no_predecessor){
                         if ($no_predecessor->getId()==$predecessora->atividade_id){
                             $no->adicionarPredecessora($no_predecessor);
@@ -89,6 +88,7 @@ class CaminhoCriticoController extends Controller
         foreach ($nos as $i => $no) {
             $no->calcPDI();
             $no->calcPDF();
+            $no->calcPDI();
         }
 
         $this->mostrarCaminhoCritico($nos);
