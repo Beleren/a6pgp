@@ -262,6 +262,5 @@ class No implements Comparable
                'fim_otimista' => $carbon_date,
             ])
         ;
-
     }
 }
