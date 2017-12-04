@@ -30,43 +30,60 @@ class CaminhoCriticoController extends Controller
      */
     private function caminhoCriticoPorMaiorDuracao(Projeto $projeto, Cenario $cenario) {
         $atividades = $projeto->atividades;
-
-        //array de nós para programação
-        $nos = [];
-
-        //iteração de todas atividades do projeto
-        foreach ($atividades as $atividade) {
-            $sequencias = Sequencia::selectRaw(
-                'atividade_id,
+        $sequencias_f = Sequencia::selectRaw(
+            'atividade_id,
                             ANY_VALUE(inicio_otimista) as inicio_otimista,
                             ANY_VALUE(fim_otimista) as fim_otimista,
                             ANY_VALUE(inicio_pessimista) as inicio_pessimista,
                             ANY_VALUE(fim_pessimista) as fim_pessimista,
                             ANY_VALUE(atividade_predecessora_id) as atividade_predecessora_id,
                             ANY_VALUE(duracao) as duracao')
-                ->where('cenario_id', $cenario->id)
-                ->where('atividade_id', $atividade->id)
-                ->groupBy('atividade_id','atividade_predecessora_id')
-                ->get();
+            ->where('cenario_id', $cenario->id)
+            ->groupBy('atividade_id','atividade_predecessora_id')
+            ->get();
+        //array de nós para programação
+        $nos = [];
 
-            if ($sequencias->first()) {
-                /*
-                 * Captura duração da atividade atual porque a duração existe na entidade
-                 * Sequência.
-                 */
+        //iteração de todas atividades do projeto
+        foreach ($atividades as $atividade) {
+            //instancia um novo nó para a atividade atual
+            $sequencias = $sequencias_f->where('atividade_id', $atividade->id);
 
+            $aux = $sequencias->first();
+
+            if ($aux) {
                 $duracao = $sequencias->first()->duracao;
             } else {
-                /*
-                 * Se não houver sequências no banco de dados, a duração é nula.
-                 */
                 $duracao = null;
             }
 
-            //instancia um novo nó para a atividade atual
             $no = new No($atividade->id, $duracao, $atividade->nome, $projeto->id, $cenario->id);
-
             array_push($nos, $no);
+            /* Verifica se existem sequências. */
+        }
+
+        foreach ($nos as $no){
+            $sequencias = $sequencias = $sequencias_f->where('atividade_id', $no->getId());
+            //iteração entre as sequências
+            foreach ($sequencias as $sequencia) {
+                //condição: se atividade tiver predecessora, popular o nó de predecessora dentro do nó da atividade atual
+                if ($sequencia->atividade_predecessora_id != null) {
+
+                    /*
+                     * Verifica a existência de atividade predecessora no banco de dados.
+                     *
+                     * Observação: Não é possível usar array como parâmetro no método where. Neste caso,
+                     * é necessário aninhar wheres.
+                     */
+                    $predecessoras = $sequencias_f->where('atividade_id', $sequencia->atividade_predecessora_id);
+                    $predecessora = $predecessoras->first();
+                    foreach ($nos as $no_predecessor){
+                        if ($no_predecessor->getId()==$predecessora->atividade_id){
+                            $no->adicionarPredecessora($no_predecessor);
+                        }
+                    }
+                }
+            }
         }
 
         foreach ($nos as $i => $no) {
@@ -74,13 +91,7 @@ class CaminhoCriticoController extends Controller
             $no->calcPDI();
         }
 
-        dd($nos);
-
         $this->mostrarCaminhoCritico($nos);
-    }
-
-    private function verificarDependenciaRecursiva() {
-
     }
 
     private function mostrarCaminhoCritico($nos) {

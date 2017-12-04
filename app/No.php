@@ -37,8 +37,6 @@ class No implements Comparable
         $this->projeto = Projeto::find($projeto);
         $this->cenario = Cenario::find($cenario);
         $this->atividade = Atividade::find($id);
-
-        $this->obterDependencias();
     }
 
     public function adicionarPredecessora(No $atividade){
@@ -49,6 +47,22 @@ class No implements Comparable
 
     public function adicionarSucessora(No $atividade) {
         array_push($this->sucessoras, $atividade);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /* Getters */
@@ -150,6 +164,8 @@ class No implements Comparable
                 if (! $predecessora->getPDF()) {
                     $predecessora->calcPDF();
                     $this->calcPDF();
+                    $maior_pdf = $predecessora->getPDF();
+                    $resultado = $maior_pdf + $this->duracao;
                 }
 
                 if ($predecessora->getPDF() > $maior_pdf) {
@@ -245,51 +261,5 @@ class No implements Comparable
                'fim_otimista' => $carbon_date,
             ])
         ;
-    }
-
-    private function obterDependencias() {
-        /* Verifica se existem sequências. */
-        $sequencias = Sequencia::selectRaw(
-            'atividade_id,
-                            ANY_VALUE(inicio_otimista) as inicio_otimista,
-                            ANY_VALUE(fim_otimista) as fim_otimista,
-                            ANY_VALUE(inicio_pessimista) as inicio_pessimista,
-                            ANY_VALUE(fim_pessimista) as fim_pessimista,
-                            ANY_VALUE(atividade_predecessora_id) as atividade_predecessora_id,
-                            ANY_VALUE(duracao) as duracao')
-            ->where('cenario_id', $this->cenario->id)
-            ->where('atividade_id', $this->id)
-            ->groupBy('atividade_id','atividade_predecessora_id')
-            ->get();
-
-        /*
-         * Verifica se existem sequências no banco de dados.
-         */
-
-        if ($sequencias) {
-            //iteração entre as sequências
-            foreach ($sequencias as $sequencia) {
-
-                //condição: se atividade tiver predecessora, popular o nó de predecessora dentro do nó da atividade atual
-                if ($sequencia->atividade_predecessora_id != null) {
-
-                    /*
-                     * Verifica a existência de atividade predecessora no banco de dados.
-                     *
-                     * Observação: Não é possível usar array como parâmetro no método where. Neste caso,
-                     * é necessário aninhar wheres.
-                     */
-                    $predecessora = Sequencia::where('atividade_id', $sequencia->atividade_predecessora_id)
-                        ->where('cenario_id', $this->cenario->id)
-                        ->first();
-
-                    $duracao_pred = $predecessora ? $predecessora->duracao : null;
-
-                    //instancia atividade predecessora e adiciona no nó
-                    $no_pred = new No($predecessora->atividade_id, $duracao_pred, $predecessora->atividade->nome, $this->projeto->id, $this->cenario->id);
-                    $this->adicionarPredecessora($no_pred);
-                }
-            }
-        }
     }
 }
