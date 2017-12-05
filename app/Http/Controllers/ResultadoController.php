@@ -95,7 +95,4 @@ class ResultadoController extends Controller
 
         return $diagrama;
     }
-
-
-
 }

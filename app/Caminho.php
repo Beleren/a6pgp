@@ -11,12 +11,15 @@ namespace App;
 class Caminho
 {
     private $nos = [];
+    private $no_maior_pdf = null;
     private static $caminhoCritico = [];
 
-    public function __construct($atividades) {
+    public function __construct($atividades, $no_maior_pdf) {
         foreach ($atividades as $atividade) {
             array_push($this->nos, $atividade);
         }
+
+        $this->no_maior_pdf = $no_maior_pdf;
     }
 
     public function adicionarAtividade(No $atividade) {
@@ -34,38 +37,30 @@ class Caminho
     }
 
     public function mostrarCaminhoCritico() {
-        dd($this->nos);
 
-        $this->nos = collect($this->nos)->sortBy(function($item, $chave) {
-            return dd($item);
-        });
 
-        $atividade = $this->nos->last();
-        No::setMaiorPDF($atividade->getPDF());
+        $no = $this->no_maior_pdf;
+        array_push(self::$caminhoCritico, $no);
 
-        array_push(self::$caminhoCritico, $atividade);
-        $maior_pdf = 0;
         $temp = null;
 
-        while ($atividade != null && $atividade->getPredecessoras() != null) {
+        while ($no != null && $no->getPredecessoras()) {
 
-            foreach ($atividade->getPredecessoras() as $atividade) {
-                if ($atividade->getPDF() >= $maior_pdf) {
-                    $maior_pdf = $atividade->getPDF();
-                    $temp = $atividade;
+            $maior_pdf = 0;
+
+            foreach ($no->getPredecessoras() as $i => $no) {
+                if ($no->getPDF() >= $maior_pdf) {
+                    $maior_pdf = $no->getPDF();
+                    $temp = $no;
                 }
             }
 
             array_push(self::$caminhoCritico, $temp);
 
-            $atividade = $temp;
+            $no = $temp;
 
-            if (!($atividade->getPDF() > 0)) {
-                $atividade = null;
-            }
-
-            foreach (self::$caminhoCritico as $atividade) {
-                echo $atividade;
+            if (! $no->getPDF()) {
+                $no = null;
             }
         }
     }
@@ -73,4 +68,6 @@ class Caminho
     public function getCaminhoCritico() {
         return self::$caminhoCritico;
     }
+
+
 }

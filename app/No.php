@@ -5,12 +5,9 @@
  * Date: 18-Oct-17
  * Time: 20:24
  */
-
 namespace App;
-
 use Carbon\Carbon;
 use Doctrine\Common\Comparable;
-
 class No implements Comparable
 {
     private $id;
@@ -27,8 +24,6 @@ class No implements Comparable
     private $folga;
     private static $maiorPDF;
     private $atividade;
-
-
     public function __construct($id, $duracao, $nome, $projeto, $cenario)
     {
         $this->id = $id;
@@ -38,17 +33,13 @@ class No implements Comparable
         $this->cenario = Cenario::find($cenario);
         $this->atividade = Atividade::find($id);
     }
-
     public function adicionarPredecessora(No $atividade){
         array_push($this->predecessoras, $atividade);
-
         $atividade->adicionarSucessora($this);
     }
-
     public function adicionarSucessora(No $atividade) {
         array_push($this->sucessoras, $atividade);
     }
-
     /**
      * @return mixed
      */
@@ -56,7 +47,6 @@ class No implements Comparable
     {
         return $this->id;
     }
-
     /**
      * @param mixed $id
      */
@@ -64,83 +54,68 @@ class No implements Comparable
     {
         $this->id = $id;
     }
-
     /* Getters */
     public function getPDI() {
         return $this->pdi;
     }
-
     public function getPDF() {
         $atividade = Sequencia::where('cenario_id', $this->cenario->id)
             ->where('atividade_id', $this->id)
             ->first();
-
         if ($atividade) {
             $pdf = $atividade->fim_otimista;
         } else {
             $pdf = null;
         }
-
         return $this->pdf;
     }
-
     public function getUDI() {
         return $this->udi;
     }
-
     public function getUDF() {
         return $this->udf;
     }
-
     public static function getMaiorPDF() {
         return self::$maiorPDF;
     }
-
     public function getDuracao() {
         return $this->duracao;
     }
-
     public function getPredecessoras() {
         return $this->predecessoras;
     }
-
     public function getSucessoras() {
         return $this->sucessoras;
     }
-
     /* Setters */
     public function setPDI($valor) {
         $this->pdi = $valor;
+        $this->persistirPDI();
     }
-
     public function setPDF($valor) {
         $this->pdf = $valor;
+        $this->persistirPDF();
     }
-
     public function setUDI($valor) {
         $this->udi = $valor;
+        $this->persistirUDI();
     }
-
     public function setUDF($valor) {
         $this->udf = $valor;
+        $this->persistirUDF();
     }
-
-    public function setMaiorPDF($valor) {
+    public static function setMaiorPDF($valor) {
         self::$maiorPDF = $valor;
     }
-
     /* Processos */
-
     /*precisaremos usar o conceito de varredura de árvore para programação de atividades
     acredito que o problema dos cálculos em relação ao código em java é a ordenação do array*/
     public function calcPDI() {
         $resultado = 0;
-
         foreach ($this->predecessoras as $predecessora) {
             if (! $predecessora->getPDF()) {
                 $predecessora->calcPDF();
             }
-
             if ($predecessora->getPDF()) {
                 if ($predecessora->getPDF() > $resultado) {
                     $resultado = $predecessora->getPDF();
@@ -149,76 +124,93 @@ class No implements Comparable
                 $resultado = 0;
             }
         }
-
         $this->setPDI($resultado);
     }
-
     public function calcPDF() {
         $resultado = 0;
-
         /* Verifica se a atividade possui predecessoras */
         if ($this->predecessoras) {
             $maior_pdf = 0;
-
             foreach ($this->predecessoras as $predecessora) {
                 /* Predecessora possui PDF calculado */
-
                 if (! $predecessora->getPDF()) {
                     $predecessora->calcPDF();
                     $this->calcPDF();
                     $maior_pdf = $predecessora->getPDF();
                     $resultado = $maior_pdf + $this->duracao;
                 }
-
                 if ($predecessora->getPDF() > $maior_pdf) {
                     $maior_pdf = $predecessora->getPDF();
                     $resultado = $maior_pdf + $this->duracao;
                 }
             }
-        /* Se não possui predecessoras, o PDF é a duração. */
+            /* Se não possui predecessoras, o PDF é a duração. */
         } else {
             $resultado = $this->duracao;
         }
-
         $this->setPDF($resultado);
     }
 
     public function calcUDI() {
-        $resultado = $this->getUDF() - $this->getDuracao();
-
-        $this->setUDI($resultado);
-    }
-
-    public function calcUDF() {
-        $udf_procurado = self::getMaiorPDF();
-        $resultado = $this->getPDF();
-
-        foreach($this->predecessoras as $predecessora) {
-            if ($predecessora->getUDF() && $predecessora->getUDI() < $udf_procurado) {
-                $udf_procurado = $predecessora->getUDI();
-            } else {
-                if ($predecessora->getPDF() != self::getMaiorPDF()) {
-                    $predecessora->calcUDF();
-                    $predecessora->calcUDI();
-                    $udf_procurado = $predecessora->getUDF();
-                } else {
-                    $udf_procurado = self::getMaiorPDF();
-                    $resultado = $udf_procurado;
-                    $this->setUDF($resultado);
+        $resultado = null;
+        $menor_udi = null;
+        /* Verifica se a atividade possui sucessoras */
+        if ($this->sucessoras) {
+            foreach ($this->sucessoras as $sucessora) {
+                /* Predecessora possui UDI calculado */
+                if (! $sucessora->getUDI()) {
+                    dd($sucessora);
+                    $sucessora->calcUDI();
                     $this->calcUDI();
+                    $menor_udi = $sucessora->getUDI();
+                    $resultado = $menor_udi - $this->duracao;
+                }
+                else{
+                    //condição para verificar menor UDI para comparar
+                    if (! $menor_udi){
+                        $menor_udi = $sucessora->getUDI();
+                        $resultado = $sucessora->getUDI() - $this->duracao;
+                    }
+                    elseif ($sucessora->getUDI() < $menor_udi){
+                        $menor_udi = $sucessora->getUDI();
+                        $resultado = $sucessora->getUDI() - $this->duracao;
+                    }
                 }
             }
         }
-
-        $this->setUDF($resultado);
+        //condição para atividaes finais
+        else {
+            $resultado = (self::getMaiorPDF() - $this->duracao);
+        }
+        $this->setUDI($resultado);
     }
+    public function calcUDF() {
+        $resultado = $this->pdf;
+        $menor_udi = null;
+        foreach ($this->sucessoras as $sucessora) {
+            if (! $sucessora->getUDI()) {
+                $sucessora->calcUDI();
+            }
+            else{
+                if (! $menor_udi) {
+                    $menor_udi = $sucessora->getUDI();
+                    $resultado = $sucessora->getUDI();
+                }
+                elseif ($sucessora->getUDI() < $menor_udi) {
+                    $menor_udi = $sucessora->getUDI();
+                    $resultado = $sucessora->getUDI();
+                }
+            }
 
+        }
+        $this->setUDF($resultado);
+
+    }
     /* Método para comparar atividades. */
     public function compareTo($outra) {
         if (! $outra instanceof No) {
             throw new \Exception('Não é possível fazer a comparação.');
         }
-
         if ($this->getPDF() > $outra->getPDF()) {
             return 1;
         } else if ($this->getPDF() < $outra->getPDF()) {
@@ -227,16 +219,18 @@ class No implements Comparable
             return 0;
         }
     }
-
     public function __toString()
     {
         return 'Atividade: ' . $this->nome_atividade .  ', Duração: ' . $this->getDuracao() .
-            ', PDF: ' . $this->getPDF() . ', PDI: ' . $this->getPDI() . "\n";
+            ', PDI: ' . $this->getPDI() . ', PDF: ' . $this->getPDF() .
+        ', UDI: ' . $this->getUDI() . ', UDF: ' . $this->getUDF() . "\n";
     }
 
-    private function persistirPDF() {
-        $carbon_date = Carbon::createFromDate(2017, 12, 6);
-
+    /**
+     * @param $carbon_date
+     */
+    private function obterMedidaTempo($carbon_date)
+    {
         switch ($this->projeto->medida_tempo) {
             case 'hora':
                 $carbon_date->addHours($this->getPDF());
@@ -256,11 +250,63 @@ class No implements Comparable
             default:
                 $carbon_date->addHours($this->getPDF());
         }
+    }
 
-        $sequencias = $this->cenario->where('atividade_id', $this->id)
-            ->update([
-               'fim_otimista' => $carbon_date,
-            ])
-        ;
+    private function persistirPDF() {
+        /* Alterar o trecho abaixo porque está hard-coded e substituí-lo com o início do projeto */
+        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+
+        $this->obterMedidaTempo($carbon_date);
+
+        $sequencias = $this->atividade
+            ->sequencias->where('cenario_id', $this->cenario->id);
+
+        /*
+         * Refatorar. Este trecho faz a varredura de cada registro encontrado.
+         * No entanto, não é a forma mais eficiente, mesmo levando em conta que as
+         * sequências estão restritas a um mesmo cenário e atividade.
+         */
+        $sequencias->each(function($item) use ($carbon_date) {
+           $item->update(['fim_otimista' => $carbon_date]);
+        });
+    }
+
+    private function persistirPDI() {
+        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+
+        $this->obterMedidaTempo($carbon_date);
+
+        $sequencias = $this->atividade
+            ->sequencias->where('cenario_id', $this->cenario->id);
+
+        $sequencias->each(function($item) use ($carbon_date) {
+            $item->update(['inicio_otimista' => $carbon_date]);
+        });
+    }
+
+    private function persistirUDI() {
+        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+
+        $this->obterMedidaTempo($carbon_date);
+
+        $sequencias = $this->atividade
+            ->sequencias->where('cenario_id', $this->cenario->id);
+
+        $sequencias->each(function($item) use ($carbon_date) {
+            $item->update(['inicio_pessimista' => $carbon_date]);
+        });
+    }
+
+    private function persistirUDF() {
+        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+
+        $this->obterMedidaTempo($carbon_date);
+
+        $sequencias = $this->atividade
+            ->sequencias->where('cenario_id', $this->cenario->id);
+
+        $sequencias->each(function($item) use ($carbon_date) {
+            $item->update(['fim_pessimista' => $carbon_date]);
+        });
     }
 }
