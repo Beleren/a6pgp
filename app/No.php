@@ -327,8 +327,8 @@ class No implements Comparable
      */
     private function obterDataInicioProjeto()
     {
-        if ($this->cenario->data_criacao_projeto) {
-            $carbon_date = $this->cenario->data_criacao_projeto;
+        if ($this->cenario->data_inicio_projeto) {
+            $carbon_date = $this->cenario->data_inicio_projeto;
         } else {
             $carbon_date = Carbon::now();
         }
