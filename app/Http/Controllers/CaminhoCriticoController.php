@@ -17,8 +17,8 @@ class CaminhoCriticoController extends Controller
         $this->caminhoCriticoPorMaiorDuracao($projeto, $cenario);
 
         return redirect(route('resultado.index', [
-            'projeto' => $projeto,
-            'cenario' => $cenario,
+            'projeto' => $projeto->id,
+            'cenario' => $cenario->id
         ]));
     }
 

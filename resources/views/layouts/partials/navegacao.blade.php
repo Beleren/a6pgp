@@ -39,12 +39,14 @@
                         <a href="{{ route('cenarios.index', ['projeto ' => $projeto->id]) }}"
                         data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.cenarios')">@lang('paginas.navegacao.cenarios')</a>
                     </li>
+                    @if(isset($projeto) && isset($atividade))
                     <li>
                         <a href="{{ route('sequencias.index', ['projeto' => $projeto->id,
                         'cenario' => $projeto->cenarios->first() ]) }}"
                         data-toggle="tooltip" data-placement="bottom" title="@lang('paginas.navegacao.descricoes.gerenciar-dependencias')"
                         >@lang('paginas.navegacao.gerenciar-dependencias')</a>
                     </li>
+                    @endif
                     @endif
                 @endif
                 <li>
