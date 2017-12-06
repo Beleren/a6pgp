@@ -14,10 +14,6 @@
                             @lang('paginas.sequencias.salvar-cenario')
                         </button>
                         &nbsp;
-                        <button id="btnSalvarNovoCenario" name="btnSalvar" type="button" class="btn btn-success">
-                            @lang('paginas.sequencias.salvar-novo-cenario')
-                        </button>
-                        &nbsp;
                         <a href="{{ route('caminho-critico.index', ['projeto' => $projeto->id, 'cenario' => $cenario->id]) }}"
                            class="btn btn-default">@lang('paginas.sequencias.diagrama')</a>
                     </div>
