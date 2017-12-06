@@ -89,22 +89,32 @@ class SequenciasController extends Controller
                  * Neste caso é necessário criar um registro de sequência para salvar os detalhes.
                  */
                 if ($this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                    $sequencia = Sequencia::firstOrCreate([
-                        'atividade_id' => $atividade->id,
-                        'cenario_id' => $request->input('cenario'),
-                    ]);
 
-                    $this->salvarDetalhes($sequencia, $detalhe);
-                    $sequencia->save();
-                }
+                    if (intval($detalhe['detalhes']['duracao']) > 0){
+                        $sequencia = Sequencia::firstOrCreate([
+                            'atividade_id' => $atividade->id,
+                            'cenario_id' => $request->input('cenario'),
+                        ]);
 
-                if (! $this->verificarExistenciaChave($detalhe, 'detalhes')) {
-                    $para_excluir = Sequencia::where('cenario_id', $request->input('cenario'))
-                        ->where('atividade_id', $atividade->id)->first();
+                        $this->salvarDetalhes($sequencia, $detalhe);
+                        $sequencia->save();
+                    }else{
+                        $para_excluir = Sequencia::where('cenario_id', $request->input('cenario'))
+                            ->where('atividade_id', $atividade->id);
+                        $seq_predecessora_del = Sequencia::where('cenario_id', $request->input('cenario'))
+                            ->where('atividade_predecessora_id', $atividade->id)->get();
 
-                    if ($para_excluir) {
-                        Sequencia::destroy($para_excluir->id);
+                        foreach ($seq_predecessora_del as $pred_del){
+                            $pred_del->atividade_predecessora_id = null;
+                            $pred_del->save();
+                        }
+
+                        if ($para_excluir) {
+
+                            $para_excluir->delete();
+                        }
                     }
+
                 }
             }
 
@@ -438,7 +448,9 @@ class SequenciasController extends Controller
             }
 
             if ($this->verificarExistenciaChave($detalhe['detalhes'], 'requerRecursos')) {
-                $sequencia->requer_recursos = $detalhe['detalhes']['requerRecursos'];
+                if($detalhe['detalhes']['requerRecursos'] == 'false')
+                    $sequencia->requer_recursos = 0;
+                else $sequencia->requer_recursos = 1;
             }
         }
     }

@@ -11,7 +11,7 @@
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text"
+                        <input type="text">
                     </div>
                 </form>
             </div>

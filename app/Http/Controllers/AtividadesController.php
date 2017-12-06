@@ -55,10 +55,10 @@ class AtividadesController extends Controller
          * Código abaixo obtém sequência existente. Se não houver sequências no banco
          * de dados, ele cria uma nova sequência.
          */
-        $sequencia = Sequencia::firstOrCreate([
-            'cenario_id' => $projeto->cenarios->first()->id,
-            'atividade_id' => $atividade->id,
-        ]);
+//        $sequencia = Sequencia::firstOrCreate([
+//            'cenario_id' => $projeto->cenarios->first()->id,
+//            'atividade_id' => $atividade->id,
+//        ]);
 
         $request->session()->flash('success', trans('paginas.atividades.atividade-criada-sucesso'));
         return redirect(route('atividades.index', [
