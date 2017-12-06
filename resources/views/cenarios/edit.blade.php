@@ -21,6 +21,16 @@
                 </div>
             </div>
 
+            <!-- Data de Início do Projeto -->
+            <div class="form-group">
+                <label for="data_inicio_projeto" class="control-label col-sm-2 col-md-2">@lang('paginas.cenarios.data-inicio-projeto')</label>
+
+                <div class="col-sm-6 col-md-6">
+                    <input type="date" id="data_inicio_projeto" name="data_inicio_projeto" class="form-control"
+                       value="{{ $cenario->data_inicio_projeto }}">
+                </div>
+            </div>
+
             <!-- Descrição -->
             <div class="form-group">
                 <label for="descricao" class="control-label col-sm-2 col-md-2">@lang('paginas.descricao')</label>

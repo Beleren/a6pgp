@@ -18,7 +18,7 @@
                             @lang('paginas.sequencias.salvar-novo-cenario')
                         </button>
                         &nbsp;
-                        <a href="{{ route('resultado.index', ['projeto' => $projeto->id, 'cenario' => $cenario->id]) }}"
+                        <a href="{{ route('caminho-critico.index', ['projeto' => $projeto->id, 'cenario' => $cenario->id]) }}"
                            class="btn btn-default">@lang('paginas.sequencias.diagrama')</a>
                     </div>
                 </div>
@@ -81,6 +81,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                <input type="hidden" value="{{ $cenario->data_inicio_projeto }}" id="data-inicio-projeto" name="data-inicio-projeto">
+                <input type="hidden" value="{{ $cenario->id }}" name="cenario_id" id="cenario_id">
             </form>
         </div>
 

@@ -682,4 +682,18 @@ $(function() {
     $('tr:not(:has(th))').each(function(index, linha) {
         $(linha).off('click');
     });
+
+    salvarEmNovoCenario();
+
+    function salvarEmNovoCenario() {
+        var endereco = window.location.href;
+        var projeto = endereco.split('/')[4];
+
+        $('#btnSalvarNovoCenario').on('click', function () {
+
+            $.post('/projetos/' + projeto + '/cenarios/novo-cenario', {projeto: projeto} ,function (data) {
+               console.log(data);
+            });
+        });
+    }
 });

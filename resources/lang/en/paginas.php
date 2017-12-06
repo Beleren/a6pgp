@@ -205,6 +205,8 @@ return [
         'recursos' => 'Resources',
         'sem-atividades' => 'There\'re no activities registered.',
         'sem-recursos' => 'There\'re no resources registered.',
+        'nome' => 'Name',
+        'data-inicio-projeto' => 'Project\'s Initial Date',
     ],
 
     'tabelas' =>
@@ -218,7 +220,8 @@ return [
         'editar' => 'Edit',
         'excluir' => 'Delete',
         'recurso' => 'Resource',
-        'cenario' => 'Scenario'
+        'cenario' => 'Scenario',
+        'data-inicio' => 'Project\'s Initial Date',
     ],
 
     'carousel' =>
@@ -323,5 +326,14 @@ return [
             'confirmed' => 'Password fields don\'t match.',
             'regex' => 'Type in a password with at least two lowercase letters, one uppercase letter and one special character.',
         ],
+    ],
+
+    'resultado' => [
+        'atividade' => 'Activity',
+        'duracao' => 'Duration',
+        'pdi' => 'ES',
+        'pdt' => 'EF',
+        'udi' => 'LS',
+        'udt' => 'LF',
     ],
 ];

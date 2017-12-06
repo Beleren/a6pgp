@@ -89,6 +89,9 @@ Route::middleware(['web', 'auth', 'idioma', 'cabecalhos'])->group(function (){
     Route::get('/projetos/{projeto}/cenarios/{cenario}/delete', 'CenariosController@confirmDelete')
         ->name('cenarios.confirm-delete');
 
+    Route::post('/projetos/{projeto}/cenarios/novo-cenario', 'CenariosController@criarNovoCenario')
+        ->name('cenarios.novo-cenario');
+
     // Atividades
     Route::get('/projetos/{projeto}/atividades', 'AtividadesController@index')
         ->name('atividades.index');

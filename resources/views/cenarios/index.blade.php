@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     <th>@lang('paginas.tabelas.cenario')</th>
-                    <th>@lang('paginas.tabelas.criado-em')</th>
+                    <th>@lang('paginas.tabelas.data-inicio')</th>
                     <th>@lang('paginas.tabelas.descricao')</th>
                     <th>@lang('paginas.tabelas.acoes')</th>
                 </tr>
@@ -26,10 +26,12 @@
                             </a>
                         </td>
                         <td>
-                            @if(app()->getLocale() !== 'en')
-                                {{ $cenario->created_at->format('d/m/Y') }}
-                            @else
-                                {{ $cenario->created_at->format('m/d/Y') }}
+                            @if (isset($cenario->data_inicio_projeto))
+                                @if(app()->getLocale() !== 'en')
+                                    {{ $cenario->data_inicio_projeto->format('d/m/Y') }}
+                                @else
+                                    {{ $cenario->data_inicio_projeto->format('m/d/Y') }}
+                                @endif
                             @endif
                         </td>
                         <td>{{ $cenario->descricao }}</td>

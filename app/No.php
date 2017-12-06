@@ -87,6 +87,19 @@ class No implements Comparable
     public function getSucessoras() {
         return $this->sucessoras;
     }
+
+    public function getCenario() {
+        return $this->cenario;
+    }
+
+    public function getProjeto() {
+        return $this->projeto;
+    }
+
+    public function getAtividade() {
+        return $this->atividade;
+    }
+
     /* Setters */
     public function setPDI($valor) {
         $this->pdi = $valor;
@@ -253,8 +266,7 @@ class No implements Comparable
     }
 
     private function persistirPDF() {
-        /* Alterar o trecho abaixo porque está hard-coded e substituí-lo com o início do projeto */
-        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+        $carbon_date = $this->obterDataInicioProjeto();
 
         $this->obterMedidaTempo($carbon_date);
 
@@ -272,7 +284,7 @@ class No implements Comparable
     }
 
     private function persistirPDI() {
-        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+        $carbon_date = $this->obterDataInicioProjeto();
 
         $this->obterMedidaTempo($carbon_date);
 
@@ -285,7 +297,7 @@ class No implements Comparable
     }
 
     private function persistirUDI() {
-        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+        $carbon_date = $this->obterDataInicioProjeto();
 
         $this->obterMedidaTempo($carbon_date);
 
@@ -298,7 +310,7 @@ class No implements Comparable
     }
 
     private function persistirUDF() {
-        $carbon_date = Carbon::createFromDate(2017, 12, 6);
+        $carbon_date = $this->obterDataInicioProjeto();
 
         $this->obterMedidaTempo($carbon_date);
 
@@ -308,5 +320,18 @@ class No implements Comparable
         $sequencias->each(function($item) use ($carbon_date) {
             $item->update(['fim_pessimista' => $carbon_date]);
         });
+    }
+
+    /**
+     * @return mixed|static
+     */
+    private function obterDataInicioProjeto()
+    {
+        if ($this->cenario->data_criacao_projeto) {
+            $carbon_date = $this->cenario->data_criacao_projeto;
+        } else {
+            $carbon_date = Carbon::now();
+        }
+        return $carbon_date;
     }
 }

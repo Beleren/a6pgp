@@ -24,17 +24,17 @@
 
                     {{ csrf_field() }}
 
-                    <!-- Data de Criação -->
+                    <input type="hidden" name="nome" id="nome" value="{{ $cenario->nome }}">
+
+                    <!-- Data de Início do Projeto -->
                     <div class="form-group">
-                        <label for="data_criacao" class="control-label col-sm-2 col-md-2">@lang('paginas.cenarios.data-criacao')</label>
+                        <label for="data_inicio_projeto" class="control-label col-sm-2 col-md-2">@lang('paginas.cenarios.data-inicio-projeto')</label>
 
                         <div class="col-sm-6 col-md-6">
-                            <input type="text" id="data_criacao" name="data_criacao"
+                            <input type="date" id="data_inicio_projeto" name="data_inicio_projeto"
                                class="form-control"
-                               @if(app()->getLocale() !== 'en')
-                               value="{{ $cenario->created_at->format('d/m/Y') }}"
-                               @else
-                               value="{{ $cenario->created_at->format('m/d/Y') }}"
+                               @if ($cenario->data_inicio_projeto)
+                                   value="{{ $cenario->data_inicio_projeto->format('Y-m-d') }}"
                                @endif
                                readonly="readonly">
                         </div>
@@ -74,7 +74,7 @@
 @section('scripts')
     <script>
         $(function () {
-            $('input[type=text], input[type=number], textarea').dblclick(function() {
+            $('input[type=text], input[type=number], input[type=date], textarea').dblclick(function() {
                 $(this)
                     .attr('readonly', false);
                 $('button, button[type=submit], input[type=submit]')

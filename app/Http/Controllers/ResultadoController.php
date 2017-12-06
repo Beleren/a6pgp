@@ -12,8 +12,11 @@ class ResultadoController extends Controller
 {
     public function index(Projeto $projeto, Cenario $cenario = null)
     {
+
         $this->authorize('view-projeto', $projeto);
+
         //agrupamento de sequencias por atividade para construção de elementos únicos
+
         $sequencias = Sequencia::selectRaw(
             'atividade_id,
             ANY_VALUE(inicio_otimista) as inicio_otimista,
@@ -21,12 +24,15 @@ class ResultadoController extends Controller
             ANY_VALUE(inicio_pessimista) as inicio_pessimista,
             ANY_VALUE(fim_pessimista) as fim_pessimista,
             ANY_VALUE(atividade_predecessora_id) as atividade_predecessora_id,
+            ANY_VALUE(is_caminho_critico) as is_caminho_critico,
             ANY_VALUE(duracao) as duracao')
             ->where('cenario_id', $cenario->id)
             ->groupBy('atividade_id','atividade_predecessora_id')
             ->get();
+
         //variável com código javascript para construção do diagrama
         $diagrama = $this->contruirDiagrama($sequencias);
+
         return view('resultado.index', [
             'projeto' => $projeto,
             'sequencias' => $sequencias,
@@ -37,20 +43,28 @@ class ResultadoController extends Controller
             'recursos' => $projeto->recursos,
         ]);
     }
+
     //construção do diagrama em javascript
     public function contruirDiagrama($sequencias){
+
         //inicializa diagrama
         $diagrama = 'image = Viz("digraph g { node [shape=record];\n" +';
+
         //construção dos elementos
         foreach ($sequencias as $elemento){
+
             $atividade = Atividade::where([
                 'id' => $elemento->atividade_id
             ])->first();
-            $diagrama = $diagrama.'"\"'.$atividade->nome.'\"[label = \"{'.$elemento->inicio_otimista.' | '.$elemento->inicio_pessimista.'}|{'.$atividade->nome.'|'.$elemento->duracao.'}| {'.$elemento->fim_otimista.'|'.$elemento->fim_pessimista.'}\"]"+';
+
+            $diagrama = $diagrama.'"\"'.$atividade->nome.'\"[label = \"{'.$elemento->inicio_otimista.' | '
+                .$elemento->inicio_pessimista.'}|{'.$atividade->nome.'|'.$elemento->duracao.'}| {'
+                .$elemento->fim_otimista.'|'.$elemento->fim_pessimista.'}\"]"+';
         }
 
         //construção do sequenciamento, não é necessário ordernar
         foreach ($sequencias as $sequencia){
+
             //variável para atividade principal da sequência
             $atividade = Atividade::where([
                 'id' => $sequencia->atividade_id
@@ -63,6 +77,7 @@ class ResultadoController extends Controller
 
             //Condição para construir sequência só realiza ligação entre sequências se possuir predecessora
             if (!empty($atividadePredecessora)) {
+
                 $diagrama = $diagrama . '"\"' . $atividadePredecessora->nome . '\"->\"' . $atividade->nome . '\"';
 
                 //variável para verificar se tanto predecessora quanto sequência atual fazem parte do caminho crítico
@@ -70,28 +85,22 @@ class ResultadoController extends Controller
                     'atividade_id' => $atividadePredecessora->id
                 ])->first();
 
-                //condição para verificar e ligar atividades do caminho crítico
-                if (isset($sequenciaPredecessora->inicio_otimista) &&
-                    isset($sequenciaPredecessora->fim_otimista) &&
-                    isset($sequenciaPredecessora->inicio_pessimista) &&
-                    isset($sequenciaPredecessora->fim_pessimista)
-                ) {
-                    if (
-                        $sequenciaPredecessora->inicio_otimista - $sequenciaPredecessora->inicio_pessimista == 0 &&
-                        $sequenciaPredecessora->fim_otimista - $sequenciaPredecessora->fim_pessimista == 0 &&
-                        $sequencia->inicio_otimista - $sequencia->inicio_pessimista == 0 &&
-                        $sequencia->fim_otimista - $sequencia->fim_pessimista == 0
-                    ) {
-                        $diagrama = $diagrama . '[color=\"red\"]"+';
-                    } else
-                        $diagrama = $diagrama . '"+';
-                }
-                else
+
+                if ($sequencia->is_caminho_critico && $sequenciaPredecessora->is_caminho_critico) {
+                    $diagrama = $diagrama . '[color=\"red\"]"+';
+                } else
                     $diagrama = $diagrama . '"+';
+
             }
         }
+
         //formato da imagem e encerramento do diagrama
-        $diagrama = $diagrama.'"struct3 [label=\" {PDI| UDI}|{Atividade|Duração}|{PDT|UDT}\"]; }", { format: "png-image-element" });';
+        $diagrama = $diagrama.'"struct3 [label=\" {' .
+            trans('paginas.resultado.pdi') . '|' . trans('paginas.resultado.udi') . '}|{' .
+            trans('paginas.resultado.atividade') . '|'.
+            trans('paginas.resultado.duracao') .
+            '}|{' . trans('paginas.resultado.pdt') . '|' . trans('paginas.resultado.udt') .
+            '}\"]; }", { format: "png-image-element" });';
 
         return $diagrama;
     }

@@ -22,8 +22,8 @@ class Caminho
         $this->no_maior_pdf = $no_maior_pdf;
     }
 
-    public function adicionarAtividade(No $atividade) {
-        array_push($this->nos, $atividade);
+    public static function adicionarAtividadeAoCaminhoCritico(No $atividade) {
+        array_push(self::$caminhoCritico, $atividade);
     }
 
     public function __toString() {
@@ -55,7 +55,7 @@ class Caminho
                 }
             }
 
-            array_push(self::$caminhoCritico, $temp);
+            self::adicionarAtividadeAoCaminhoCritico($temp);
 
             $no = $temp;
 
@@ -63,6 +63,8 @@ class Caminho
                 $no = null;
             }
         }
+
+        $this->persistirCaminhoCritico();
     }
 
     public function getCaminhoCritico() {
@@ -70,4 +72,34 @@ class Caminho
     }
 
 
+    private function persistirCaminhoCritico() {
+        $projeto = $this->no_maior_pdf->getProjeto();
+        $cenario = $this->no_maior_pdf->getCenario();
+
+        /*
+         * Redefine o caminho crítico para evitar que o valor esteja errado quando for
+         * gerar o gráfico.
+         */
+        $sequencias = $projeto->sequencias->where('cenario_id', $cenario->id);
+
+        /* Refatorar. */
+        $sequencias->each(function ($item) {
+           $item->is_caminho_critico = false;
+           $item->save();
+        });
+
+        /*
+         * Atualizar a flag do caminho crítico das atividades que compõem o caminho.
+         */
+        foreach (self::getCaminhoCritico() as $no) {
+            $sequencias = $projeto->sequencias
+                ->where('cenario_id', $cenario->id)
+                ->where('atividade_id', $no->getId());
+
+            $sequencias->each(function ($item) {
+               $item->is_caminho_critico = true;
+               $item->save();
+            });
+        }
+    }
 }

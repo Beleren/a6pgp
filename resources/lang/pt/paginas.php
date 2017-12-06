@@ -206,6 +206,8 @@ return [
         'recursos' => 'Recursos',
         'sem-atividades' => 'Não há atividades cadastradas.',
         'sem-recursos' => 'Não há recursos cadastrados.',
+        'nome' => 'Nome',
+        'data-inicio-projeto' => 'Data de Início do Projeto',
     ],
 
     'tabelas' =>
@@ -219,7 +221,8 @@ return [
         'editar' => 'Editar',
         'excluir' => 'Excluir',
         'recurso' => 'Recurso',
-        'cenario' => 'Cenário'
+        'cenario' => 'Cenário',
+        'data-inicio' => 'Data de Início do Projeto',
     ],
 
     'carousel' =>
@@ -324,5 +327,14 @@ return [
             'confirmed' => 'Os campos referentes à senha não conferem.',
             'regex' => 'Digite uma senha com pelos menos duas letras minúsculas, uma maiúscula e um caractere especial.',
         ],
+    ],
+
+    'resultado' => [
+        'atividade' => 'Atividade',
+        'duracao' => 'Duração',
+        'pdi' => 'PDI',
+        'pdt' => 'PDT',
+        'udi' => 'UDI',
+        'udt' => 'UDT',
     ],
 ];

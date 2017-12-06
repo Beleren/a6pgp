@@ -89,6 +89,16 @@ return [
             'schema'   => 'public',
         ],
 
+        'heroku_clear_db' => [
+            'driver'    => 'mysql',
+            'host'      => @parse_url(getenv("CLEARDB_DATABASE_URL"))["host"],
+            'database'  => @parse_url(getenv("CLEARDB_DATABASE_URL"))["path"],
+            'username'  => @parse_url(getenv("CLEARDB_DATABASE_URL"))["user"],
+            'password'  => @parse_url(getenv("CLEARDB_DATABASE_URL"))["pass"],
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ],
     ],
 
     /*

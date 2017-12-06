@@ -25,6 +25,7 @@ class CenariosController extends Controller
     public function create(Projeto $projeto)
     {
         $this->authorize('view-projeto', $projeto);
+
         return view('cenarios.create', [
             'projeto' => $projeto
         ]);
@@ -33,6 +34,7 @@ class CenariosController extends Controller
     public function show(Projeto $projeto, Cenario $cenario)
     {
         $this->authorize('view-projeto', $projeto);
+
         return view('cenarios.show', [
             'cenario' => $cenario,
             'projeto' => $projeto,
@@ -47,6 +49,7 @@ class CenariosController extends Controller
             'nome' => $request->input('nome'),
             'descricao' => $request->input('descricao'),
             'projeto_id' => $projeto->id,
+            'data_inicio_projeto' => $request->input('data_inicio_projeto'),
         ]);
 
         $atividades = $projeto->atividades;
@@ -83,6 +86,7 @@ class CenariosController extends Controller
 
         $cenario->nome = $request->input('nome');
         $cenario->descricao = $request->input('descricao');
+        $cenario->data_inicio_projeto = $request->input('data_inicio_projeto');
         $cenario->save();
 
         $request->session()->flash('success', trans('paginas.cenarios.cenario-atualizado'));
@@ -104,6 +108,7 @@ class CenariosController extends Controller
 
         /* Verifica as sequências que utilizam este cenário. */
         $sequencias = Sequencia::where('cenario_id', $cenario->id);
+
         $sequencias->delete();
 
         Cenario::destroy($cenario->id);
@@ -123,5 +128,27 @@ class CenariosController extends Controller
             'cenario' => $cenario,
             'projeto' => $projeto,
         ]);
+    }
+
+    public function criarNovoCenario(Request $request, Projeto $projeto) {
+        $this->authorize('view-projeto', $projeto);
+
+        $cenario = Cenario::create([
+            'nome' => 'Cenário ',
+            'descricao' => $request->input('descricao'),
+            'projeto_id' => $projeto->id,
+        ]);
+
+        $atividades = $projeto->atividades;
+
+        //TODO: Verificar uma forma de evitar a duplicação de sequência se uma atividade já existe.
+        foreach ($atividades as $atividade) {
+            $sequencia = Sequencia::firstOrCreate([
+                'atividade_id' => $atividade->id,
+                'cenario_id' => $cenario->id,
+            ]);
+        }
+
+        return $cenario;
     }
 }

@@ -24,8 +24,9 @@ class CenarioRequest extends FormRequest
     public function rules()
     {
         return [
-            'nome'=>'required|min:3|max:70',
-            'descricao'=>'max:255',
+            'nome' => 'required|min:3|max:70',
+            'descricao' => 'max:255',
+            'data_inicio_projeto' => 'date|nullable',
         ];
     }
 }

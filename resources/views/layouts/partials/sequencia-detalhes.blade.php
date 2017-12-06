@@ -29,25 +29,25 @@
                     <!-- Início Otimista -->
                     <div class="form-group">
                         <label for="inicio-otimista" class="control-label">@lang('paginas.sequencias.inicio-otimista')</label>
-                        <input type="date" id="inicio-otimista" name="inicio-otimista" class="form-control">
+                        <input type="date" id="inicio-otimista" name="inicio-otimista" class="form-control" readonly>
                     </div>
 
                     <!-- Início Pessimista -->
                     <div class="form-group">
                         <label for="inicio-pessimista" class="control-label">@lang('paginas.sequencias.inicio-pessimista')</label>
-                        <input type="date" id="inicio-pessimista" name="inicio-pessimista" class="form-control">
+                        <input type="date" id="inicio-pessimista" name="inicio-pessimista" class="form-control" readonly>
                     </div>
 
                     <!-- Fim Otimista -->
                     <div class="form-group">
                         <label for="fim-otimista" class="control-label">@lang('paginas.sequencias.fim-otimista')</label>
-                        <input type="date" id="fim-otimista" name="fim-otimista" class="form-control">
+                        <input type="date" id="fim-otimista" name="fim-otimista" class="form-control" readonly>
                     </div>
 
                     <!-- Fim Pessimista -->
                     <div class="form-group">
                         <label for="fim-pessimista" class="control-label">@lang('paginas.sequencias.fim-pessimista')</label>
-                        <input type="date" id="fim-pessimista" name="fim-pessimista" class="form-control">
+                        <input type="date" id="fim-pessimista" name="fim-pessimista" class="form-control" readonly>
                     </div>
                 </form>
             </div>

@@ -12,6 +12,11 @@ class Cenario extends Model
         'nome',
         'descricao',
         'projeto_id',
+        'data_inicio_projeto',
+    ];
+
+    protected $dates = [
+        'data_inicio_projeto',
     ];
 
     public function projeto()
