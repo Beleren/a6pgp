@@ -172,7 +172,6 @@ class No implements Comparable
             foreach ($this->sucessoras as $sucessora) {
                 /* Predecessora possui UDI calculado */
                 if (! $sucessora->getUDI()) {
-                    dd($sucessora);
                     $sucessora->calcUDI();
                     $this->calcUDI();
                     $menor_udi = $sucessora->getUDI();
