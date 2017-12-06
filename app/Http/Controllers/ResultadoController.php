@@ -33,7 +33,8 @@ class ResultadoController extends Controller
                 'inicio_pessimista',
                 'fim_otimista',
                 'fim_pessimista',
-                'duracao'
+                'duracao',
+                'is_caminho_critico'
             )
             ->get();
 
