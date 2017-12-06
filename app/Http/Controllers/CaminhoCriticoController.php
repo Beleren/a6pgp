@@ -34,20 +34,16 @@ class CaminhoCriticoController extends Controller
 
         $atividades = $projeto->atividades;
 
-//        $sequencias_f = Sequencia::selectRaw(
-//            'atividade_id,
-//                            ANY_VALUE(inicio_otimista) as inicio_otimista,
-//                            ANY_VALUE(fim_otimista) as fim_otimista,
-//                            ANY_VALUE(inicio_pessimista) as inicio_pessimista,
-//                            ANY_VALUE(fim_pessimista) as fim_pessimista,
-//                            ANY_VALUE(atividade_predecessora_id) as atividade_predecessora_id,
-//                            ANY_VALUE(duracao) as duracao')
-//            ->where('cenario_id', $cenario->id)
-//            ->groupBy('atividade_id','atividade_predecessora_id')
-//            ->get();
-
-        $sequencias_f = Sequencia::where('cenario_id', $cenario->id)
-            ->groupBy('atividade_id', 'atividade_predecessora_id')
+        $sequencias_f = Sequencia::selectRaw(
+            'atividade_id,
+                            inicio_otimista as inicio_otimista,
+                            fim_otimista as fim_otimista,
+                            inicio_pessimista as inicio_pessimista,
+                            fim_pessimista as fim_pessimista,
+                            atividade_predecessora_id as atividade_predecessora_id,
+                            duracao as duracao')
+            ->where('cenario_id', $cenario->id)
+            ->groupBy('atividade_id','atividade_predecessora_id')
             ->get();
 
         //array de nós para programação
