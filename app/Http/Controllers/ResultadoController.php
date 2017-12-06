@@ -17,17 +17,21 @@ class ResultadoController extends Controller
 
         //agrupamento de sequencias por atividade para construção de elementos únicos
 
-        $sequencias = Sequencia::selectRaw(
-            '`atividade_id`,
-            `inicio_otimista` as inicio_otimista,
-            `fim_otimista` as fim_otimista,
-            `inicio_pessimista` as inicio_pessimista,
-            `fim_pessimista` as fim_pessimista,
-            `atividade_predecessora_id` as atividade_predecessora_id,
-            `is_caminho_critico` as is_caminho_critico,
-            `duracao` as duracao')
-            ->where('cenario_id', $cenario->id)
-            ->groupBy('atividade_id','atividade_predecessora_id')
+//        $sequencias = Sequencia::selectRaw(
+//            '`atividade_id`,
+//            `inicio_otimista` as inicio_otimista,
+//            `fim_otimista` as fim_otimista,
+//            `inicio_pessimista` as inicio_pessimista,
+//            `fim_pessimista` as fim_pessimista,
+//            `atividade_predecessora_id` as atividade_predecessora_id,
+//            `is_caminho_critico` as is_caminho_critico,
+//            `duracao` as duracao')
+//            ->where('cenario_id', $cenario->id)
+//            ->groupBy('atividade_id','atividade_predecessora_id')
+//            ->get();
+
+        $sequencias = Sequencia::where('cenario_id', $cenario->id)
+            ->groupBy('atividade_id', 'atividade_predecessora_id')
             ->get();
 
         //variável com código javascript para construção do diagrama
