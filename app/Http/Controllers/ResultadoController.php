@@ -27,7 +27,14 @@ class ResultadoController extends Controller
             is_caminho_critico as is_caminho_critico,
             duracao as duracao')
             ->where('cenario_id', $cenario->id)
-            ->groupBy('atividade_id','atividade_predecessora_id')
+            ->groupBy('atividade_id',
+                'atividade_predecessora_id',
+                'inicio_otimista',
+                'inicio_pessimista',
+                'fim_otimista',
+                'fim_pessimista',
+                'duracao'
+            )
             ->get();
 
         //variável com código javascript para construção do diagrama

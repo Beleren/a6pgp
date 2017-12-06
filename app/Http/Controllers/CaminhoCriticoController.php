@@ -43,7 +43,14 @@ class CaminhoCriticoController extends Controller
                             atividade_predecessora_id as atividade_predecessora_id,
                             duracao as duracao')
             ->where('cenario_id', $cenario->id)
-            ->groupBy('atividade_id','atividade_predecessora_id')
+            ->groupBy('atividade_id',
+                'atividade_predecessora_id',
+                'inicio_otimista',
+                'inicio_pessimista',
+                'fim_otimista',
+                'fim_pessimista',
+                'duracao'
+            )
             ->get();
 
         //array de nós para programação
