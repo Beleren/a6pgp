@@ -6,6 +6,7 @@ use App\Cenario;
 use App\Http\Requests\ProjetoRequest;
 use App\Projeto;
 use App\ProjetoUsuario;
+use App\Sequencia;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -136,6 +137,19 @@ class ProjetosController extends Controller
     public function destroy(Request $request, Projeto $projeto)
     {
         $this->authorize('view-projeto', $projeto);
+
+        $cenarios = Cenario::where('projeto_id', $projeto->id);
+
+        if ($cenarios) {
+            $cenarios->each(function ($item) {
+               $sequencias = Sequencia::where('cenario_id', $item->id);
+
+               if ($sequencias) {
+                   $sequencias->delete();
+               }
+            });
+            Cenario::destroy($cenarios->pluck('id'));
+        }
 
         Projeto::destroy($projeto->id);
 
